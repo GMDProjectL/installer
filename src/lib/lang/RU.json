@@ -16,5 +16,11 @@
     "introduce-error": "Невозможно продолжить!",
     "introduce-error-explaination": "Заполните все поля, пожалуйста.",
     "location-title": "Где вы находитесь?",
-    "location-title-description": "Выберите часовой пояс:"
+    "location-title-description": "Выберите часовой пояс:",
+    "partitioning-title": "Разметка диска",
+    "select-drive": "Выберите диск",
+    "no-drive-selected": "Диск не выбран",
+    "drive-method": "Выберите способ:",
+    "nuke-drive": "Стереть диск",
+    "manual-partitioning": "Ручное форматирование"
 }

@@ -2,7 +2,7 @@
     import Icon from "@iconify/svelte";
     import type { TimezonesResponse } from "$lib";
     import { 
-        getString, globalLanguage, 
+        getString, 
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
         installInfo, getTimezones
     } from "$lib";
@@ -28,10 +28,10 @@
     <SetupPageTitle>
         <span class="flex items-center gap-3">
             <Icon icon="material-symbols:language" width="40" height="40" />
-            { getString($globalLanguage, "location-title") }
+            { getString($installInfo.language, "location-title") }
         </span>
         <span class="text-base mt-4 text-zinc-400 font-normal">
-            { getString($globalLanguage, "location-title-description") }
+            { getString($installInfo.language, "location-title-description") }
         </span>
     </SetupPageTitle>
 
@@ -61,13 +61,13 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => history.back()}>
-            { getString($globalLanguage, "back") }
+            { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
             if (!canGoFurther) {
                 Swal.fire({
-                    title: getString($globalLanguage, "introduce-error"),
-                    text: getString($globalLanguage, "introduce-error-explaination"),
+                    title: getString($installInfo.language, "introduce-error"),
+                    text: getString($installInfo.language, "introduce-error-explaination"),
                     icon: 'error',
                     background: '#222',
                     color: 'white',
@@ -76,9 +76,9 @@
                 });
                 return;
             }
-            goto("/location");
+            goto("/partitioning");
         }}>
-            { getString($globalLanguage, "next") }
+            { getString($installInfo.language, "next") }
         </GDLButton>
     </SetupPageBottom>
 </SetupPage>

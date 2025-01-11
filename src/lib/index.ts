@@ -1,20 +1,22 @@
-import { globalLanguage, getLanguageStrings, getString } from "./lang";
+import { getLanguageStrings, getString } from "./lang";
 import { GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput } from "./components";
 import installInfo from "./stores/install-info";
 import type { InstallInfo } from "./stores/install-info";
-import { getTimezones } from "./api";
-import type { TimezonesResponse } from "./api";
+import { getTimezones, getDrives, getPartitions } from "./api";
+import type { TimezonesResponse, DrivesResponse, PartitionsResponse } from "./api";
+import bytesToReadable from "./utils/size";
 
 
 export { 
-    globalLanguage, getLanguageStrings, getString, 
+    getLanguageStrings, getString, 
     GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
     GDLInput,
     installInfo,
-    getTimezones
+    getTimezones, getDrives, getPartitions,
+    bytesToReadable
 };
 
 export type {
     InstallInfo,
-    TimezonesResponse
+    TimezonesResponse, DrivesResponse, PartitionsResponse
 };

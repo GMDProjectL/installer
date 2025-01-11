@@ -2,6 +2,10 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import urllib.parse
 import os
 import json
+import fcntl
+import struct
+
+req = 0x80081272
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -19,6 +23,51 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                             if not file.startswith('.'):
                                 timezones[dir_name].append(file)
         return timezones
+    
+    def get_drives(self):
+        drives = {}
+        for drive in os.listdir('/sys/block'):
+            with open(f'/sys/block/{drive}/device/model', 'r') as f:
+                model = f.read().strip()
+
+            buf = b' ' * 8
+            fmt = 'L'
+
+            with open(f'/dev/{drive}') as dev:
+                buf = fcntl.ioctl(dev.fileno(), req, buf)
+            size = struct.unpack('L', buf)[0]
+
+            drives[drive] = {
+                'model': model,
+                'size': size
+            }
+        return drives
+    
+    def get_partitions(self, block_name):
+        partition_names = []
+        partitions = {}
+
+        for dir in os.listdir(f'/sys/block/{block_name}'):
+            if dir.startswith(block_name):
+                partition_names.append(dir)
+        
+        partition_names.sort()
+
+        for partition_name in partition_names:
+            with open(f'/sys/block/{block_name}/{partition_name}/size', 'r') as f:
+                size = f.read()
+                size = int(size)
+
+            with open(f'/sys/block/{block_name}/{partition_name}/start', 'r') as f:
+                start = f.read()
+                start = int(start)
+
+            partitions[partition_name] = {
+                'size': size,
+                'start': start,
+            }
+
+        return partitions
 
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
@@ -31,6 +80,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if parsed_path.path == '/get_timezones':
             timezones = self.get_timezones()
             self.wfile.write(json.dumps(timezones).encode())
+
+        if parsed_path.path == '/get_drives':
+            drives = self.get_drives()
+            self.wfile.write(json.dumps(drives).encode())
+
+        if parsed_path.path.startswith('/get_partitions/'):
+            parts = self.get_partitions(parsed_path.path.replace('/get_partitions/', ''))
+            self.wfile.write(json.dumps(parts).encode())
 
 
 

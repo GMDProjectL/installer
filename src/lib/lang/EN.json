@@ -15,5 +15,11 @@
     "introduce-error": "Unable to go further",
     "introduce-error-explaination": "Please fill in all the fields.",
     "location-title": "Where are you?",
-    "location-title-description": "Select your timezone:"
+    "location-title-description": "Select your timezone:",
+    "partitioning-title": "Partitioning",
+    "select-drive": "Select a drive",
+    "no-drive-selected": "No drive selected",
+    "drive-method": "Choose the method:",
+    "nuke-drive": "Nuke the drive",
+    "manual-partitioning": "Manual Partitioning"
 }
