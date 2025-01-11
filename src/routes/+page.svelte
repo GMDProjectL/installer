@@ -1,10 +1,25 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { 
-        getString, installInfo,
+        getString, installInfo, checkInternetConnection,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom
     } from "$lib";
     import { goto } from "$app/navigation";
+    import { onMount } from "svelte";
+
+    let internetConnectionAvailable: boolean | null = null;
+
+    onMount(() => {
+        checkInternetConnection().then(status => internetConnectionAvailable = status);
+        
+        const internetConnectionInterval = setInterval(async() => {
+            internetConnectionAvailable = await checkInternetConnection();
+        }, 5000);
+
+        return () => {
+            clearInterval(internetConnectionInterval);
+        }
+    })
 </script>
 
 
@@ -33,13 +48,26 @@
                 </GDLButton>
             {/each}
         </div>
+
+        {#if internetConnectionAvailable === false}
+        <div class="text-red-500 text-center text-lg">
+            { getString($installInfo.language, "no-internet") }
+        </div>
+        {/if}
     </div>
 
     <SetupPageBottom>
         <GDLButton on:click={() => window.close()}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
-        <GDLButton secondary on:click={() => goto("/introduce-yourself")}>
+        <GDLButton secondary disabled={!internetConnectionAvailable} 
+        on:click={() => {
+            if (!internetConnectionAvailable) {
+                return;
+            }
+
+            goto("/introduce-yourself");
+        }}>
             { getString($installInfo.language, "begin") }
         </GDLButton>
     </SetupPageBottom>

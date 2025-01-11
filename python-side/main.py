@@ -1,4 +1,6 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
+import subprocess
+import requests
 import urllib.parse
 import os
 import json
@@ -54,9 +56,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         partition_names.sort()
 
         for partition_name in partition_names:
-            with open(f'/sys/block/{block_name}/{partition_name}/size', 'r') as f:
-                size = f.read()
-                size = int(size)
+            buf = b' ' * 8
+            fmt = 'L'
+
+            with open(f'/dev/{partition_name}') as dev:
+                buf = fcntl.ioctl(dev.fileno(), req, buf)
+            size = struct.unpack('L', buf)[0]
 
             with open(f'/sys/block/{block_name}/{partition_name}/start', 'r') as f:
                 start = f.read()
@@ -68,6 +73,14 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             }
 
         return partitions
+    
+    def check_internet_connection(self):
+        try:
+            r = requests.get("https://archlinux.org")
+            return r.status_code == 200
+        except:
+            return False
+    
 
     def do_GET(self):
         parsed_path = urllib.parse.urlparse(self.path)
@@ -88,7 +101,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if parsed_path.path.startswith('/get_partitions/'):
             parts = self.get_partitions(parsed_path.path.replace('/get_partitions/', ''))
             self.wfile.write(json.dumps(parts).encode())
-
+        
+        if parsed_path.path == '/check_internet_connection':
+            self.wfile.write(json.dumps({'ok': self.check_internet_connection()}).encode())
+        
+        
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):

@@ -2,7 +2,7 @@ import { getLanguageStrings, getString } from "./lang";
 import { GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput } from "./components";
 import installInfo from "./stores/install-info";
 import type { InstallInfo } from "./stores/install-info";
-import { getTimezones, getDrives, getPartitions } from "./api";
+import { getTimezones, getDrives, getPartitions, checkInternetConnection } from "./api";
 import type { TimezonesResponse, DrivesResponse, PartitionsResponse } from "./api";
 import bytesToReadable from "./utils/size";
 
@@ -13,7 +13,8 @@ export {
     GDLInput,
     installInfo,
     getTimezones, getDrives, getPartitions,
-    bytesToReadable
+    bytesToReadable,
+    checkInternetConnection
 };
 
 export type {

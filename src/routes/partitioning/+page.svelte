@@ -8,17 +8,11 @@
         bytesToReadable,
         type DrivesResponse,
         type PartitionsResponse,
-
         getPartitions
-
-
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
-
-
-    $: canGoFurther = false;
 
     let drives: DrivesResponse = {};
 
@@ -29,6 +23,9 @@
     let partitions: PartitionsResponse = {};
 
     $: console.log(partitions);
+
+
+    $: canGoFurther = $installInfo.selectedDrive != '';
     
 </script>
 
@@ -41,12 +38,19 @@
         </span>
     </SetupPageTitle>
 
-    <div class="flex justify-between items-center flex-col px-20 w-full gap-10">
+    <div class="flex justify-start items-center flex-col px-20 w-full gap-10">
         <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2">
             <div>
-                <p>{ getString($installInfo.language, "select-drive") }</p>
+                <p>
+                    { getString($installInfo.language, "select-drive") }
+                    <a class="ms-3 text-blue-200" href="#" on:click={async() => {
+                        drives = await getDrives();
+                    }}>
+                        ({ getString($installInfo.language, "drive-update") })
+                    </a>
+                </p>
                 <select id="select-drive" 
-                    class="bg-zinc-800 outline-0 p-4 rounded-xl mt-2 w-96"
+                    class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full"
                     on:change={(e) => {
                         $installInfo.selectedDrive = `${(e.target as any).value}`
                         getPartitions($installInfo.selectedDrive)
@@ -65,9 +69,9 @@
             <div>
                 <p>{ getString($installInfo.language, "drive-method") }</p>
                 <select id="drive-method" 
-                    class="bg-zinc-800 outline-0 p-4 rounded-xl mt-2 w-96"
+                    class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full"
                     on:change={(e) => {
-                        $installInfo.selectedDrive = `${(e.target as any).value}`
+                        $installInfo.method = `${(e.target as any).value}`
                     }}
                     >
                     {#each ['nuke-drive', 'manual-partitioning'] as method}
@@ -77,6 +81,17 @@
                         </option>
                     {/each}
                 </select>
+                <p class={"text-red-500 mt-2" + (
+                    $installInfo.method == 'nuke-drive'
+                    ? ""
+                    : " text-transparent"
+                )}> {getString($installInfo.language, "nuke-warning")} </p>
+
+                <div class={$installInfo.method != 'manual-partitioning' ? "opacity-0 pointer-events-none" : ""}>
+                    <GDLButton on:click={() => fetch("/open-gparted")}>
+                        { getString($installInfo.language, "open-gparted") }
+                    </GDLButton>
+                </div>
             </div>
         </div>
     </div>
@@ -98,7 +113,17 @@
                 });
                 return;
             }
-            goto("/location");
+
+            if ($installInfo.method == 'nuke-drive') {
+                $installInfo.bootPartition = $installInfo.selectedDrive + '1';
+                $installInfo.rootPartition = $installInfo.selectedDrive + '2';
+            }
+
+            goto(
+                $installInfo.method != 'manual-partitioning'
+                ? "/summary"
+                : "/manual-mount"
+            );
         }}>
             { getString($installInfo.language, "next") }
         </GDLButton>

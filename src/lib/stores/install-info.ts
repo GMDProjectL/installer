@@ -9,7 +9,10 @@ type InstallInfo = {
     timezoneRegion: string,
     timezoneInfo: string,
     selectedDrive: string,
-    method: string
+    method: string,
+    bootPartition: string,
+    rootPartition: string,
+    formatBootPartition: boolean
 };
 
 let installInfo = writable<InstallInfo>({
@@ -21,7 +24,10 @@ let installInfo = writable<InstallInfo>({
     timezoneRegion: '',
     timezoneInfo: '',
     selectedDrive: '',
-    method: ''
+    method: 'nuke-drive',
+    bootPartition: '',
+    rootPartition: '',
+    formatBootPartition: false
 });
 
 export default installInfo;  // Export the store

@@ -45,6 +45,13 @@ const getPartitions = async(drive: string) : Promise<PartitionsResponse> => {
     return response as PartitionsResponse;
 }
 
+const checkInternetConnection = async() : Promise<boolean> => {
+    const request = await fetch(API_BASE_PATH + '/check_internet_connection');
+    const response = await request.json();
 
-export { getTimezones, getDrives, getPartitions }
+    return response['ok'];
+}
+
+
+export { getTimezones, getDrives, getPartitions, checkInternetConnection }
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }
