@@ -2,6 +2,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from utils import check_internet_connection, get_drives, get_partitions, get_timezones
 from installation import start_installation
+import threading
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -30,16 +31,20 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         
         if parsed_path == '/check_internet_connection':
             self.wfile.write(json.dumps({'ok': check_internet_connection()}).encode())
-    
+
+    def do_OPTIONS(self):
+        self.handle_cors()    
 
     def do_POST(self):
         parsed_path = self.path
+        self.handle_cors()
 
         if parsed_path == '/install':
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
             install_object = json.loads(body)
-            start_installation(install_object)
+            self.wfile.write(json.dumps({'ok': True}).encode())
+            threading.Thread(target=start_installation, args=(install_object,)).start()
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):

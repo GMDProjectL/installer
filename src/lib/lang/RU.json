@@ -45,5 +45,6 @@
     "summary-install-popup-title": "Вы действительно хотите установить систему?",
     "summary-install-popup-body": "Вы можете проверить всё ещё раз.",
     "summary-install-popup-no": "Назад",
-    "summary-install-popup-yes": "Да, установить!"
+    "summary-install-popup-yes": "Да, установить!",
+    "installing": "Установка..."
 }

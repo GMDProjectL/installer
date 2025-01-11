@@ -44,5 +44,6 @@
     "summary-install-popup-title": "Do you really want to install the system?",
     "summary-install-popup-body": "You can go check the summary again if you want.",
     "summary-install-popup-no": "Back",
-    "summary-install-popup-yes": "Yes, install!"
+    "summary-install-popup-yes": "Yes, install!",
+    "installing": "Installing..."
 }

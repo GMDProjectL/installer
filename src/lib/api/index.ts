@@ -1,3 +1,5 @@
+import type { InstallInfo } from "$lib/stores/install-info";
+
 const API_BASE_PATH = 'http://localhost:669'
 
 
@@ -52,6 +54,16 @@ const checkInternetConnection = async() : Promise<boolean> => {
     return response['ok'];
 }
 
+const startInstallation = async(installation: InstallInfo) => {
+    await fetch(API_BASE_PATH + '/install', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(installation)
+    });
+}
 
-export { getTimezones, getDrives, getPartitions, checkInternetConnection }
+
+export { getTimezones, getDrives, getPartitions, checkInternetConnection, startInstallation }
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }
