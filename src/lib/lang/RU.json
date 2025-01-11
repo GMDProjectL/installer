@@ -1,0 +1,20 @@
+{
+    "name": "Русский",
+    "welcome": "Добро пожаловать в установщик Project GDL!",
+    "welcome-description": "Лёгкий в использовании дистрибутив Linux.",
+    "language-tip": "Для начала, выберите язык:",
+    "begin": "Начнём!",
+    "quit": "Выйти",
+    "back": "Назад",
+    "next": "Далее",
+    "introduce-yourself": "Представьтесь, пожалуйста",
+    "your-name": "Ваше имя",
+    "username": "Логин",
+    "computer-name": "Имя компьютера",
+    "password": "Задайте пароль",
+    "password-2": "Подтвердите пароль",
+    "introduce-error": "Невозможно продолжить!",
+    "introduce-error-explaination": "Заполните все поля, пожалуйста.",
+    "location-title": "Где вы находитесь?",
+    "location-title-description": "Выберите часовой пояс:"
+}

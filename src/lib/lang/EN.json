@@ -1,0 +1,19 @@
+{
+    "name": "English",
+    "welcome": "Welcome to Project GDL Installer!",
+    "welcome-description": "Easy-to-use Linux distribution.",
+    "language-tip": "First, select the language:",
+    "begin": "Let's begin!",
+    "quit": "Quit",
+    "back": "Back",
+    "next": "Next",
+    "introduce-yourself": "Introduce yourself",
+    "username": "Username",
+    "computer-name": "Computer's Name",
+    "password": "Password",
+    "password-2": "Confirm the password",
+    "introduce-error": "Unable to go further",
+    "introduce-error-explaination": "Please fill in all the fields.",
+    "location-title": "Where are you?",
+    "location-title-description": "Select your timezone:"
+}
