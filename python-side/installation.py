@@ -3,6 +3,7 @@ from gdltypes import InstallInfo
 from shared import shared_events
 from copy import deepcopy
 import time
+import shutil
 import subprocess
 
 
@@ -376,10 +377,63 @@ def patch_default_grub(installation_object: InstallInfo, root: str):
         content = f.read()
         content = content.replace('GRUB_DISTRIBUTOR="Arch"', 'GRUB_DISTRIBUTOR="ProjectGDL"')
         content = content.replace('#GRUB_THEME="/path/to/gfxtheme"', 'GRUB_THEME="/usr/share/grub/themes/Vimix/theme.txt"')
-        content = content.replace('#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false"')
+        content = content.replace('#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false')
+        content = content.replace('GRUB_GFXMODE=auto', 'GRUB_GFXMODE=1920x1080')
     
     with open(root + '/etc/default/grub', 'w') as f:
         f.write(content)
+
+
+def patch_sddm_theme(installation_object: InstallInfo, root: str):
+    shared_events.append('Patching default SDDM theme...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources'
+    sddm_conf_dir = root + '/etc/sddm.conf.d'
+
+    try:
+        os.mkdir(sddm_conf_dir)
+    except:
+        pass
+
+    shutil.copy(resources_dir + '/kde_settings.conf', sddm_conf_dir + '/kde_settings.conf')
+
+
+def install_gdl_xdg_icon(installation_object: InstallInfo, root: str):
+    shared_events.append('Installing GDL XDG icon...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources'
+    target_dir = '/usr/share'
+
+    shutil.copy(resources_dir + '/projectgdl-logo.png', root + target_dir + '/projectgdl-logo.png')
+
+    result = os.system(f'arch-chroot {root} xdg-icon-resource install --size 128 "{target_dir + '/projectgdl-logo.png'}"')
+
+    if result != 0:
+        shared_events.append('Failed to install an icon')
+        return False
+    
+    return True
+
+
+def put_essentials_on_desktop(installation_object: InstallInfo, root: str):
+    shared_events.append('Placing essentials on desktop...')
+
+    if not os.path.exists(root + '/home/' + installation_object.username + '/Desktop'):
+        try:
+            os.makedirs(root + '/home/' + installation_object.username + '/Desktop')
+            os.chown(pamac_desktop_file, 1000, 1000)
+        except:
+            shared_events.append('Failed to create and chown a desktop directory')
+            return False
+
+    pamac_desktop_file_orig = root + '/usr/share/applications/org.manjaro.pamac.manager.desktop'
+    pamac_desktop_file = root + '/home/' + installation_object.username + '/Desktop/pamac-manager.desktop'
+
+    try:
+        shutil.copy(pamac_desktop_file_orig, pamac_desktop_file)
+        os.chown(pamac_desktop_file, 1000, 1000)
+    except:
+        shared_events.append('Failed to copy and chown a desktop file')
 
 
 def start_installation(installation_object: InstallInfo):
@@ -456,7 +510,8 @@ def start_installation(installation_object: InstallInfo):
                 "grub", "efibootmgr", 
                 "electron33", "nodejs", "npm",
                 "pamac", "apple-fonts", "yay",
-                "konsole", "dolphin", "kio-admin"
+                "konsole", "dolphin", "kio-admin",
+                "spectacle", "gwenview", "kate"
             ]
         ):
         return
@@ -470,6 +525,8 @@ def start_installation(installation_object: InstallInfo):
     if not activate_systemd_service(installation_object, installation_root, "sddm.service"):
         return
     
+    activate_systemd_service(installation_object, installation_root, "NetworkManager")
+    
     try_install_nvidia(installation_object, installation_root)
 
     patch_distro_release(installation_object, installation_root)
@@ -480,5 +537,11 @@ def start_installation(installation_object: InstallInfo):
     patch_default_grub(installation_object, installation_root)
 
     update_grub(installation_object, installation_root)
+
+    patch_sddm_theme(installation_object, installation_root)
+
+    install_gdl_xdg_icon(installation_object, installation_root)
+
+    put_essentials_on_desktop(installation_object, installation_root)
     
     shared_events.append('Project GDL Installed!')

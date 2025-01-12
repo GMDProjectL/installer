@@ -5,7 +5,8 @@ from installation import start_installation
 import threading
 from shared import shared_events
 from gdltypes import InstallInfo
-
+import os
+import systemd.daemon
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
@@ -37,6 +38,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if parsed_path == '/get_installation_events':
             self.wfile.write(json.dumps({'events': shared_events}).encode())
             shared_events.clear()
+        
+        if parsed_path == '/reboot':
+            self.wfile.write(json.dumps({'ok': True}).encode())
+            os.system("reboot")
 
     def do_OPTIONS(self):
         self.handle_cors()    
@@ -57,6 +62,7 @@ def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
     server_address = ('', 669)
     httpd = server_class(server_address, handler_class)
     print('Starting httpd...')
+    systemd.daemon.notify('READY=1')
     httpd.serve_forever()
 
 run()

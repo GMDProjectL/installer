@@ -47,5 +47,6 @@
     "summary-install-popup-no": "Назад",
     "summary-install-popup-yes": "Да, установить!",
     "installing": "Установка...",
-    "toggle-scrolling": "Включить/выключить прокрутку"
+    "toggle-scrolling": "Включить/выключить прокрутку",
+    "restart": "Перезагрузиться"
 }

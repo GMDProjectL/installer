@@ -6,7 +6,10 @@
         getDrives,
         installInfo,
         startInstallation,
-        getInstallationEvents
+        getInstallationEvents,
+
+        reboot
+
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -15,7 +18,11 @@
 
     let logsPre: unknown;
     let scrollLocked = true;
-    let installationProgress = 40;
+    let progressLeftPos = 0;
+    let installationProgress = 0;
+    let pbVisible = false;
+    let done = false;
+    let progressAnimationInterval = 0;
     let logs = '-----------------------------------------------------------';
 
     const scrollToBottom = async (node: HTMLElement) => {
@@ -23,6 +30,9 @@
 
         node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
     }; 
+
+
+    const sleepAwait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 
     onMount(() => {
@@ -35,10 +45,35 @@
             }
             await tick();
             scrollToBottom(logsPre as HTMLElement);
+
+            newEvents.forEach((content) => {
+                if (content.includes('Project GDL Installed!')) {
+                    clearInterval(eventCheckerInterval);
+                    clearInterval(progressAnimationInterval);
+                    done = true;
+                }
+            })
         }, 1000);
+
+        progressAnimationInterval = setInterval(async() => {
+            pbVisible = true;
+            installationProgress = 30;
+
+            for (let int = 0; int < 70; int++) {
+                progressLeftPos = int;
+                await sleepAwait(16);
+            }
+            
+            for (let int = 70; int > 0; int--) {
+                progressLeftPos = int;
+                await sleepAwait(27);
+            }
+            
+        }, 3000);
 
         return () => {
             clearInterval(eventCheckerInterval);
+            clearInterval(progressAnimationInterval);
         }
     });
 
@@ -61,8 +96,17 @@
     </div>
 
     <SetupPageBottom>
-        <div class="w-full flex justify-start rounded-2xl overflow-hidden bg-zinc-700 h-4">
-            <div class="bg-slate-400 h-4 transition-all" style={`width: ${installationProgress}%`}></div>
-        </div>
+        {#if !done}
+        <div class="w-full flex justify-start rounded-2xl overflow-hidden bg-zinc-700 h-4 relative">
+            <div class={"bg-slate-400 h-4 transition-all absolute" + (!pbVisible ? " opacity-0" : " opacity-100")}
+                    style={`left: ${progressLeftPos}%; width: ${installationProgress}%`}></div>
+            </div>
+        {:else}
+            <GDLButton secondary on:click={() => {
+                reboot();
+            }}>
+                { getString($installInfo.language, "restart") }
+            </GDLButton>
+        {/if}
     </SetupPageBottom>
 </SetupPage>

@@ -1,0 +1,17 @@
+[Unit]
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=notify
+Restart=no
+TimeoutSec=30sec
+IgnoreSIGPIPE=no
+KillMode=none
+GuessMainPID=no
+RemainAfterExit=no
+WorkingDirectory=/opt/installer/python-side
+ExecStart=/usr/bin/python /opt/installer/python-side/main.py
+
+[Install]
+WantedBy=multi-user.target

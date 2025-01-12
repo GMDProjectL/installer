@@ -71,6 +71,14 @@ const getInstallationEvents = async(): Promise<Array<string>> => {
     return response['events'] as Array<string>;
 }
 
+const reboot = async() => {
+    const request = await fetch(API_BASE_PATH + '/reboot');
+}
 
-export { getTimezones, getDrives, getPartitions, checkInternetConnection, startInstallation, getInstallationEvents }
+
+export { 
+    getTimezones, getDrives, getPartitions, 
+    checkInternetConnection, startInstallation, getInstallationEvents,
+    reboot 
+}
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }

@@ -46,5 +46,6 @@
     "summary-install-popup-no": "Back",
     "summary-install-popup-yes": "Yes, install!",
     "installing": "Installing...",
-    "toggle-scrolling": "Toggle scrolling"
+    "toggle-scrolling": "Toggle scrolling",
+    "restart": "Restart"
 }
