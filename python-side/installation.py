@@ -345,7 +345,7 @@ def try_install_nvidia(installation_object: InstallInfo, root: str):
 def patch_distro_release(installation_object: InstallInfo, root: str):
     shared_events.append('Patching distro release...')
     # changing /usr/lib/os-release
-    with open('/usr/lib/os-release', 'r') as f:
+    with open(root + '/usr/lib/os-release', 'r') as f:
         content = f.read()
         content = content.replace("Arch Linux", "Project GDL (Arch Linux)")
         content = content.replace("ID=arch", "ID=projectgdl")
@@ -357,8 +357,12 @@ def patch_distro_release(installation_object: InstallInfo, root: str):
             'BUG_REPORT_URL="https://gitlab.archlinux.org/groups/archlinux/-/issues"', 
             'BUG_REPORT_URL="https://t.me/ProjectGDL"'
         )
+        content = content.replace(
+            'archlinux-logo', 
+            'projectgdl-logo'
+        )
     
-    with open('/usr/lib/os-release', 'w') as f:
+    with open(root + '/usr/lib/os-release', 'w') as f:
         f.write(content)
 
 
@@ -368,13 +372,13 @@ def patch_default_grub(installation_object: InstallInfo, root: str):
     pacman_install(installation_object, root, ['os-prober', 'grub-theme-vimix'])
 
     # changing /etc/default/grub
-    with open('/etc/default/grub', 'r') as f:
+    with open(root + '/etc/default/grub', 'r') as f:
         content = f.read()
         content = content.replace('GRUB_DISTRIBUTOR="Arch"', 'GRUB_DISTRIBUTOR="ProjectGDL"')
         content = content.replace('#GRUB_THEME="/path/to/gfxtheme"', 'GRUB_THEME="/usr/share/grub/themes/Vimix/theme.txt"')
         content = content.replace('#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false"')
     
-    with open('/etc/default/grub', 'w') as f:
+    with open(root + '/etc/default/grub', 'w') as f:
         f.write(content)
 
 
