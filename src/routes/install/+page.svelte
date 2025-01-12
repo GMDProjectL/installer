@@ -5,18 +5,41 @@
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         getDrives,
         installInfo,
-        startInstallation
+        startInstallation,
+        getInstallationEvents
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
-    import { onMount } from "svelte";
+    import { onMount, tick } from "svelte";
 
 
+    let logsPre: unknown;
+    let scrollLocked = true;
     let installationProgress = 40;
+    let logs = '-----------------------------------------------------------';
+
+    const scrollToBottom = async (node: HTMLElement) => {
+        if (!scrollLocked) return;
+
+        node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
+    }; 
 
 
-    onMount(async() => {
+    onMount(() => {
         startInstallation($installInfo);
+
+        const eventCheckerInterval = setInterval(async() => {
+            const newEvents = await getInstallationEvents();
+            if (newEvents.length > 0) {
+                logs += '\n' + newEvents.join('\n');
+            }
+            await tick();
+            scrollToBottom(logsPre as HTMLElement);
+        }, 1000);
+
+        return () => {
+            clearInterval(eventCheckerInterval);
+        }
     });
 
     $: canGoFurther = true;
@@ -33,9 +56,8 @@
     </SetupPageTitle>
 
     <div class="flex justify-start items-start flex-col px-20 w-full gap-10">
-        <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2" style="height: 70vh;">
-            
-        </div>
+        <pre bind:this={logsPre} class="w-full flex flex-col gap-5 overflow-y-auto p-2 text-wrap" 
+            style="height: 70vh;">{ logs }</pre>
     </div>
 
     <SetupPageBottom>

@@ -64,6 +64,13 @@ const startInstallation = async(installation: InstallInfo) => {
     });
 }
 
+const getInstallationEvents = async(): Promise<Array<string>> => {
+    const request = await fetch(API_BASE_PATH + '/get_installation_events');
+    const response = await request.json();
 
-export { getTimezones, getDrives, getPartitions, checkInternetConnection, startInstallation }
+    return response['events'] as Array<string>;
+}
+
+
+export { getTimezones, getDrives, getPartitions, checkInternetConnection, startInstallation, getInstallationEvents }
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }

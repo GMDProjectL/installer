@@ -45,5 +45,6 @@
     "summary-install-popup-body": "You can go check the summary again if you want.",
     "summary-install-popup-no": "Back",
     "summary-install-popup-yes": "Yes, install!",
-    "installing": "Installing..."
+    "installing": "Installing...",
+    "toggle-scrolling": "Toggle scrolling"
 }

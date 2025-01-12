@@ -3,6 +3,8 @@ import json
 from utils import check_internet_connection, get_drives, get_partitions, get_timezones
 from installation import start_installation
 import threading
+from shared import shared_events
+from gdltypes import InstallInfo
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -31,6 +33,10 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         
         if parsed_path == '/check_internet_connection':
             self.wfile.write(json.dumps({'ok': check_internet_connection()}).encode())
+        
+        if parsed_path == '/get_installation_events':
+            self.wfile.write(json.dumps({'events': shared_events}).encode())
+            shared_events.clear()
 
     def do_OPTIONS(self):
         self.handle_cors()    
@@ -44,7 +50,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
             install_object = json.loads(body)
             self.wfile.write(json.dumps({'ok': True}).encode())
-            threading.Thread(target=start_installation, args=(install_object,)).start()
+            threading.Thread(target=start_installation, args=(InstallInfo(**install_object),)).start()
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):
