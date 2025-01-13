@@ -25,7 +25,7 @@
     "nuke-drive": "Nuke the drive",
     "manual-partitioning": "Manual Partitioning",
     "nuke-warning": "Warning: This will erase all data on the selected drive!",
-    "open-gparted": "Open GParted",
+    "open-gparted": "Partitioning tool",
     "manual-mount-title": "Assign the mountpoints by yourself",
     "selected-drive": "Selected drive:",
     "boot-partition": "Boot partition:",

@@ -4,6 +4,6 @@ import type { RequestHandler } from './$types';
 import { spawn } from 'node:child_process';
 
 export const GET: RequestHandler = async () => {
-    spawn('gparted');
+    spawn('gnome-disks');
     return new Response();
 };
