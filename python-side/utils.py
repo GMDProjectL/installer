@@ -21,6 +21,12 @@ def get_timezones():
 def get_drives():
     drives = {}
     for drive in os.listdir('/sys/block'):
+        if (not drive.startswith('hd') 
+            and not drive.startswith('sd') 
+            and not drive.startswith('vd') 
+            and not drive.startswith('nvme')):
+            continue
+
         with open(f'/sys/block/{drive}/device/model', 'r') as f:
             model = f.read().strip()
         buf = b' ' * 8
