@@ -24,7 +24,7 @@ let installInfo = writable<InstallInfo>({
     timezoneRegion: '',
     timezoneInfo: '',
     selectedDrive: '',
-    method: 'nuke-drive',
+    method: 'manual-partitioning',
     bootPartition: '',
     rootPartition: '',
     formatBootPartition: false
