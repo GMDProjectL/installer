@@ -26,7 +26,7 @@
     "nuke-drive": "Стереть диск",
     "manual-partitioning": "Ручное форматирование",
     "nuke-warning": "Внимание: все данные на выбранном диске будут стёрты!",
-    "open-gparted": "Разметить диск",
+    "open-gnome-disks": "Разметить диск",
     "manual-mount-title": "Назначьте точки монтирования",
     "selected-drive": "Выбранный диск:",
     "boot-partition": "Раздел загрузчика:",
@@ -48,5 +48,13 @@
     "summary-install-popup-yes": "Да, установить!",
     "installing": "Установка...",
     "toggle-scrolling": "Включить/выключить прокрутку",
-    "restart": "Перезагрузиться"
+    "restart": "Перезагрузиться",
+    "additional-software": "Дополнительное ПО",
+    "enable-multilib-repo": "Включить репозиторий multilib",
+    "install-steam": "Установить Steam",
+    "install-wine": "Установить WineHQ для запуска Windows-приложений",
+    "install-winetricks": "Установить Winetricks для управления проприетарными компонентами в Wine",
+    "at-least-one-vulkan-backend": "Выберите хотя бы одну Vulkan-версию!",
+    "install-gnome-disks": "Установить Gnome Disks (для управления дисками)",
+    "install-intel-media": "Установить Intel Media (QSV, VA-API, etc.)"
 }

@@ -251,6 +251,17 @@ def append_mirrorlist(root: str):
 Include = /etc/pacman.d/chaotic-mirrorlist''')
 
 
+def enable_multilib(root: str):
+    with open(root + '/etc/pacman.conf', 'r') as f:
+        pacman_conf = f.read()
+
+    pacman_conf = pacman_conf.replace('#[multilib]', '[multilib]')
+    pacman_conf = pacman_conf.replace('#Include = /etc/pacman.d/mirrorlist', 'Include = /etc/pacman.d/mirrorlist')
+
+    with open(root + '/etc/pacman.conf', 'w') as f:
+        f.write(pacman_conf)
+
+
 def connect_chaotic_aur(installation_object: InstallInfo, root: str):
     shared_events.append('Installing Chaotic AUR...')
 
@@ -567,6 +578,52 @@ def start_installation(installation_object: InstallInfo):
 
     install_gdl_xdg_icon(installation_object, installation_root)
 
-    put_essentials_on_desktop(installation_object, installation_root)
+    if installation_object.enableMultilibRepo:
+        enable_multilib(installation_root)
+
+        if installation_object.installSteam:
+            if installation_object.vulkanNvidia:
+                pacman_install(installation_object, installation_root, [
+                    "lib32-nvidia-utils",
+                    "nvidia-utils"
+                ])
+            
+            if installation_object.vulkanAMD:
+                pacman_install(installation_object, installation_root, [
+                    "lib32-amdvlk",
+                    "amdvlk",
+                    "lib32-vulkan-radeon",
+                    "vulkan-radeon"
+                ])
+            
+            if installation_object.vulkanIntel:
+                pacman_install(installation_object, installation_root, [
+                    "lib32-vulkan-intel",
+                    "vulkan-intel"
+                ])
+        
+        if installation_object.installWine:
+            pacman_install(installation_object, installation_root, [
+                "wine",
+                "wine_gecko",
+                "wine-mono",
+                "wine-nine"
+            ])
+
+            if installation_object.installWinetricks:
+                pacman_install(installation_object, installation_root, [
+                    "winetricks"
+                ])
+        
+    if installation_object.installGnomeDisks:
+        pacman_install(installation_object, installation_root, [
+            "gnome-disk-utility"
+        ])
+    
+    if installation_object.installIntelMedia:
+        pacman_install(installation_object, installation_root, [
+            "intel-media-driver",
+            "intel-media-sdk"
+        ])
     
     shared_events.append('Project GDL Installed!')

@@ -12,8 +12,17 @@ type InstallInfo = {
     method: string,
     bootPartition: string,
     rootPartition: string,
-    formatBootPartition: boolean
-};
+    formatBootPartition: boolean,
+    enableMultilibRepo: boolean,
+    installSteam: boolean,
+    installWine: boolean,
+    installWinetricks: boolean,
+    vulkanNvidia: boolean,
+    vulkanAmd: boolean,
+    vulkanIntel: boolean,
+    installGnomeDisks: boolean,
+    installIntelMedia: boolean
+}
 
 let installInfo = writable<InstallInfo>({
     language: 'en',
@@ -27,7 +36,16 @@ let installInfo = writable<InstallInfo>({
     method: 'manual-partitioning',
     bootPartition: '',
     rootPartition: '',
-    formatBootPartition: false
+    formatBootPartition: false,
+    enableMultilibRepo: false,
+    installSteam: false,
+    installWine: false,
+    installWinetricks: false,
+    vulkanNvidia: false,
+    vulkanAmd: false,
+    vulkanIntel: false,
+    installGnomeDisks: false,
+    installIntelMedia: false
 });
 
 export default installInfo;  // Export the store

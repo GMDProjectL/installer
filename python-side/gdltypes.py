@@ -14,3 +14,12 @@ class InstallInfo:
     bootPartition: str
     rootPartition: str
     formatBootPartition: bool
+    enableMultilibRepo: bool
+    installSteam: bool
+    installWine: bool
+    installWinetricks: bool
+    vulkanNvidia: bool
+    vulkanAmd: bool
+    vulkanIntel: bool
+    installGnomeDisks: bool
+    installIntelMedia: bool

@@ -76,7 +76,7 @@
                 });
                 return;
             }
-            goto("/partitioning");
+            goto("/additional-software");
         }}>
             { getString($installInfo.language, "next") }
         </GDLButton>

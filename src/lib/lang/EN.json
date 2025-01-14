@@ -25,7 +25,7 @@
     "nuke-drive": "Nuke the drive",
     "manual-partitioning": "Manual Partitioning",
     "nuke-warning": "Warning: This will erase all data on the selected drive!",
-    "open-gparted": "Partitioning tool",
+    "open-gnome-disks": "Partitioning tool",
     "manual-mount-title": "Assign the mountpoints by yourself",
     "selected-drive": "Selected drive:",
     "boot-partition": "Boot partition:",
@@ -47,5 +47,13 @@
     "summary-install-popup-yes": "Yes, install!",
     "installing": "Installing...",
     "toggle-scrolling": "Toggle scrolling",
-    "restart": "Restart"
+    "restart": "Restart",
+    "additional-software": "Additional Software",
+    "enable-multilib-repo": "Enable multilib repository",
+    "install-steam": "Install Steam",
+    "install-wine": "Install WineHQ to run Windows applications",
+    "install-winetricks": "Install Winetricks for managing proprietary components in Wine",
+    "at-least-one-vulkan-backend": "Select at least one Vulkan backend!",
+    "install-gnome-disks": "Install Gnome Disks (for managing disks)",
+    "install-intel-media": "Install Intel Media (QSV, VA-API, etc.)"
 }
