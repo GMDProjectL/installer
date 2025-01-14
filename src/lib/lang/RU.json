@@ -56,5 +56,6 @@
     "install-winetricks": "Установить Winetricks для управления проприетарными компонентами в Wine",
     "at-least-one-vulkan-backend": "Выберите хотя бы одну Vulkan-версию!",
     "install-gnome-disks": "Установить Gnome Disks (для управления дисками)",
-    "install-intel-media": "Установить Intel Media (QSV, VA-API, etc.)"
+    "install-intel-media": "Установить Intel Media (QSV, VA-API, etc.)",
+    "checking-for-connection": "Проверяем подключение..."
 }

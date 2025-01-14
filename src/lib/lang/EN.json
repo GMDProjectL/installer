@@ -55,5 +55,6 @@
     "install-winetricks": "Install Winetricks for managing proprietary components in Wine",
     "at-least-one-vulkan-backend": "Select at least one Vulkan backend!",
     "install-gnome-disks": "Install Gnome Disks (for managing disks)",
-    "install-intel-media": "Install Intel Media (QSV, VA-API, etc.)"
+    "install-intel-media": "Install Intel Media (QSV, VA-API, etc.)",
+    "checking-for-connection": "Checking for connection..."
 }

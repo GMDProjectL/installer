@@ -68,7 +68,11 @@
 
             goto("/introduce-yourself");
         }}>
-            { getString($installInfo.language, "begin") }
+            { 
+                internetConnectionAvailable === null
+                ? getString($installInfo.language, "checking-for-connection")
+                : getString($installInfo.language, "begin")
+            }
         </GDLButton>
     </SetupPageBottom>
 </SetupPage>
