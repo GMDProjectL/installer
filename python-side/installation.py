@@ -15,6 +15,11 @@ def clear_mountpoints(installation_object: InstallInfo, root: str):
         shared_events.append(f'{root} not mounted')
         return
 
+    process = subprocess.run(['umount', '-lf', root], capture_output=True)
+    if process.returncode != 0:
+        shared_events.append(f'{root} not mounted')
+        return
+
 def format_fs(installation_object: InstallInfo, partition_name: str, destination: str, bootable = False):
     partition_device = '/dev/' + partition_name
 
