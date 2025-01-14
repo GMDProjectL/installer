@@ -604,10 +604,7 @@ def start_installation(installation_object: InstallInfo):
         
         if installation_object.installWine:
             pacman_install(installation_object, installation_root, [
-                "wine",
-                "wine_gecko",
-                "wine-mono",
-                "wine-nine"
+                "wine"
             ])
 
             if installation_object.installWinetricks:
