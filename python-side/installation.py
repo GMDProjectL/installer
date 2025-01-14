@@ -531,7 +531,10 @@ def start_installation(installation_object: InstallInfo):
                 "electron33", "nodejs", "npm",
                 "pamac", "apple-fonts", "yay",
                 "konsole", "dolphin", "kio-admin",
-                "spectacle", "gwenview", "kate"
+                "spectacle", "gwenview", "kate", 
+                "ark", "p7zip", 
+                "zip", "unzip", "unrar", "neofetch",
+                "sof-firmware"
             ]
         ):
         return
