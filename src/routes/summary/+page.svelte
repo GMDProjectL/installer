@@ -34,31 +34,35 @@
     </SetupPageTitle>
 
     <div class="flex justify-start items-start flex-col px-20 w-full gap-10">
-        <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2" style="height: 70vh;">
+        <div class="w-full flex flex-col gap-5 overflow-y-auto p-2" style="height: 70vh;">
             <div class="mt-3">
                 <p>
                     <b class="me-3">• { getString($installInfo.language, "summary-language") }</b>
                     { getString($installInfo.language, "name") }
                 </p>
             </div>
+
             <div class="mt-3">
                 <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-identity")}</b>
                     {$installInfo.username}@{$installInfo.computerName}
                 </p>
             </div>
+
             <div class="mt-3">
                 <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-timezone")}</b>
                     {$installInfo.timezoneRegion}/{$installInfo.timezoneInfo}
                 </p>
             </div>
+
             <div class="mt-3">
                 <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-drive")}</b>
                     /dev/{$installInfo.selectedDrive} - {drives[$installInfo.selectedDrive]?.model} ({bytesToReadable(drives[$installInfo.selectedDrive]?.size)})
                 </p>
             </div>
+
             <div class="mt-3">
                 <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-boot-partition")}</b>
@@ -69,10 +73,59 @@
                     {$installInfo.formatBootPartition ? "✓" : "x"}
                 </p>
             </div>
+
             <div class="mt-3">
                 <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-root-partition")}</b>
                     /dev/{$installInfo.rootPartition}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="me-3">• {getString($installInfo.language, "enable-multilib-repo")}</b>
+                    {$installInfo.enableMultilibRepo ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-steam")}</b>
+                    {$installInfo.installSteam ? "✓" : "x"}
+                </p>
+                <p>
+                    <b class="ms-4 me-3">• Vulkan: </b>
+                    {$installInfo.vulkanNvidia ? "Nvidia; " : ""}
+                    {$installInfo.vulkanIntel ? "Intel; " : ""}
+                    {$installInfo.vulkanAmd ? "AMD; " : ""}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-wine")}</b>
+                    {$installInfo.installWine ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-winetricks")}</b>
+                    {$installInfo.installWinetricks ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-gnome-disks")}</b>
+                    {$installInfo.installGnomeDisks ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-intel-media")}</b>
+                    {$installInfo.installIntelMedia ? "✓" : "x"}
                 </p>
             </div>
         </div>

@@ -12,6 +12,10 @@ from misc_utils import (
 )
 
 
+def failmsg():
+    shared_events.append(f'Fatal error. Installation failed.')
+
+
 def start_installation(installation_object: InstallInfo):
     debug_inso = deepcopy(installation_object)
 
@@ -23,6 +27,7 @@ def start_installation(installation_object: InstallInfo):
 
     if installation_object.method == 'nuke-drive':
         shared_events.append(f'Nuking drive is unavailable right now. Please use a different method.')
+        failmsg()
         return
     
     installation_root = '/mnt/installation'
@@ -31,19 +36,24 @@ def start_installation(installation_object: InstallInfo):
     clear_mountpoints(installation_object, installation_root)
     
     if not format_fs(installation_object, installation_object.rootPartition, installation_root):
+        failmsg()
         return
 
     if not mount_fs(installation_object, installation_object.rootPartition, installation_root):
+        failmsg()
         return
 
     if installation_object.formatBootPartition:
         if not format_fs(installation_object, installation_object.bootPartition, installation_boot, bootable=True):
+            failmsg()
             return
     
     if not mount_fs(installation_object, installation_object.bootPartition, installation_boot):
+        failmsg()
         return
 
     if not pacstrap(installation_boot, installation_root):
+        failmsg()
         return
 
     fstab = generate_fstab(installation_object, installation_root)
@@ -52,6 +62,7 @@ def start_installation(installation_object: InstallInfo):
         f.write(fstab)
     
     if not generate_localtime(installation_object, installation_root):
+        failmsg()
         return
     
     if not generate_locales(
@@ -59,6 +70,7 @@ def start_installation(installation_object: InstallInfo):
             installation_root, 
             ["en_US.UTF-8", "ru_RU.UTF-8"]
         ):
+        failmsg()
         return
     
     system_locale = "en_US.UTF-8"
@@ -73,9 +85,11 @@ def start_installation(installation_object: InstallInfo):
         f.write(installation_object.computerName)
     
     if not change_password(installation_object, installation_root, 'root', installation_object.password):
+        failmsg()
         return
     
     if not connect_chaotic_aur(installation_object, installation_root):
+        failmsg()
         return
     
     if not pacman_install(
@@ -93,15 +107,19 @@ def start_installation(installation_object: InstallInfo):
                 "sof-firmware"
             ]
         ):
+        failmsg()
         return
     
     if not create_user(installation_object, installation_root):
+        failmsg()
         return
     
     if not sudo_wheel(installation_object, installation_root):
+        failmsg()
         return
     
     if not activate_systemd_service(installation_object, installation_root, "sddm.service"):
+        failmsg()
         return
     
     activate_systemd_service(installation_object, installation_root, "NetworkManager")
@@ -113,6 +131,7 @@ def start_installation(installation_object: InstallInfo):
     patch_distro_release(installation_object, installation_root)
     
     if not install_grub(installation_object, installation_root):
+        failmsg()
         return
     
     patch_default_grub(installation_object, installation_root)

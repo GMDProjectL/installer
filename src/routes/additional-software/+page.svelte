@@ -44,7 +44,7 @@
     </SetupPageTitle>
 
     <div class="flex justify-start items-center flex-col px-20 w-full gap-10 h-screen">
-        <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2 text-xl outline-none pt-16" style="height: 78vh;">
+        <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2 outline-none pt-16" style="height: 78vh;">
             <div class="flex items-center gap-5">
                 <input id="multilib" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.enableMultilibRepo} />

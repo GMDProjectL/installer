@@ -52,9 +52,12 @@
     "enable-multilib-repo": "Enable multilib repository",
     "install-steam": "Install Steam",
     "install-wine": "Install WineHQ to run Windows applications",
-    "install-winetricks": "Install Winetricks for managing proprietary components in Wine",
+    "install-winetricks": "Install Winetricks for managing additional components in Wine",
     "at-least-one-vulkan-backend": "Select at least one Vulkan backend!",
     "install-gnome-disks": "Install Gnome Disks (for managing disks)",
     "install-intel-media": "Install Intel Media (QSV, VA-API, etc.)",
-    "checking-for-connection": "Checking for connection..."
+    "checking-for-connection": "Checking for connection...",
+    "error-installing": "An error occurred during installation.",
+    "fatal-error": "Fatal error. Installation failed.",
+    "partitioning-disclaimer": "Tip: create filesystems in order to be able to see it in the next selection.\n\n1. FAT32 Partition for boot;\n2. Ext4 Partition for the main system."
 }

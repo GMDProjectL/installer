@@ -53,9 +53,12 @@
     "enable-multilib-repo": "Включить репозиторий multilib",
     "install-steam": "Установить Steam",
     "install-wine": "Установить WineHQ для запуска Windows-приложений",
-    "install-winetricks": "Установить Winetricks для управления проприетарными компонентами в Wine",
+    "install-winetricks": "Установить Winetricks (управление доп. компонентами в Wine)",
     "at-least-one-vulkan-backend": "Выберите хотя бы одну Vulkan-версию!",
     "install-gnome-disks": "Установить Gnome Disks (для управления дисками)",
     "install-intel-media": "Установить Intel Media (QSV, VA-API, etc.)",
-    "checking-for-connection": "Проверяем подключение..."
+    "checking-for-connection": "Проверяем подключение...",
+    "error-installing": "Возникла ошибка во время установки.",
+    "fatal-error": "Фатальная ошибка. Установка невозможна.",
+    "partitioning-disclaimer": "Совет: создайте файловые системы, чтобы их можно было увидеть в выборе разделов.\n\n1. FAT32 раздел для загрузчика;\n2. Ext4 раздел под систему."
 }

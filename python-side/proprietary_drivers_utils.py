@@ -1,9 +1,5 @@
-import os
 from gdltypes import InstallInfo
 from shared import shared_events
-from copy import deepcopy
-import time
-import shutil
 import subprocess
 from pacman_utils import pacman_install
 

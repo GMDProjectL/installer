@@ -88,6 +88,8 @@
                 )}> {getString($installInfo.language, "nuke-warning")} </p>
 
                 <div class={$installInfo.method != 'manual-partitioning' ? "opacity-0 pointer-events-none" : ""}>
+                    <p class="mb-5 opacity-50 w-96 text-wrap whitespace-pre">{ getString($installInfo.language, "partitioning-disclaimer") }</p>
+
                     <GDLButton on:click={() => fetch("/open-gnome-disks")}>
                         { getString($installInfo.language, "open-gnome-disks") }
                     </GDLButton>

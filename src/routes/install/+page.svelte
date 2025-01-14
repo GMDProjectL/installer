@@ -52,6 +52,22 @@
                     clearInterval(progressAnimationInterval);
                     done = true;
                 }
+
+                if (content.includes('Fatal error. Installation failed.')) {
+                    Swal.fire({
+                        title: getString($installInfo.language, "error-installing"),
+                        text: getString($installInfo.language, "fatal-error"),
+                        icon: 'error',
+                        background: '#222',
+                        color: 'white',
+                        confirmButtonColor: '#333'
+                    });
+
+                    clearInterval(eventCheckerInterval);
+                    clearInterval(progressAnimationInterval);
+
+                    done = true;
+                }
             })
         }, 1000);
 
@@ -59,17 +75,16 @@
             pbVisible = true;
             installationProgress = 30;
 
-            for (let int = 0; int < 70; int++) {
-                progressLeftPos = int;
-                await sleepAwait(16);
-            }
+            await sleepAwait(2000);
+
+            progressLeftPos = 80;
+
+            await sleepAwait(2000);
             
-            for (let int = 70; int > 0; int--) {
-                progressLeftPos = int;
-                await sleepAwait(27);
-            }
+            progressLeftPos = -5;
             
-        }, 3000);
+            
+        }, 4000);
 
         return () => {
             clearInterval(eventCheckerInterval);
@@ -98,8 +113,9 @@
     <SetupPageBottom>
         {#if !done}
         <div class="w-full flex justify-start rounded-2xl overflow-hidden bg-zinc-700 h-4 relative">
-            <div class={"bg-slate-400 h-4 transition-all absolute" + (!pbVisible ? " opacity-0" : " opacity-100")}
-                    style={`left: ${progressLeftPos}%; width: ${installationProgress}%`}></div>
+            <div class={"pb-inner bg-slate-400 h-4 absolute" 
+                + (!pbVisible ? " opacity-0" : " opacity-100")
+                } style={`left: ${progressLeftPos}%; width: ${installationProgress}%`}></div>
             </div>
         {:else}
             <GDLButton secondary on:click={() => {
@@ -110,3 +126,9 @@
         {/if}
     </SetupPageBottom>
 </SetupPage>
+
+<style>
+    .pb-inner {
+        transition: all 2s ease-in-out;
+    }
+</style>

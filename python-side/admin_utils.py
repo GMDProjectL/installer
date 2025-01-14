@@ -39,14 +39,19 @@ def create_user(installation_object: InstallInfo, root: str):
     user_name = installation_object.username
     password = installation_object.password
 
-    result = os.system(f'arch-chroot {root} useradd -m -G wheel -s /bin/bash {user_name}')
+    process = subprocess.run([
+        'arch-chroot', root, 
+        'useradd', '-m', '-G',
+        'wheel', '-s', '/bin/bash', user_name
+    ], capture_output=True)
+
+    result = process.returncode
 
     if result != 0:
-        shared_events.append('Failed to create user')
+        shared_events.append(f'Failed to create user: {process.stdout.decode()}')
         return False
     
     if not change_password(installation_object, root, user_name, password):
-        shared_events.append('Failed to set user password')
         return False
     
     return True
