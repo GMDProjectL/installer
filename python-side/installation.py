@@ -331,6 +331,14 @@ def is_nvidia(installation_object: InstallInfo):
     return False
 
 
+def is_broadcom_wl(installation_object: InstallInfo):
+    lspci = get_lspci(installation_object)
+    if 'in use: wl' in lspci:
+        return True
+    
+    return False
+
+
 def try_install_nvidia(installation_object: InstallInfo, root: str):
     if not is_nvidia(installation_object) and not is_nouveau(installation_object):
         shared_events.append('Your system doesn\'t have NVIDIA GPU. Skipping.')
@@ -341,6 +349,18 @@ def try_install_nvidia(installation_object: InstallInfo, root: str):
 
     if not result:
         shared_events.append('Failed to install NVIDIA drivers')
+
+
+def try_install_broadcom(installation_object: InstallInfo, root: str):
+    if not is_broadcom_wl(installation_object):
+        shared_events.append('Your system doesn\'t have Broadcom WiFi. Skipping.')
+        return
+    
+    shared_events.append('Installing Broadcom drivers...')
+    result = pacman_install(installation_object, root, ['linux-headers', 'dkms', 'broadcom-wl-dkms'])
+
+    if not result:
+        shared_events.append('Failed to install Broadcom drivers')
 
 
 def patch_distro_release(installation_object: InstallInfo, root: str):
@@ -528,6 +548,8 @@ def start_installation(installation_object: InstallInfo):
     activate_systemd_service(installation_object, installation_root, "NetworkManager")
     
     try_install_nvidia(installation_object, installation_root)
+
+    try_install_broadcom(installation_object, installation_root)
 
     patch_distro_release(installation_object, installation_root)
     
