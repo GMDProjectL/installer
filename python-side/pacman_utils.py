@@ -15,8 +15,7 @@ def enable_multilib(root: str):
     with open(root + '/etc/pacman.conf', 'r') as f:
         pacman_conf = f.read()
 
-    pacman_conf = pacman_conf.replace('#[multilib]', '[multilib]')
-    pacman_conf = pacman_conf.replace('#Include = /etc/pacman.d/mirrorlist', 'Include = /etc/pacman.d/mirrorlist')
+    pacman_conf = pacman_conf.replace('#[multilib]\n#Include', '[multilib]\nInclude')
 
     with open(root + '/etc/pacman.conf', 'w') as f:
         f.write(pacman_conf)
