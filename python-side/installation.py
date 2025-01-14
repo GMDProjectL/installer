@@ -146,6 +146,10 @@ def start_installation(installation_object: InstallInfo):
                     "lib32-vulkan-intel",
                     "vulkan-intel"
                 ])
+            
+            pacman_install(installation_object, installation_root, [
+                "steam"
+            ])
         
         if installation_object.installWine:
             pacman_install(installation_object, installation_root, [
