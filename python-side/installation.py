@@ -1,7 +1,7 @@
 from gdltypes import InstallInfo
 from shared import shared_events
 from copy import deepcopy
-from disk_utils import mount_fs, format_fs, clear_mountpoints
+from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
 from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur
 from admin_utils import sudo_wheel, change_password, create_user
 from grub_utils import install_grub, update_grub, patch_default_grub
@@ -26,9 +26,7 @@ def start_installation(installation_object: InstallInfo):
     shared_events.append(f'Installation started. Received installation object: {debug_inso}')
 
     if installation_object.method == 'nuke-drive':
-        shared_events.append(f'Nuking drive is unavailable right now. Please use a different method.')
-        failmsg()
-        return
+        nuke_drive(installation_object, installation_object.selectedDrive)
     
     installation_root = '/mnt/installation'
     installation_boot = installation_root + '/boot/efi'

@@ -45,6 +45,51 @@ def format_fs(installation_object: InstallInfo, partition_name: str, destination
     return True
 
 
+def nuke_drive(installation_object: InstallInfo, drive_name: str):
+    shared_events.append(f'Nuking {drive_name} drive...')
+    process = subprocess.run(['wipefs', '-a', '/dev/' + drive_name], capture_output=True)
+    if process.returncode != 0:
+        shared_events.append(f'Failed to wipefs {drive_name} drive: {process.stderr.decode()}')
+    
+    shared_events.append("wipefs: " + process.stdout.decode())
+    
+    process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'mklabel', 'gpt'], capture_output=True)
+    if process.returncode != 0:
+        shared_events.append(f'Failed to label {drive_name} drive as gpt: {process.stderr.decode()}')
+    
+    shared_events.append("label gpt: " + process.stdout.decode())
+    
+    process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'mkpart', 'primary', 'ext4', '1MiB', '1024MiB'], capture_output=True)
+    if process.returncode != 0:
+        shared_events.append(f'Failed to make boot partition on {drive_name} drive: {process.stderr.decode()}')
+    
+    shared_events.append("mkpart 1: " + process.stdout.decode())
+    
+    process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'mkpart', 'primary', 'ext4', '1024MiB', '100%'], capture_output=True)
+    if process.returncode != 0:
+        shared_events.append(f'Failed to make main partition on {drive_name} drive: {process.stderr.decode()}')
+    
+    shared_events.append("mkpart 2: " + process.stdout.decode())
+    
+    # process = subprocess.run(['mkfs.fat', '-F', '32', '/dev/' + drive_name + '1'], capture_output=True)
+    # if process.returncode != 0:
+        # shared_events.append(f'Failed to format boot partition on {drive_name} drive: {process.stderr.decode()}')
+    # 
+    # shared_events.append(process.stdout.decode())
+    # 
+    # process = subprocess.run(['mkfs.ext4', '/dev/' + drive_name + '2'], capture_output=True)
+    # if process.returncode != 0:
+        # shared_events.append(f'Failed to format main partition on {drive_name} drive: {process.stderr.decode()}')
+    # 
+    # shared_events.append(process.stdout.decode())
+    # 
+    # process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'set', '1', 'boot', 'on'], capture_output=True)
+    # if process.returncode != 0:
+        # shared_events.append(f'Failed to make boot partition on {drive_name} drive bootable: {process.stderr.decode()}')
+    # 
+    # shared_events.append(process.stdout.decode())
+    
+
 def mount_fs(installation_object: InstallInfo, partition_name: str, destination: str):
     partition_device = '/dev/' + partition_name
 

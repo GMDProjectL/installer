@@ -74,7 +74,7 @@
                         $installInfo.method = `${(e.target as any).value}`
                     }}
                     >
-                    {#each ['manual-partitioning'] as method}
+                    {#each ['nuke-drive', 'manual-partitioning'] as method}
                         <option selected={$installInfo.method == method} 
                         value={method}>
                             { getString($installInfo.language, method) }
