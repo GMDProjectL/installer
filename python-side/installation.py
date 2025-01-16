@@ -8,7 +8,7 @@ from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
 from misc_utils import (
     activate_systemd_service, generate_fstab, generate_locales, generate_localtime, 
-    patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme
+    patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config
 )
 
 
@@ -188,5 +188,9 @@ def start_installation(installation_object: InstallInfo):
             "intel-media-driver",
             "intel-media-sdk"
         ])
+    
+    shared_events.append('Setting up default KDE settings...')
+
+    copy_kde_config(installation_object, installation_root)
     
     shared_events.append('Project GDL Installed!')

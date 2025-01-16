@@ -148,3 +148,100 @@ def put_essentials_on_desktop(installation_object: InstallInfo, root: str):
         os.chown(pamac_desktop_file, 1000, 1000)
     except:
         shared_events.append('Failed to copy and chown a desktop file')
+
+
+def copy_kde_config(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying KDE config files...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    dotconfig_dir = script_dir + '/resources/.config'
+    user_config_dir = root + '/home/' + installation_object.username + '/.config'
+    autostart_dir = user_config_dir + '/autostart'
+
+
+    try:
+        os.mkdir(user_config_dir)
+    except:
+        shared_events.append('User config directory already exists, copying...')
+
+    try:
+        os.mkdir(autostart_dir)
+    except:
+        shared_events.append('User autostart directory already exists, copying...')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/kdeglobals', user_config_dir + '/kdeglobals')
+    except Exception as e:
+        shared_events.append(f'Failed to copy kdeglobals file: {e}')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/plasmarc', user_config_dir + '/plasmarc')
+    except Exception as e:
+        shared_events.append(f'Failed to copy plasmarc file: {e}')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/pgd-bg.png', user_config_dir + '/pgd-bg.png')
+    except Exception as e:
+        shared_events.append(f'Failed to copy pgd-bg.png file: {e}')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/set-gd-wallpaper.sh', user_config_dir + '/set-gd-wallpaper.sh')
+    except Exception as e:
+        shared_events.append(f'Failed to copy set-gd-wallpaper.sh file: {e}')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/autostart/set-gd-wallpaper.desktop', autostart_dir + '/set-gd-wallpaper.desktop')
+    except Exception as e:
+        shared_events.append(f'Failed to copy set-gd-wallpaper.desktop file: {e}')
+    
+
+    with open(user_config_dir + '/plasmarc', 'r') as f:
+        plasmarc = f.read()
+    
+    plasmarc = plasmarc.replace('myuser', installation_object.username)
+
+    with open(user_config_dir + '/plasmarc', 'w') as f:
+        f.write(plasmarc)
+
+
+    with open(user_config_dir + '/set-gd-wallpaper.sh', 'r') as f:
+        sgd = f.read()
+    
+    sgd = sgd.replace('myuser', installation_object.username)
+
+    with open(user_config_dir + '/set-gd-wallpaper.sh', 'w') as f:
+        f.write(sgd)
+
+
+    with open(autostart_dir + '/set-gd-wallpaper.desktop', 'r') as f:
+        sgdd = f.read()
+    
+    sgdd = sgdd.replace('myuser', installation_object.username)
+
+    with open(autostart_dir + '/set-gd-wallpaper.desktop', 'w') as f:
+        f.write(sgdd)
+
+
+    shared_events.append('Adjusting permissions')
+
+    process = subprocess.run([
+        'arch-chroot', root,
+        'chown', '-R', '1000:1000', '/home/' + installation_object.username + '/.config'
+        ], capture_output=True)
+    
+    if process.returncode != 0:
+        shared_events.append(f'Failed to adjust: {process.stderr.decode()}')
+
+
+    process = subprocess.run([
+        'arch-chroot', root,
+        'chmod', '7777', '/home/' + installation_object.username + './config/set-gd-wallpaper.sh'
+        ], capture_output=True)
+    
+    if process.returncode != 0:
+        shared_events.append(f'Failed to adjust sgd: {process.stderr.decode()}')
