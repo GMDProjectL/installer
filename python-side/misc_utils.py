@@ -3,6 +3,8 @@ from gdltypes import InstallInfo
 from shared import shared_events
 import shutil
 import subprocess
+from pacman_utils import pacman_install
+from admin_utils import mkinitpcio
 
 
 def generate_fstab(installation_object: InstallInfo, destination: str):
@@ -122,6 +124,35 @@ def patch_sddm_theme(installation_object: InstallInfo, root: str):
         shutil.copy(resources_dir + '/theme.conf.user', sddm_breeze_dir + '/theme.conf.user')
     except Exception as e:
         shared_events.append(f'Failed to apply patch to SDDM Background: {e}')
+
+
+def install_plymouth(installation_object: InstallInfo, root: str):
+    shared_events.append('Installing Plymouth...')
+
+    if not pacman_install(installation_object, root, [
+        'plymouth'
+    ]):
+        shared_events.append('Something went wrong while installing Plymouth.')
+        return
+    
+    try:
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        shutil.copytree(script_dir + '/resources/michigun', root + '/usr/share/plymouth/themes/michigun')
+
+        with open(root + '/etc/plymouth/plymouthd.conf') as f:
+            content = f.read()
+        
+        content = content.replace('#[Daemon]', '[Daemon]')
+        content = content.replace('#Theme=fade-in', 'Theme=michigun')    
+
+        with open(root + '/etc/plymouth/plymouthd.conf', 'w') as f:
+            f.write(content)
+    except Exception as e:
+        shared_events.append(f'Failed to setup Plymouth theme: {e}')
+    
+    
+    if not mkinitpcio(installation_object, root):
+        shared_events.append('Something went wrong while configuring mkinitcpio.')
 
 
 def install_gdl_xdg_icon(installation_object: InstallInfo, root: str):

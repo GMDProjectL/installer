@@ -34,6 +34,26 @@ def change_password(installation_object: InstallInfo, root: str, user: str, pass
     return True
 
 
+def mkinitpcio(installation_object, root: str):
+    shared_events.append('Generating CPIO...')
+
+    process = subprocess.Popen([
+        'arch-chroot', root,
+        'mkinitcpio', 'P'
+    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'mkinitcpio: {line.strip()}')
+    process.wait()
+    
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to mkinitcpio: {line.strip()}')
+        
+        return False
+    
+    return True
+
 def create_user(installation_object: InstallInfo, root: str):
     shared_events.append('Creating user...')
     user_name = installation_object.username

@@ -8,7 +8,8 @@ from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
 from misc_utils import (
     activate_systemd_service, generate_fstab, generate_locales, generate_localtime, 
-    patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config
+    patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
+    install_plymouth
 )
 
 
@@ -192,6 +193,7 @@ def start_installation(installation_object: InstallInfo):
     shared_events.append('Setting up default KDE settings...')
 
     copy_kde_config(installation_object, installation_root)
+    install_plymouth(installation_object, installation_root)
     add_to_input(installation_object, installation_root)
 
     if installation_object.setupBluetooth:
