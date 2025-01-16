@@ -55,3 +55,22 @@ def create_user(installation_object: InstallInfo, root: str):
         return False
     
     return True
+
+
+def add_to_input(installation_object: InstallInfo, root: str):
+    shared_events.append('Adding user to input group...')
+    user_name = installation_object.username
+
+    process = subprocess.run([
+        'arch-chroot', root, 
+        'usermod', '-a', '-G',
+        'input', user_name
+    ], capture_output=True)
+
+    result = process.returncode
+
+    if result != 0:
+        shared_events.append(f'Failed to add user to input group: {process.stdout.decode()}')
+        return False
+    
+    return True

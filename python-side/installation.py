@@ -3,7 +3,7 @@ from shared import shared_events
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
 from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur
-from admin_utils import sudo_wheel, change_password, create_user
+from admin_utils import sudo_wheel, change_password, create_user, add_to_input
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
 from misc_utils import (
@@ -192,5 +192,7 @@ def start_installation(installation_object: InstallInfo):
     shared_events.append('Setting up default KDE settings...')
 
     copy_kde_config(installation_object, installation_root)
+
+    add_to_input(installation_object, installation_root)
     
     shared_events.append('Project GDL Installed!')

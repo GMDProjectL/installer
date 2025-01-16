@@ -240,7 +240,7 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
 
     process = subprocess.run([
         'arch-chroot', root,
-        'chmod', '7777', '/home/' + installation_object.username + './config/set-gd-wallpaper.sh'
+        'chmod', '7777', '/home/' + installation_object.username + '/.config/set-gd-wallpaper.sh'
         ], capture_output=True)
     
     if process.returncode != 0:

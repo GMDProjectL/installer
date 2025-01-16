@@ -1,7 +1,9 @@
 from gdltypes import InstallInfo
 from shared import shared_events
 from pacman_utils import pacman_install
+import os
 import subprocess
+import shutil
 
 
 def update_grub(installation_object: InstallInfo, destination: str):
@@ -56,11 +58,18 @@ def patch_default_grub(installation_object: InstallInfo, root: str):
 
     pacman_install(installation_object, root, ['os-prober', 'grub-theme-vimix'])
 
+    if not os.path.exists(root + '/usr/share/gdlbg'):
+        os.makedirs(root + '/usr/share/gdlbg')
+    
+
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    shutil.copy(script_dir + '/resources/.config/pgd-bg.png', root + '/usr/share/gdlbg/pgd-bg.png')
+
     # changing /etc/default/grub
     with open(root + '/etc/default/grub', 'r') as f:
         content = f.read()
         content = content.replace('GRUB_DISTRIBUTOR="Arch"', 'GRUB_DISTRIBUTOR="ProjectGDL"')
-        content = content.replace('#GRUB_THEME="/path/to/gfxtheme"', 'GRUB_THEME="/usr/share/grub/themes/Vimix/theme.txt"')
+        content = content.replace('#GRUB_BACKGROUND="/path/to/wallpaper"', 'GRUB_BACKGROUND="/usr/share/gdlbg/pgd-bg.png"')
         content = content.replace('#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false')
         content = content.replace('GRUB_GFXMODE=auto', 'GRUB_GFXMODE=1920x1080')
     
