@@ -149,8 +149,22 @@ def install_plymouth(installation_object: InstallInfo, root: str):
             f.write(content)
     except Exception as e:
         shared_events.append(f'Failed to setup Plymouth theme: {e}')
+        return
+
+    with open(root + '/etc/mkinitcpio.conf', 'r') as f:
+        lines = f.readlines()
     
+    content = ""
+
+    for line in lines:
+        if line.startswith('HOOKS') and not 'plymouth' in line:
+            content += line.replace(')', ' plymouth)')
+        else:
+            content += line
     
+    with open(root + '/etc/mkinitcpio.conf', 'w') as f:
+        f.write(content)
+
     if not mkinitpcio(installation_object, root):
         shared_events.append('Something went wrong while configuring mkinitcpio.')
 
