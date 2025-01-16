@@ -192,7 +192,12 @@ def start_installation(installation_object: InstallInfo):
     shared_events.append('Setting up default KDE settings...')
 
     copy_kde_config(installation_object, installation_root)
-
     add_to_input(installation_object, installation_root)
+
+    if installation_object.setupBluetooth:
+        pacman_install(installation_object, installation_root, [
+            "bluez"
+        ])
+        activate_systemd_service(installation_object, installation_root, "bluetooth.service")
     
     shared_events.append('Project GDL Installed!')

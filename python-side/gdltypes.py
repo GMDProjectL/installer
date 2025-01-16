@@ -23,3 +23,4 @@ class InstallInfo:
     vulkanIntel: bool
     installGnomeDisks: bool
     installIntelMedia: bool
+    setupBluetooth: bool

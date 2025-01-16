@@ -144,6 +144,16 @@
                     <Icon icon="ion:hardware-chip-sharp" />
                 </label>
             </div>
+
+            <div class="flex items-center gap-5">
+                <input id="bt" class="invert grayscale scale-150" type="checkbox" 
+                    bind:checked={$installInfo.setupBluetooth} 
+                    />
+                <label for="bt" class="flex items-center gap-4">
+                    { getString($installInfo.language, "setup-bluetooth") }
+                    <Icon icon="material-symbols:bluetooth" />
+                </label>
+            </div>
         </div>
     </div>
 
