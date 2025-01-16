@@ -39,7 +39,7 @@ def mkinitpcio(installation_object, root: str):
 
     process = subprocess.Popen([
         'arch-chroot', root,
-        'mkinitcpio', 'P'
+        'mkinitcpio', '-P'
     ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
     
     for line in iter(process.stdout.readline, ''):
