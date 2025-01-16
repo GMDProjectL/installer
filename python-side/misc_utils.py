@@ -103,6 +103,7 @@ def patch_sddm_theme(installation_object: InstallInfo, root: str):
     script_dir = os.path.dirname(os.path.abspath(__file__))
     resources_dir = script_dir + '/resources'
     sddm_conf_dir = root + '/etc/sddm.conf.d'
+    sddm_breeze_dir = root + '/usr/share/sddm/themes/breeze'
 
     try:
         os.mkdir(sddm_conf_dir)
@@ -110,6 +111,17 @@ def patch_sddm_theme(installation_object: InstallInfo, root: str):
         pass
 
     shutil.copy(resources_dir + '/kde_settings.conf', sddm_conf_dir + '/kde_settings.conf')
+
+
+    if not os.path.exists(sddm_breeze_dir):
+        shared_events.append('SDDM Breeze theme not found, can\'t patch.')
+        return
+    
+    try:
+        shutil.copy(resources_dir + '/.config/pgd-bg.png', sddm_breeze_dir + '/pgdl.png')
+        shutil.copy(resources_dir + '/theme.conf.user', sddm_breeze_dir + '/theme.conf.user')
+    except Exception as e:
+        shared_events.append(f'Failed to apply patch to SDDM Background: {e}')
 
 
 def install_gdl_xdg_icon(installation_object: InstallInfo, root: str):
