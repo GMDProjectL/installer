@@ -73,6 +73,23 @@ def create_oobe_autostart(installation_object: InstallInfo, root: str):
 
     try:
         shutil.copy(script_dir + '/resources/.config/autostart/oobe.desktop', root + autostart_directory + '/oobe.desktop')
-        return True
     except Exception as e:
         shared_events.append(f'Failed to install OOBE autostart: {str(e)}')
+        return
+    
+    process = subprocess.Popen([
+        'arch-chroot', root,
+        'chown', username, root + autostart_directory + '/oobe.desktop'
+    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'Installing OOBE autostart perms: {line.strip()}')
+    process.wait()
+    
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to install OOBE autostart perms: {line.strip()}')
+        
+        return False
+    
+    return True
