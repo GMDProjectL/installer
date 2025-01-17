@@ -6,6 +6,7 @@ from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chao
 from admin_utils import sudo_wheel, change_password, create_user, add_to_input
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
+from oobe_utils import adjust_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
 from misc_utils import (
     activate_systemd_service, generate_fstab, generate_locales, generate_localtime, 
     patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
@@ -201,5 +202,23 @@ def start_installation(installation_object: InstallInfo):
             "bluez"
         ])
         activate_systemd_service(installation_object, installation_root, "bluetooth.service")
+    
+    if not clone_oobe(installation_object, installation_root):
+        failmsg()
+        return
+    
+    if not adjust_permissions(installation_object, installation_root):
+        failmsg()
+        return
+    
+    if not install_oobe_dependencies(installation_object, installation_root):
+        failmsg()
+        return
+    
+    if not adjust_permissions(installation_object, installation_root):
+        failmsg()
+        return
+    
+    create_oobe_autostart(installation_object, installation_root)
     
     shared_events.append('Project GDL Installed!')
