@@ -29,7 +29,7 @@ def clone_oobe(installation_object: InstallInfo, root: str):
 def adjust_permissions(installation_object: InstallInfo, root: str):
     process = subprocess.Popen([
         'arch-chroot', root,
-        'chmod', '-R', '7777', '/opt/oobe/'
+        'chmod', '-R', '7777', '/opt/oobe'
     ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
     
     for line in iter(process.stdout.readline, ''):
@@ -39,6 +39,22 @@ def adjust_permissions(installation_object: InstallInfo, root: str):
     if process.returncode != 0:
         for line in iter(process.stderr.readline, ''):
             shared_events.append(f'Failed to change OOBE permissions: {line.strip()}')
+        
+        return False
+
+
+    process = subprocess.Popen([
+        'arch-chroot', root,
+        'chown', '-R', installation_object.username, '/opt/oobe'
+    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'Changing ownership: {line.strip()}')
+    process.wait()
+    
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to change OOBE ownership: {line.strip()}')
         
         return False
     
