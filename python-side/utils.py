@@ -27,8 +27,12 @@ def get_drives():
             and not drive.startswith('nvme')):
             continue
 
-        with open(f'/sys/block/{drive}/device/model', 'r') as f:
-            model = f.read().strip()
+        try:
+            with open(f'/sys/block/{drive}/device/model', 'r') as f:
+                model = f.read().strip()
+        except:
+            model = 'Unknown Model'
+            
         buf = b' ' * 8
         fmt = 'L'
         with open(f'/dev/{drive}') as dev:
