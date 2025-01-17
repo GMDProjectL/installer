@@ -79,7 +79,7 @@ def create_oobe_autostart(installation_object: InstallInfo, root: str):
     
     process = subprocess.Popen([
         'arch-chroot', root,
-        'chown', username, root + autostart_directory + '/oobe.desktop'
+        'chown', username, autostart_directory + '/oobe.desktop'
     ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
     
     for line in iter(process.stdout.readline, ''):
