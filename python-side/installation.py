@@ -103,7 +103,7 @@ def start_installation(installation_object: InstallInfo):
                 "spectacle", "gwenview", "kate", 
                 "ark", "p7zip", 
                 "zip", "unzip", "unrar", "neofetch",
-                "sof-firmware"
+                "sof-firmware", "breeze5"
             ]
         ):
         failmsg()
