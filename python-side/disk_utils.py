@@ -59,7 +59,7 @@ def nuke_drive(installation_object: InstallInfo, drive_name: str):
     
     shared_events.append("label gpt: " + process.stdout.decode())
     
-    process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'mkpart', 'bootloader', 'c12a7328-f81f-11d2-ba4b-00a0c93ec93b', '1MiB', '1024MiB'], capture_output=True)
+    process = subprocess.run(['parted', '/dev/' + drive_name, '--script', 'mkpart', 'bootloader', 'fat32', '1MiB', '1024MiB'], capture_output=True)
     if process.returncode != 0:
         shared_events.append(f'Failed to make boot partition on {drive_name} drive: {process.stderr.decode()}')
     
