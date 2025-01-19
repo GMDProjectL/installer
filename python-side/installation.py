@@ -130,9 +130,15 @@ def start_installation(installation_object: InstallInfo):
         failmsg()
         return
     
-    if not activate_systemd_service(installation_object, installation_root, "sddm.service"):
-        failmsg()
-        return
+    if installation_object.de == 'kde':
+        if not activate_systemd_service(installation_object, installation_root, "sddm.service"):
+            failmsg()
+            return
+    
+    if installation_object.de == 'gnome':
+        if not activate_systemd_service(installation_object, installation_root, "gdm.service"):
+            failmsg()
+            return
     
     activate_systemd_service(installation_object, installation_root, "NetworkManager")
     
