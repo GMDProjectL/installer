@@ -22,7 +22,8 @@ type InstallInfo = {
     vulkanIntel: boolean,
     installGnomeDisks: boolean,
     installIntelMedia: boolean,
-    setupBluetooth: boolean
+    setupBluetooth: boolean,
+    de: string
 }
 
 let installInfo = writable<InstallInfo>({
@@ -47,7 +48,8 @@ let installInfo = writable<InstallInfo>({
     vulkanIntel: false,
     installGnomeDisks: false,
     installIntelMedia: false,
-    setupBluetooth: false
+    setupBluetooth: false,
+    de: 'kde'
 });
 
 export default installInfo;  // Export the store

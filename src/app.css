@@ -11,6 +11,16 @@ body {
     @apply bg-zinc-900;
 }
 
+.shitinside div {
+  width: 600px;
+  height: 60vh;
+  justify-content: center;
+}
+
+.shitinside div img {
+  object-fit: contain;
+}
+
 @keyframes fade-in {
 	from {
 		opacity: 0;

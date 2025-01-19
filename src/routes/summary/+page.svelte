@@ -58,6 +58,13 @@
 
             <div class="mt-3">
                 <p>
+                    <b class="me-3">• {getString($installInfo.language, "desktop-environment")}:</b>
+                    {$installInfo.de.toUpperCase()}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
                     <b class="me-3">• {getString($installInfo.language, "summary-drive")}</b>
                     /dev/{$installInfo.selectedDrive} - {drives[$installInfo.selectedDrive]?.model} ({bytesToReadable(drives[$installInfo.selectedDrive]?.size)})
                 </p>

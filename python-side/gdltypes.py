@@ -24,3 +24,4 @@ class InstallInfo:
     installGnomeDisks: bool
     installIntelMedia: bool
     setupBluetooth: bool
+    de: str

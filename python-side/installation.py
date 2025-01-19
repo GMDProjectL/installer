@@ -92,20 +92,32 @@ def start_installation(installation_object: InstallInfo):
         failmsg()
         return
     
+    de_packages = []
+
+    if installation_object.de == "gnome":
+        de_packages = [
+            "gdm", "gnome", "gnome-tweaks", 
+            "gnome-photos", "dconf", "dconf-editor"
+        ]
+    
+    if installation_object.de == "kde":
+        de_packages = [
+            "plasma", "sddm", "ark", "dolphin",
+            "konsole", "kio-admin", "gwenview", "kate",
+            "breeze5", "spectacle"
+        ]
+    
     if not pacman_install(
             installation_object, 
             installation_root, 
             [
-                "plasma", "sddm", 
                 "grub", "efibootmgr", 
                 "electron33", "nodejs", "npm",
                 "pamac", "apple-fonts", "yay",
-                "konsole", "dolphin", "kio-admin",
-                "spectacle", "gwenview", "kate", 
-                "ark", "p7zip", 
+                "p7zip", 
                 "zip", "unzip", "unrar", "neofetch",
-                "sof-firmware", "breeze5"
-            ]
+                "sof-firmware"
+            ] + de_packages
         ):
         failmsg()
         return

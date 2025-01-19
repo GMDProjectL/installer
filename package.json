@@ -26,6 +26,7 @@
 	"dependencies": {
 		"@fontsource/roboto": "^5.1.1",
 		"@sweetalert2/themes": "^5.0.26",
+		"flowbite-svelte": "^0.47.4",
 		"sweetalert2": "^11.15.10"
 	}
 }

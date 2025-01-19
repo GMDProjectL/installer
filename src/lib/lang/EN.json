@@ -60,5 +60,7 @@
     "error-installing": "An error occurred during installation.",
     "fatal-error": "Fatal error. Installation failed.",
     "partitioning-disclaimer": "Tip: create filesystems in order to be able to see it in the next selection.\n\n1. FAT32 Partition for boot;\n2. Ext4 Partition for the main system.",
-    "setup-bluetooth": "Setup Bluetooth"
+    "setup-bluetooth": "Setup Bluetooth",
+    "desktop-environment": "Desktop Environment",
+    "recommended": "Recommended"
 }

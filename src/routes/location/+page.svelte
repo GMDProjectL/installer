@@ -76,7 +76,7 @@
                 });
                 return;
             }
-            goto("/additional-software");
+            goto("/desktop-environment");
         }}>
             { getString($installInfo.language, "next") }
         </GDLButton>
