@@ -97,7 +97,8 @@ def start_installation(installation_object: InstallInfo):
     if installation_object.de == "gnome":
         de_packages = [
             "gdm", "gnome", "gnome-tweaks", 
-            "gnome-photos", "dconf", "dconf-editor"
+            "gnome-photos", "dconf", "dconf-editor",
+            "adw-gtk-theme"
         ]
     
     if installation_object.de == "kde":
