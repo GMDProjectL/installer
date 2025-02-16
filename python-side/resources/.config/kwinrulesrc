@@ -28,3 +28,7 @@ titlematch=1
 types=1
 wmclass=steam_app_322170
 wmclassmatch=1
+
+[General]
+count=2
+rules=68dc3fff-b0f3-4810-b616-af1e433b489c,69ab2f35-60dd-4fcb-9951-5d0f070907f3
