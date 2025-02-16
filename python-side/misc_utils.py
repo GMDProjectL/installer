@@ -186,6 +186,19 @@ def install_gdl_xdg_icon(installation_object: InstallInfo, root: str):
     return True
 
 
+def install_sayodevice_udev_rule(installation_object: InstallInfo, root: str):
+    shared_events.append('Installing SayoDevice udev rule...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources/'
+    target_dir = '/etc/udev/rules.d/'
+    rules_name = '70-sayo.rules'
+
+    try:
+        shutil.copy(resources_dir + rules_name, root + target_dir + rules_name)
+    except Exception as e:
+        shared_events.append(f'Failed to copy Sayo udev rule: {e}')
+
+
 def put_essentials_on_desktop(installation_object: InstallInfo, root: str):
     shared_events.append('Placing essentials on desktop...')
 
