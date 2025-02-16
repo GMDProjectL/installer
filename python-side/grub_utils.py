@@ -69,7 +69,7 @@ def patch_default_grub(installation_object: InstallInfo, root: str):
     with open(root + '/etc/default/grub', 'r') as f:
         content = f.read()
         content = content.replace('GRUB_DISTRIBUTOR="Arch"', 'GRUB_DISTRIBUTOR="ProjectGDL"')
-        content = content.replace('loglevel=3 quiet', 'loglevel=3 quiet splash')
+        content = content.replace('loglevel=3 quiet', 'loglevel=3 quiet splash radeon.dpm=0 nmi_watchdog=0 mitigations=off tsc=reliable clocksource=tsc no_debug_objects dma_debug=off highres=on no_timer_check no-kvmclock nomca nomce nosoftlockup nowatchdog powersave=off selinux=0 apparmor=0')
         content = content.replace('#GRUB_BACKGROUND="/path/to/wallpaper"', 'GRUB_BACKGROUND="/usr/share/gdlbg/pgd-bg.png"')
         content = content.replace('#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false')
         content = content.replace('GRUB_GFXMODE=auto', 'GRUB_GFXMODE=1920x1080')

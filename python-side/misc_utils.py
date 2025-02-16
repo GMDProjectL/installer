@@ -199,6 +199,32 @@ def install_sayodevice_udev_rule(installation_object: InstallInfo, root: str):
         shared_events.append(f'Failed to copy Sayo udev rule: {e}')
 
 
+def copy_sysctl_config(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying sysctl config...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources/'
+    target_dir = '/etc/sysctl.d/'
+    config_name = '99-optimizations.conf'
+    
+    try:
+        shutil.copy(resources_dir + 'sysctl.d/' + config_name, root + target_dir + config_name)
+    except Exception as e:
+        shared_events.append(f'Failed to copy sysctl config: {e}')
+
+
+def copy_modprobe_config(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying modprobe config...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources/'
+    target_dir = '/etc/modprobe.d/'
+    config_name = 'gaming.conf'
+    
+    try:
+        shutil.copy(resources_dir + 'modprobe.d/' + config_name, root + target_dir + config_name)
+    except Exception as e:
+        shared_events.append(f'Failed to copy modprobe config: {e}')
+
+
 def put_essentials_on_desktop(installation_object: InstallInfo, root: str):
     shared_events.append('Placing essentials on desktop...')
 
