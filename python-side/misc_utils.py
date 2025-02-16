@@ -247,6 +247,12 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
 
 
     try:
+        shutil.copy(dotconfig_dir + '/kwinrulesrc', user_config_dir + '/kwinrulesrc')
+    except Exception as e:
+        shared_events.append(f'Failed to copy kwinrulesrc file: {e}')
+
+
+    try:
         shutil.copy(dotconfig_dir + '/plasmarc', user_config_dir + '/plasmarc')
     except Exception as e:
         shared_events.append(f'Failed to copy plasmarc file: {e}')

@@ -1,0 +1,30 @@
+[68dc3fff-b0f3-4810-b616-af1e433b489c]
+Description=Window settings for Geometry Dash on Wine
+acceptfocus=true
+acceptfocusrule=2
+adaptivesync=false
+adaptivesyncrule=2
+blockcompositingrule=2
+clientmachine=localhost
+fpplevel=2
+fpplevelrule=2
+fullscreen=true
+fullscreenrule=2
+tearingrule=2
+title=Geometry Dash
+titlematch=3
+types=1
+wmclass=geometrydash.exe
+wmclassmatch=1
+
+[69ab2f35-60dd-4fcb-9951-5d0f070907f3]
+Description=Window settings for Geometry Dash on Steam
+clientmachine=localhost
+tearingrule=2
+fullscreen=true
+fullscreenrule=2
+title=Geometry Dash
+titlematch=1
+types=1
+wmclass=steam_app_322170
+wmclassmatch=1
