@@ -351,7 +351,7 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
     
 
 def get_latest_gi_release():
-    url = 'https://api.github.com/repos/GMDProjectL/oobe/releases'
+    url = 'https://api.github.com/repos/GMDProjectL/geode-installer/releases'
     response = requests.get(url)
     result = response.json()
 
