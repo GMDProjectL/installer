@@ -10,7 +10,7 @@ from oobe_utils import adjust_permissions, clone_oobe, create_oobe_autostart, in
 from misc_utils import (
     activate_systemd_service, generate_fstab, generate_locales, generate_localtime, 
     patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
-    install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config
+    install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config, install_geode_installer
 )
 
 
@@ -242,5 +242,7 @@ def start_installation(installation_object: InstallInfo):
 
     install_sayodevice_udev_rule(installation_object, installation_root)
     copy_sysctl_config(installation_object, installation_root)
+
+    install_geode_installer(installation_object, installation_root)
     
     shared_events.append('Project GDL Installed!')

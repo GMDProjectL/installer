@@ -97,3 +97,22 @@ def pacman_install(installation_object: InstallInfo, destination: str, packages:
         return False
     
     return True
+
+
+def pacman_install_from_file(installation_object: InstallInfo, destination: str, filename: str):
+    process = subprocess.Popen([
+        'arch-chroot', destination,
+        'pacman', '-U', filename, '--noconfirm', '--noprogressbar', '--needed'
+    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'Installing: {line.strip()}')
+    process.wait()
+    
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to install: {line.strip()}')
+        
+        return False
+    
+    return True

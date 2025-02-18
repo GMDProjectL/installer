@@ -1,9 +1,10 @@
 import os
+import requests
 from gdltypes import InstallInfo
 from shared import shared_events
 import shutil
 import subprocess
-from pacman_utils import pacman_install
+from pacman_utils import pacman_install, pacman_install_from_file
 from admin_utils import mkinitpcio
 
 
@@ -347,3 +348,31 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
     
     if process.returncode != 0:
         shared_events.append(f'Failed to adjust sgd: {process.stderr.decode()}')
+    
+
+def get_latest_gi_release():
+    url = 'https://api.github.com/repos/GMDProjectL/oobe/releases'
+    response = requests.get(url)
+    result = response.json()
+
+    return result[0]
+
+def get_gi_zstball():
+    release = get_latest_gi_release()
+    return release["assets"][0]["browser_download_url"]
+
+
+def install_geode_installer(installation_object: InstallInfo, root: str):
+    shared_events.append('Downloading Geode Installer...')
+    zstball_url = get_gi_zstball()
+
+    response = requests.get(zstball_url, stream=True)
+    with open(root + '/opt/geode-installer.pkg.tar.zst', 'wb') as f:
+        for chunk in response.iter_content(chunk_size=1024): 
+            if chunk:
+                f.write(chunk)
+    
+    shared_events.append('Geode Installer downloaded')
+    shared_events.append('Installing Geode Installer...')
+
+    pacman_install_from_file(installation_object, root, '/opt/geode-installer.pkg.tar.zst')
