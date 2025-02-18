@@ -43,7 +43,7 @@ def try_install_nvidia(installation_object: InstallInfo, root: str):
         return
     
     shared_events.append('Installing NVIDIA drivers...')
-    result = pacman_install(installation_object, root, ['nvidia', 'nvidia-utils', 'nvidia-settings'])
+    result = pacman_install(installation_object, root, ['nvidia-dkms', 'nvidia-utils', 'nvidia-settings'])
 
     if not result:
         shared_events.append('Failed to install NVIDIA drivers')
