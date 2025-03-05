@@ -105,7 +105,7 @@ def start_installation(installation_object: InstallInfo):
         de_packages = [
             "plasma", "sddm", "ark", "dolphin",
             "konsole", "kio-admin", "gwenview", "kate",
-            "breeze5", "spectacle"
+            "breeze5", "spectacle", "packagekit-qt6", "flatpak-kcm"
         ]
     
     if not pacman_install(
