@@ -45,8 +45,8 @@ def try_install_nvidia(installation_object: InstallInfo, root: str):
     shared_events.append('Installing NVIDIA drivers...')
     result = pacman_install(installation_object, root, 
         [
-            'nvidia-dkms', 'nvidia-utils', 'nvidia-settings',
-            'nvidia-prime'
+            'nvidia-dkms', 'nvidia-utils', 
+            'nvidia-settings', 'nvidia-prime'
         ]
     )
 
@@ -60,7 +60,11 @@ def try_install_broadcom(installation_object: InstallInfo, root: str):
         return
     
     shared_events.append('Installing Broadcom drivers...')
-    result = pacman_install(installation_object, root, ['linux-headers', 'dkms', 'broadcom-wl-dkms'])
+    result = pacman_install(installation_object, root, 
+        [
+            'linux-headers', 'dkms', 'broadcom-wl-dkms'
+        ]
+    )
 
     if not result:
         shared_events.append('Failed to install Broadcom drivers')
