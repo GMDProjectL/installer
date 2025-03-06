@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=Steam Prime-Run (NVIDIA for laptops)
+Comment=Play this game on Steam
+Exec=prime-run steam
+Icon=steam
+Terminal=false
+Type=Application
+Categories=Game;

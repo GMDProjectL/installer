@@ -247,6 +247,22 @@ def put_essentials_on_desktop(installation_object: InstallInfo, root: str):
         shared_events.append('Failed to copy and chown a desktop file')
 
 
+def copy_nvidia_prime_steam(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying NVIDIA PRIME Steam file...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    res_dir = script_dir + '/resources/'
+    app_dir = root + '/usr/share/applications/'
+
+    filename = 'steam-prime.desktop'
+
+    try:
+        shutil.copy(res_dir + 'steam-prime.desktop', app_dir + filename)
+        os.chown(app_dir + filename, 1000, 1000)
+    except Exception as e:
+        shared_events.append(f'Failed to copy NVIDIA PRIME Steam file: {e}')
+
+
 def copy_kde_config(installation_object: InstallInfo, root: str):
     shared_events.append('Copying KDE config files...')
     script_dir = os.path.dirname(os.path.abspath(__file__))
