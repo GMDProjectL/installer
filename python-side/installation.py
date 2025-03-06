@@ -115,8 +115,8 @@ def start_installation(installation_object: InstallInfo):
                 "grub", "efibootmgr", 
                 "electron33", "nodejs", "npm",
                 "pamac", "apple-fonts", "yay",
-                "p7zip", 
-                "zip", "unzip", "unrar", "neofetch",
+                "p7zip", "zip", "unzip", "unrar", 
+                "neofetch",
                 "sof-firmware", "fastfetch", "btop", "aptpac"
             ] + de_packages
         ):
