@@ -117,7 +117,7 @@ def start_installation(installation_object: InstallInfo):
                 "pamac", "apple-fonts", "yay",
                 "p7zip", 
                 "zip", "unzip", "unrar", "neofetch",
-                "sof-firmware", "fastfetch", "btop"
+                "sof-firmware", "fastfetch", "btop", "aptpac"
             ] + de_packages
         ):
         failmsg()
