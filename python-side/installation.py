@@ -161,6 +161,11 @@ def start_installation(installation_object: InstallInfo):
 
     install_gdl_xdg_icon(installation_object, installation_root)
 
+    if pacman_install(installation_object, installation_root, [
+        "power-profiles-daemon"
+    ]):
+        activate_systemd_service(installation_object, installation_root, "power-profiles-daemon")
+
     if installation_object.enableMultilibRepo:
         enable_multilib(installation_root)
 
