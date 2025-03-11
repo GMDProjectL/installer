@@ -117,8 +117,14 @@
             }
 
             if ($installInfo.method == 'nuke-drive') {
-                $installInfo.bootPartition = $installInfo.selectedDrive + '1';
-                $installInfo.rootPartition = $installInfo.selectedDrive + '2';
+                if ($installInfo.selectedDrive.startsWith('nvme')) {
+                    $installInfo.bootPartition = $installInfo.selectedDrive + 'p' + '1';
+                    $installInfo.rootPartition = $installInfo.selectedDrive + 'p' + '2';
+                }
+                else {
+                    $installInfo.bootPartition = $installInfo.selectedDrive + '1';
+                    $installInfo.rootPartition = $installInfo.selectedDrive + '2';
+                }
             }
 
             goto(
