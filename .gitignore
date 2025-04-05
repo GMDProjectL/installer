@@ -25,3 +25,6 @@ vite.config.ts.timestamp-*
 
 **__pycache__**
 **/venv
+
+new-imgui/build/**
+new-imgui/.cache/**
