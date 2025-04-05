@@ -13,7 +13,11 @@ target_include_directories(
     ${PROJECT_NAME} PUBLIC 
     thirdparty/imgui
     thirdparty/imgui/backends
+    src/include
+    src/include/components
 )
+
+file(COPY ./resources DESTINATION ${CMAKE_BINARY_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC
     OpenGL::OpenGL
