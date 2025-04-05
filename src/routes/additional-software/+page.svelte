@@ -2,15 +2,13 @@
     import Icon from "@iconify/svelte";
     import { 
         getString, 
-        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
-        getDrives,
+        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installInfo,
-        bytesToReadable,
-        getPartitions
+        installationPage
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
-    import { onMount, tick } from "svelte";
+    import { tick } from "svelte";
 
 
     const bugfixCheckbox = async() => {
@@ -158,7 +156,10 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => history.back()}>
+        <GDLButton on:click={() => {
+            $installationPage = $installationPage - 1;
+            history.back();
+        }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
@@ -176,6 +177,7 @@
                     return;
                 }
             }
+            $installationPage = $installationPage + 1;
             goto("/partitioning");
         }}>
             { getString($installInfo.language, "next") }

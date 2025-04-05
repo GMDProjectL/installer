@@ -16,5 +16,27 @@ const getString = (lang: string, key: string) : string => {
     return langStrings[key] ?? key;
 }
 
+const getRegionString = (lang: string, key: string) : string => {
+    const langStrings = getLanguageStrings(lang);
 
-export { getString, getLanguageStrings };
+    if (!('regions-translations' in langStrings)) {
+        return key;
+    }
+    
+    // @ts-ignore
+    return langStrings['regions-translations'][key] ?? key;
+}
+
+const getCityString = (lang: string, key: string) : string => {
+    const langStrings = getLanguageStrings(lang);
+
+    if (!('cities-translations' in langStrings)) {
+        return key;
+    }
+    
+    // @ts-ignore
+    return langStrings['cities-translations'][key] ?? key;
+}
+
+
+export { getString, getLanguageStrings, getRegionString, getCityString };

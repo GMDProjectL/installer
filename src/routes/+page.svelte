@@ -2,7 +2,10 @@
     import Icon from "@iconify/svelte";
     import { 
         getString, installInfo, checkInternetConnection,
-        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom
+        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
+
+        installationPage
+
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
@@ -65,6 +68,8 @@
             if (!internetConnectionAvailable) {
                 return;
             }
+
+            $installationPage = $installationPage + 1;
 
             goto("/introduce-yourself");
         }}>

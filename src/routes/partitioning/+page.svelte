@@ -8,7 +8,7 @@
         bytesToReadable,
         type DrivesResponse,
         type PartitionsResponse,
-        getPartitions
+        getPartitions, installationPage
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -99,7 +99,10 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => history.back()}>
+        <GDLButton on:click={() => {
+            $installationPage = $installationPage - 1;
+            history.back();
+        }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
@@ -126,6 +129,7 @@
                     $installInfo.rootPartition = $installInfo.selectedDrive + '2';
                 }
             }
+            $installationPage = $installationPage + 1;
 
             goto(
                 $installInfo.method != 'manual-partitioning'

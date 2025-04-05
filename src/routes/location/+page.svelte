@@ -4,7 +4,10 @@
     import { 
         getString, 
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
-        installInfo, getTimezones
+        installInfo, getTimezones, getRegionString,
+        installationPage,
+        getCityString
+
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -40,7 +43,7 @@
             {#each Object.keys(timezones).sort() as region}
                 <GDLButton secondary={$installInfo.timezoneRegion == region} 
                     on:click={() => $installInfo.timezoneRegion = region}>
-                    { region }
+                    { getRegionString($installInfo.language, region) }
                 </GDLButton>
             {/each}
         </div>
@@ -54,13 +57,16 @@
                     $installInfo.timezoneRegion = $installInfo.timezoneRegion as string;
                     $installInfo.timezoneInfo = zone;
                 }}>
-                { zone }</GDLButton>
+                { getCityString($installInfo.language, zone) }</GDLButton>
             {/each}
         </div>
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => history.back()}>
+        <GDLButton on:click={() => {
+            $installationPage = $installationPage - 1;
+            history.back();
+        }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
@@ -76,6 +82,7 @@
                 });
                 return;
             }
+            $installationPage = $installationPage + 1;
             goto("/desktop-environment");
         }}>
             { getString($installInfo.language, "next") }

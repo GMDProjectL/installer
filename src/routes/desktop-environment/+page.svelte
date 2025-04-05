@@ -3,7 +3,7 @@
     import { 
         getString, 
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
-        installInfo,
+        installInfo, installationPage
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -31,11 +31,13 @@
             <Carousel index={galleryIndex} images={[
                 {
                     src: '/de/kde.png',
-                    title: 'KDE Plasma'
+                    title: 'KDE Plasma',
+                    alt: 'KDE Plasma is a desktop environment from the KDE community. It\'s very customizable and has a lot of features. Highly recommended for gaming.',
                 },
                 {
                     src: '/de/gnome.webp',
-                    title: 'GNOME'
+                    title: 'GNOME',
+                    alt: 'GNOME is a desktop environment from the GNOME community. It\'s strict and determined. Highly recommended for productivity.'
                 }
             ]} />
         </div>
@@ -50,10 +52,14 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => history.back()}>
+        <GDLButton on:click={() => {
+            $installationPage = $installationPage - 1;
+            history.back();
+        }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+            $installationPage = $installationPage + 1;
             goto("/additional-software");
         }}>
             { getString($installInfo.language, "next") }

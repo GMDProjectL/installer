@@ -1,6 +1,9 @@
-import { getLanguageStrings, getString } from "./lang";
+import { getLanguageStrings, getString, getCityString, getRegionString } from "./lang";
 import { GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput } from "./components";
+
 import installInfo from "./stores/install-info";
+import installationPage from "./stores/installation-page";
+
 import type { InstallInfo } from "./stores/install-info";
 import { 
     getTimezones, getDrives, getPartitions, 
@@ -15,10 +18,11 @@ export {
     getLanguageStrings, getString, 
     GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
     GDLInput,
-    installInfo, reboot,
+    installInfo, installationPage, reboot,
     getTimezones, getDrives, getPartitions,
     bytesToReadable,
-    checkInternetConnection, startInstallation, getInstallationEvents
+    checkInternetConnection, startInstallation, getInstallationEvents,
+    getCityString, getRegionString
 };
 
 export type {
