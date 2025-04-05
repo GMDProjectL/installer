@@ -1,5 +1,5 @@
 from gdltypes import InstallInfo
-from shared import shared_events
+from shared import shared_events, shared_progress
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
 from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur
@@ -18,6 +18,7 @@ def failmsg():
     shared_events.append(f'Fatal error. Installation failed.')
 
 
+# 30 STEPS IN THIS TIME. 15:50 2025-04-05
 def start_installation(installation_object: InstallInfo):
     debug_inso = deepcopy(installation_object)
 
@@ -30,6 +31,8 @@ def start_installation(installation_object: InstallInfo):
     if installation_object.method == 'nuke-drive':
         nuke_drive(installation_object, installation_object.selectedDrive)
     
+    shared_progress.append('Done nuking');
+    
     installation_root = '/mnt/installation'
     installation_boot = installation_root + '/boot/efi'
 
@@ -38,32 +41,46 @@ def start_installation(installation_object: InstallInfo):
     if not format_fs(installation_object, installation_object.rootPartition, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done formatting root');
 
     if not mount_fs(installation_object, installation_object.rootPartition, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done mounting root');
 
     if installation_object.formatBootPartition:
         if not format_fs(installation_object, installation_object.bootPartition, installation_boot, bootable=True):
             failmsg()
             return
+        
+    shared_progress.append('Done formatting (or not) the boot partition');
     
     if not mount_fs(installation_object, installation_object.bootPartition, installation_boot):
         failmsg()
         return
+    
+    shared_progress.append('Done mounting the boot partition');
 
     if not pacstrap(installation_boot, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done pacstrapping');
 
     fstab = generate_fstab(installation_object, installation_root)
 
     with open(f'{installation_root}/etc/fstab', 'w') as f:
         f.write(fstab)
+
+    shared_progress.append('Done genfstab');
     
     if not generate_localtime(installation_object, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done localtime');
     
     if not generate_locales(
             installation_object, 
@@ -71,7 +88,7 @@ def start_installation(installation_object: InstallInfo):
             ["en_US.UTF-8", "ru_RU.UTF-8"]
         ):
         failmsg()
-        return
+        
     
     system_locale = "en_US.UTF-8"
 
@@ -80,6 +97,8 @@ def start_installation(installation_object: InstallInfo):
     
     with open(f'{installation_root}/etc/locale.conf', 'w') as f:
         f.write(f"LANG={system_locale}\n")
+        
+    shared_progress.append('Done locales');
     
     with open(f'{installation_root}/etc/hostname', 'w') as f:
         f.write(installation_object.computerName)
@@ -88,9 +107,13 @@ def start_installation(installation_object: InstallInfo):
         failmsg()
         return
     
+    shared_progress.append('Done root');
+    
     if not connect_chaotic_aur(installation_object, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done chaotic');
     
     de_packages = []
 
@@ -123,13 +146,19 @@ def start_installation(installation_object: InstallInfo):
         failmsg()
         return
     
+    shared_progress.append('Done DE');
+    
     if not create_user(installation_object, installation_root):
         failmsg()
         return
     
+    shared_progress.append('Done user');
+    
     if not sudo_wheel(installation_object, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done sudo');
     
     if installation_object.de == 'kde':
         if not activate_systemd_service(installation_object, installation_root, "sddm.service"):
@@ -140,12 +169,18 @@ def start_installation(installation_object: InstallInfo):
         if not activate_systemd_service(installation_object, installation_root, "gdm.service"):
             failmsg()
             return
+        
+    shared_progress.append('Done DM');
     
     activate_systemd_service(installation_object, installation_root, "NetworkManager")
+
+    shared_progress.append('Done Network');
     
     try_install_nvidia(installation_object, installation_root)
 
     try_install_broadcom(installation_object, installation_root)
+
+    shared_progress.append('Done proprietary');
 
     patch_distro_release(installation_object, installation_root)
     
@@ -156,15 +191,23 @@ def start_installation(installation_object: InstallInfo):
     patch_default_grub(installation_object, installation_root)
 
     update_grub(installation_object, installation_root)
+    
+    shared_progress.append('Done GRUB');
 
     patch_sddm_theme(installation_object, installation_root)
 
+    shared_progress.append('Done SDDM');
+
     install_gdl_xdg_icon(installation_object, installation_root)
+
+    shared_progress.append('Done Branding');
 
     if pacman_install(installation_object, installation_root, [
         "power-profiles-daemon"
     ]):
         activate_systemd_service(installation_object, installation_root, "power-profiles-daemon")
+
+    shared_progress.append('Done Power');
 
     if installation_object.enableMultilibRepo:
         enable_multilib(installation_root)
@@ -206,6 +249,8 @@ def start_installation(installation_object: InstallInfo):
                 pacman_install(installation_object, installation_root, [
                     "winetricks"
                 ])
+
+    shared_progress.append('Done Multilib');
         
     if installation_object.installGnomeDisks:
         pacman_install(installation_object, installation_root, [
@@ -217,6 +262,8 @@ def start_installation(installation_object: InstallInfo):
             "intel-media-driver",
             "intel-media-sdk"
         ])
+
+    shared_progress.append('Done Additional software');
     
     shared_events.append('Setting up default KDE settings...')
 
@@ -230,27 +277,41 @@ def start_installation(installation_object: InstallInfo):
         ])
         activate_systemd_service(installation_object, installation_root, "bluetooth.service")
     
+    shared_progress.append('Done BT');
+
     if not clone_oobe(installation_object, installation_root):
         failmsg()
         return
     
+    shared_progress.append('Done OOBE');
+    
     if not adjust_permissions(installation_object, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done Perms');
     
     if not install_oobe_dependencies(installation_object, installation_root):
         failmsg()
         return
     
+    shared_progress.append('Done Deps');
+    
     if not adjust_permissions(installation_object, installation_root):
         failmsg()
         return
+    
+    shared_progress.append('Done Perms');
     
     create_oobe_autostart(installation_object, installation_root)
 
     install_sayodevice_udev_rule(installation_object, installation_root)
     copy_sysctl_config(installation_object, installation_root)
 
+    shared_progress.append('Done Sayo and sysctl');
+
     install_geode_installer(installation_object, installation_root)
+
+    shared_progress.append('Done Geode');
     
     shared_events.append('Project GDL Installed!')

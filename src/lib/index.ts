@@ -3,15 +3,17 @@ import { GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput } from 
 
 import installInfo from "./stores/install-info";
 import installationPage from "./stores/installation-page";
+import installProgress from "./stores/install-progress";
 
 import type { InstallInfo } from "./stores/install-info";
 import { 
     getTimezones, getDrives, getPartitions, 
     checkInternetConnection, startInstallation, getInstallationEvents,
-    reboot
+    reboot, getInstallationProgress
 } from "./api";
 import type { TimezonesResponse, DrivesResponse, PartitionsResponse } from "./api";
 import bytesToReadable from "./utils/size";
+import type InstallationProgress from "./stores/install-progress";
 
 
 export { 
@@ -22,7 +24,7 @@ export {
     getTimezones, getDrives, getPartitions,
     bytesToReadable,
     checkInternetConnection, startInstallation, getInstallationEvents,
-    getCityString, getRegionString
+    getCityString, getRegionString, getInstallationProgress, installProgress
 };
 
 export type {

@@ -7,7 +7,7 @@
         installInfo,
         startInstallation,
         getInstallationEvents,
-
+        installProgress,
         reboot
 
     } from "$lib";
@@ -73,18 +73,7 @@
 
         progressAnimationInterval = setInterval(async() => {
             pbVisible = true;
-            installationProgress = 30;
-
-            await sleepAwait(2000);
-
-            progressLeftPos = 80;
-
-            await sleepAwait(2000);
-            
-            progressLeftPos = -5;
-            
-            
-        }, 4000);
+        }, 1000);
 
         return () => {
             clearInterval(eventCheckerInterval);
@@ -115,7 +104,7 @@
         <div class="w-full flex justify-start rounded-2xl overflow-hidden bg-zinc-700 h-4 relative">
             <div class={"pb-inner bg-slate-400 h-4 absolute" 
                 + (!pbVisible ? " opacity-0" : " opacity-100")
-                } style={`left: ${progressLeftPos}%; width: ${installationProgress}%`}></div>
+                } style={`left: 0%; width: ${Math.round($installProgress.progress / $installProgress.total * 100)}%`}></div>
             </div>
         {:else}
             <GDLButton secondary on:click={() => {

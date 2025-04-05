@@ -1,4 +1,5 @@
 import type { InstallInfo } from "$lib/stores/install-info";
+import type { InstallationProgress } from "$lib/stores/install-progress";
 
 const API_BASE_PATH = 'http://localhost:669'
 
@@ -71,6 +72,13 @@ const getInstallationEvents = async(): Promise<Array<string>> => {
     return response['events'] as Array<string>;
 }
 
+const getInstallationProgress = async(): Promise<InstallationProgress> => {
+    const request = await fetch(API_BASE_PATH + '/get_installation_progress');
+    const response = await request.json();
+
+    return response as InstallationProgress;
+}
+
 const reboot = async() => {
     const request = await fetch(API_BASE_PATH + '/reboot');
 }
@@ -79,6 +87,6 @@ const reboot = async() => {
 export { 
     getTimezones, getDrives, getPartitions, 
     checkInternetConnection, startInstallation, getInstallationEvents,
-    reboot 
+    reboot, getInstallationProgress
 }
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }

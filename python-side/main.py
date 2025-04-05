@@ -3,7 +3,7 @@ import json
 from utils import check_internet_connection, get_drives, get_partitions, get_timezones
 from installation import start_installation
 import threading
-from shared import shared_events
+from shared import shared_progress,shared_events 
 from gdltypes import InstallInfo
 import os
 import systemd.daemon
@@ -38,6 +38,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if parsed_path == '/get_installation_events':
             self.wfile.write(json.dumps({'events': shared_events}).encode())
             shared_events.clear()
+        
+        if parsed_path == '/get_installation_progress':
+            self.wfile.write(json.dumps({'progress': len(shared_progress), 'total': 30}).encode())
         
         if parsed_path == '/reboot':
             self.wfile.write(json.dumps({'ok': True}).encode())
