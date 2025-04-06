@@ -16,7 +16,7 @@ void Welcome::render() {
         ImGuiWindowFlags_NoNav
     );
 
-    ImVec2 welcomeWindowSize = { 700.0, 300.0 };
+    ImVec2 welcomeWindowSize = { 700.0, 400.0 };
 
     ImGui::SetWindowSize(welcomeWindowSize, ImGuiCond_Always);
 
