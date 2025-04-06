@@ -1,5 +1,5 @@
 #include "navigation.hpp"
-#include "hoverbutton.h"
+#include "mutedbutton.hpp"
 #include "imgui.h"
 #include "installationstate.hpp"
 #include "styleshit.hpp"
@@ -33,34 +33,29 @@ void Components::Navigation() {
     );
 
     ImGui::PushFont(StyleShit::g_fontAwesome);
-    ImGui::PushStyleColor(ImGuiCol_Button, {0.1f, 0.1f, 0.1f, 1.f});
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, {0.15f, 0.15f, 0.15f, 1.f});
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, {0.2f, 0.2f, 0.2f, 1.f});
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {40.f, ImGui::GetStyle().FramePadding.y});
 
     if (InstallationState::page > 0) {
         
-        if (Components::HoverButton(std::format(
-            "{}   {}", ICON_FA_CHEVRON_CIRCLE_LEFT, 
-            Languages::getLanguageString("back")
+        if (Components::MutedButton(std::format(
+            "{}   {}", ICON_FA_CHEVRON_CIRCLE_LEFT, Languages::getLanguageString("back")
         ), {0.f, 0.f})) {
 
-            InstallationState::page--;
+            InstallationState::goBack();
         }
-    
+
         ImGui::SameLine(0, 40);
     }
+    
 
-    if (Components::HoverButton(std::format(
-        "{}   {}", ICON_FA_CHEVRON_CIRCLE_RIGHT, 
-        Languages::getLanguageString("next")
+    if (Components::MutedButton(std::format(
+        "{}   {}", ICON_FA_CHEVRON_CIRCLE_RIGHT, Languages::getLanguageString("next")
     ), {0.f, 0.f})) {
 
-        InstallationState::page++;
+        InstallationState::goNext();
     }
 
     ImGui::PopStyleVar();
-    ImGui::PopStyleColor(3);
     ImGui::PopFont();
 
     ImGui::End();

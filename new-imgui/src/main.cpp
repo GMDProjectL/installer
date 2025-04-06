@@ -84,8 +84,6 @@ int main(int, char**)
 
     io.FontDefault = font;
 
-    ImVec4 clear_color = ImVec4(0.1, 0.1, 0.1, 1.00f);
-
     StyleShit::setupStyles();
 
     while (!glfwWindowShouldClose(WindowState::window))
@@ -109,7 +107,12 @@ int main(int, char**)
         int display_w, display_h;
         glfwGetFramebufferSize(WindowState::window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
-        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+        glClearColor(
+            StyleShit::g_GlobalBgColor.x * StyleShit::g_GlobalBgColor.w, 
+            StyleShit::g_GlobalBgColor.y * StyleShit::g_GlobalBgColor.w, 
+            StyleShit::g_GlobalBgColor.z * StyleShit::g_GlobalBgColor.w, 
+            StyleShit::g_GlobalBgColor.w
+        );
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
