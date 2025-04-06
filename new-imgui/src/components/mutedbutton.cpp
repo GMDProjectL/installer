@@ -1,6 +1,6 @@
 #include "mutedbutton.hpp"
 #include "styleshit.hpp"
-#include "hoverbutton.h"
+#include "hoverbutton.hpp"
 
 
 bool Components::MutedButton(std::string label, const ImVec2& size)

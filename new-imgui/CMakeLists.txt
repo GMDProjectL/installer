@@ -10,9 +10,7 @@ find_package(glfw3 CONFIG REQUIRED)
 file(GLOB_RECURSE PROJ_SRC src/*.c*)
 file(GLOB_RECURSE IMGUI_SRC thirdparty/imgui/*.c*)
 
-add_executable(${PROJECT_NAME} ${PROJ_SRC} ${IMGUI_SRC}
-        src/include/components/hoverbutton.h
-        src/components/hoverbutton.cpp)
+add_executable(${PROJECT_NAME} ${PROJ_SRC} ${IMGUI_SRC})
 
 target_include_directories(
     ${PROJECT_NAME} PUBLIC 

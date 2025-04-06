@@ -1,4 +1,7 @@
 #include "pagecounter.hpp"
+
+#include <algorithm>
+
 #include "imgui.h"
 #include "windowstate.hpp"
 
@@ -11,6 +14,34 @@ void Components::PageCounter(int page, int total) {
         ImGuiWindowFlags_NoResize |
         ImGuiWindowFlags_NoNav
     );
+
+    // Init for animation
+    if (circleRadius.size() != total)
+        circleRadius.resize(total);
+
+    if (!initDone) {
+        std::fill(circleRadius.begin(), circleRadius.end(), 2.0f);
+        circleRadius[page] = 5.0f;
+        initDone = true;
+    }
+
+    if (previousPage != page) {
+        auto previousIter = std::ranges::find_if(jobIndexes.begin(), jobIndexes.end(), [](auto& item) {
+            return item.first == previousPage;
+        });
+        if (previousIter != jobIndexes.end()) {
+            jobIndexes.erase(previousIter);
+        }
+        auto currentIter = std::ranges::find_if(jobIndexes.begin(), jobIndexes.end(), [page](auto& item) {
+            return item.first == page;
+        });
+        if (currentIter != jobIndexes.end()) {
+            jobIndexes.erase(currentIter);
+        }
+        jobIndexes.emplace_back(previousPage, false);
+        jobIndexes.emplace_back(page, true);
+        previousPage = page;
+    }
 
     ImGui::SetWindowSize({
         100, 50
@@ -30,12 +61,30 @@ void Components::PageCounter(int page, int total) {
 
     ImVec2 pos = ImGui::GetCursorScreenPos();
 
+    const auto deltaTime = ImGui::GetIO().DeltaTime;
+
+    for (auto it = jobIndexes.begin(); it != jobIndexes.end();) {
+        if (it->second) {
+            circleRadius[it->first] += deltaTime * 10;
+            if (circleRadius[it->first] > 5.0f) {
+                circleRadius[it->first] = 5.0f;
+                it = jobIndexes.erase(it);
+            } else ++it;
+        } else {
+            circleRadius[it->first] -= deltaTime * 10;
+            if (circleRadius[it->first] < 2.0f) {
+                circleRadius[it->first] = 2.0f;
+                it = jobIndexes.erase(it);
+            } else ++it;
+        }
+    }
+
     for (int i = 0; i < total; i++) {
         ImGui::PushID(i);
         if (i == page) {
-            draw_list->AddCircleFilled(pos, 5.0f, IM_COL32(255, 255, 255, 255));
+            draw_list->AddCircleFilled(pos, circleRadius[i], IM_COL32(255, 255, 255, 255));
         } else {
-            draw_list->AddCircleFilled(pos, 2.0f, IM_COL32(150, 150, 150, 255));
+            draw_list->AddCircleFilled(pos, circleRadius[i], IM_COL32(150, 150, 150, 255));
         }
         pos.x += 15.0f;
         ImGui::PopID();
