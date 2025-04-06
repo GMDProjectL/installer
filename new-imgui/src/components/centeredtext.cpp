@@ -3,7 +3,7 @@
 
 
 void Components::CenteredText(const char *text, bool disable) {
-    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text).x) / 2 + 5);
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text).x) / 2 + 10);
 
     if (!disable) {
         ImGui::Text("%s", text);

@@ -16,16 +16,16 @@ void Welcome::render() {
         ImGuiWindowFlags_NoNav
     );
 
-    ImGui::SetWindowSize({
-        400.0, 300.0
-    }, ImGuiCond_Always);
+    ImVec2 welcomeWindowSize = { 700.0, 300.0 };
 
-    auto welcomeWindowSize = WindowState::getWindowSize();
+    ImGui::SetWindowSize(welcomeWindowSize, ImGuiCond_Always);
+
+    auto globalWindowSize = WindowState::getWindowSize();
 
     ImGui::SetWindowPos(
         {
-            welcomeWindowSize.x / 2.0f - 200.0f,
-            welcomeWindowSize.y / 2.0f - 150.0f
+            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2,
+            globalWindowSize.y / 2.0f - welcomeWindowSize.y / 2
         }, 
         ImGuiCond_Always
     );

@@ -5,7 +5,7 @@
 #include "ru.hpp"
 
 namespace Languages {
-    inline std::string g_currentLanguage = "ru";
+    inline std::string g_currentLanguage = "en";
     
     std::string getCurrentLanguage();
     void changeLanguage(const std::string& language);
