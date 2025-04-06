@@ -5,7 +5,7 @@
 #include "titletext.hpp"
 #include "windowstate.hpp"
 #include "languages.hpp"
-#include "hoverbutton.h"
+#include "hoverbutton.hpp"
 
 void Welcome::render() {
     ImGui::Begin("#Welcome", NULL, 
