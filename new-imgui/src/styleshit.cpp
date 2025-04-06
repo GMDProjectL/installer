@@ -9,7 +9,7 @@ void StyleShit::setupSizes() {
     ImGuiStyle& style = ImGui::GetStyle();
 
     style.WindowPadding = ImVec2(15, 15);
-    style.FramePadding = ImVec2(10, 10);
+    style.FramePadding = ImVec2(10, 20);
     style.ItemSpacing = ImVec2(8, 4);
     style.ItemInnerSpacing = ImVec2(6, 6);
     style.IndentSpacing = 22.0f;

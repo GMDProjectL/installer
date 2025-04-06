@@ -4,6 +4,7 @@
 namespace StyleShit {
 
     inline ImFont* g_titleFont;
+    inline ImFont* g_boldFont;
 
     void setupStyles();
     void setupSizes();

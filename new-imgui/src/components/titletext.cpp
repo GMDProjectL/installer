@@ -5,7 +5,7 @@
 
 void Components::TitleText(const char *text) {
     ImGui::PushFont(StyleShit::g_titleFont);
-    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text).x) / 2);
+    ImGui::SetCursorPosX((ImGui::GetContentRegionAvail().x - ImGui::CalcTextSize(text).x) / 2 + 5);
     ImGui::Text("%s", text);
     ImGui::PopFont();
 }

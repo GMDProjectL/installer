@@ -53,6 +53,11 @@ int main(int, char**)
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
+    StyleShit::g_boldFont = io.Fonts->AddFontFromFileTTF(
+        "./resources/fonts/inter-bold.ttf", 18.0f, nullptr, 
+        io.Fonts->GetGlyphRangesCyrillic()
+    );
+
     ImFontConfig titleFontConfig;
 
     StyleShit::g_titleFont = io.Fonts->AddFontFromFileTTF(
@@ -84,7 +89,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
         GlobalView::render();
-        // ImGui::ShowStyleEditor();
+        ImGui::ShowStyleEditor();
         
         ImGui::Render();
         int display_w, display_h;
