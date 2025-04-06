@@ -5,7 +5,7 @@
 #include "components/hoverbutton.hpp"
 #include <unordered_map>
 
-bool Components::HoverButton(std::string label, const ImVec2& size)
+bool Components::HoverButton(const std::string& label, const ImVec2& size)
 {
     const auto colorFrom = ImGui::GetStyleColorVec4(ImGuiCol_Button);
     const auto colorInto = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
@@ -24,8 +24,9 @@ bool Components::HoverButton(std::string label, const ImVec2& size)
     ImGui::PushStyleColor(ImGuiCol_Button, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, transparent);
+    ImGui::PushStyleColor(ImGuiCol_Text, transparent);
     auto ret = ImGui::Button(label.c_str(), size);
-    ImGui::PopStyleColor(3);
+    ImGui::PopStyleColor(4);
 
     const auto isHovered = ImGui::IsItemHovered();
     const auto deltaTime = ImGui::GetIO().DeltaTime;

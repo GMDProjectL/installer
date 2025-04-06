@@ -4,5 +4,5 @@
 #include <string>
 
 namespace Components {
-    bool MutedButton(std::string label, const ImVec2& size);
+    bool MutedButton(const std::string& label, const ImVec2& size);
 }

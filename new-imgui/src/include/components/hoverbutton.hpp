@@ -10,5 +10,5 @@
 
 namespace Components {
     inline std::unordered_map<std::string, float> buttonsSmoothFactor;
-    bool HoverButton(std::string label, const ImVec2& size);
+    bool HoverButton(const std::string& label, const ImVec2& size);
 }
