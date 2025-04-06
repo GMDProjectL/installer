@@ -32,6 +32,12 @@ void Components::PageCounter(int page, int total) {
         if (previousIter != jobIndexes.end()) {
             jobIndexes.erase(previousIter);
         }
+        auto currentIter = std::ranges::find_if(jobIndexes.begin(), jobIndexes.end(), [page](auto& item) {
+            return item.first == page;
+        });
+        if (currentIter != jobIndexes.end()) {
+            jobIndexes.erase(currentIter);
+        }
         jobIndexes.emplace_back(previousPage, false);
         jobIndexes.emplace_back(page, true);
         previousPage = page;
