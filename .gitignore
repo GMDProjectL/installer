@@ -29,4 +29,5 @@ vite.config.ts.timestamp-*
 new-imgui/build/**
 new-imgui/.cache/**
 
-**imgui.ini**
+imgui.ini
+**/imgui.ini
