@@ -22,6 +22,7 @@ target_include_directories(
     src/include
     src/include/components
     src/include/languages
+    src/include/pages
 )
 
 file(COPY ./resources DESTINATION ${CMAKE_BINARY_DIR})
