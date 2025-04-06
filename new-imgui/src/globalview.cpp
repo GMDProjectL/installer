@@ -1,6 +1,7 @@
 #include "globalview.hpp"
 #include "imgui.h"
 #include "installationstate.hpp"
+#include "navigation.hpp"
 #include "pagecounter.hpp"
 #include "welcome.hpp"
 
@@ -17,4 +18,6 @@ void GlobalView::render() {
     }
 
     Components::PageCounter(InstallationState::page, 6);
+
+    Components::Navigation();
 }

@@ -16,6 +16,7 @@ target_include_directories(
     ${PROJECT_NAME} PUBLIC 
     thirdparty/imgui
     thirdparty/imgui/backends
+    thirdparty/fontawesome
     src/include
     src/include/components
     src/include/languages

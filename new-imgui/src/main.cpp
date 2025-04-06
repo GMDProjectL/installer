@@ -8,6 +8,7 @@
 
 #include "styleshit.hpp"
 #include "globalview.hpp"
+#include "font_awesome.h"
 
 
 static void glfw_error_callback(int error, const char* description)
@@ -48,6 +49,7 @@ int main(int, char**)
 
 
     io.Fonts->AddFontDefault();
+
     ImFont* font = io.Fonts->AddFontFromFileTTF(
         "/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf", 18.0f, nullptr, 
         io.Fonts->GetGlyphRangesCyrillic()
@@ -58,6 +60,16 @@ int main(int, char**)
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
+    static const ImWchar iconsRange[] = {ICON_MIN_FA, ICON_MAX_FA, 0};
+    ImFontConfig iconsConfig;
+    iconsConfig.MergeMode = true;
+    iconsConfig.PixelSnapH = true;
+
+    StyleShit::g_fontAwesome = io.Fonts->AddFontFromMemoryCompressedTTF(
+        FontAwesome::font_awesome_data, 
+        FontAwesome::font_awesome_size, 
+        14, &iconsConfig, iconsRange);
+
     ImFontConfig titleFontConfig;
 
     StyleShit::g_titleFont = io.Fonts->AddFontFromFileTTF(
@@ -66,6 +78,8 @@ int main(int, char**)
     );
 
     IM_ASSERT(font != nullptr);
+    IM_ASSERT(StyleShit::g_boldFont != nullptr);
+    IM_ASSERT(StyleShit::g_fontAwesome != nullptr);
     IM_ASSERT(StyleShit::g_titleFont != nullptr);
 
     io.FontDefault = font;
