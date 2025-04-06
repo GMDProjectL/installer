@@ -5,7 +5,7 @@
 #include "titletext.hpp"
 #include "windowstate.hpp"
 #include "languages.hpp"
-
+#include "hoverbutton.h"
 
 void Welcome::render() {
     ImGui::Begin("#Welcome", NULL, 
@@ -46,7 +46,7 @@ void Welcome::render() {
             ImGui::PushFont(StyleShit::g_boldFont);
         }
 
-        if (ImGui::Button(language.second["lang_name"].c_str(), {-1, 0})) {
+        if (Components::HoverButton(language.second["lang_name"], {-1, 0})) {
 
             Languages::changeLanguage(language.first);
         }
