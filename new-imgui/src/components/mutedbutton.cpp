@@ -3,7 +3,7 @@
 #include "hoverbutton.hpp"
 
 
-bool Components::MutedButton(std::string label, const ImVec2& size)
+bool Components::MutedButton(const std::string& label, const ImVec2& size)
 {
     ImGui::PushStyleColor(ImGuiCol_Button, StyleShit::g_GlobalBgColor);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, {
