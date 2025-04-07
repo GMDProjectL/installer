@@ -17,10 +17,9 @@ void Components::PageCounter(int page, int total) {
 
     // Init for animation
     if (circleRadius.size() != total)
-        circleRadius.resize(total);
+        circleRadius.resize(total, 2.0f);
 
     if (!initDone) {
-        std::fill(circleRadius.begin(), circleRadius.end(), 2.0f);
         circleRadius[page] = 5.0f;
         initDone = true;
     }
