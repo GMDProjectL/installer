@@ -12,11 +12,9 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
     const auto colorActivated = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
 
     float smoothFactor = 0;
-    if (buttonsSmoothFactor.contains(label))
-    {
+    if (buttonsSmoothFactor.contains(label)) {
         smoothFactor = buttonsSmoothFactor[label];
-    } else
-    {
+    } else {
         buttonsSmoothFactor[label] = smoothFactor;
     }
 
@@ -52,7 +50,6 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
 
     if (ImGui::IsItemActive())
         currentColor = colorActivated;
-
 
     const auto drawList = ImGui::GetWindowDrawList();
     const auto buttonMin = ImGui::GetItemRectMin();
