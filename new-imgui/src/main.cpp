@@ -1,6 +1,7 @@
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
+#include "installationstate.hpp"
 #include "windowstate.hpp"
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
@@ -41,6 +42,7 @@ int main(int, char**)
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+    io.IniFilename = nullptr; // Disabled .ini file
 
     ImGui::StyleColorsDark();
 
@@ -86,6 +88,9 @@ int main(int, char**)
 
     StyleShit::setupStyles();
 
+    auto& globalView = GlobalView::getInstance();
+    globalView.changePage(InstallationState::getPageForNum(InstallationState::page));
+
     while (!glfwWindowShouldClose(WindowState::window))
     {
         glfwPollEvents();
@@ -100,7 +105,7 @@ int main(int, char**)
         ImGui_ImplGlfw_NewFrame();
         ImGui::NewFrame();
 
-        GlobalView::render();
+        globalView.render();
         ImGui::ShowStyleEditor();
         
         ImGui::Render();

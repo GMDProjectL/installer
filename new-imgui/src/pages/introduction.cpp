@@ -1,15 +1,15 @@
 #include "introduction.hpp"
 
-#include "centeredtext.hpp"
 #include "imgui.h"
 #include "installationstate.hpp"
-#include "styleshit.hpp"
 #include "titletext.hpp"
 #include "windowstate.hpp"
 #include "languages.hpp"
-#include "hoverbutton.hpp"
+
+Introduction* Introduction::instance = nullptr;
 
 void Introduction::render() {
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Introduction", NULL, 
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoDecoration |
@@ -26,7 +26,7 @@ void Introduction::render() {
 
     ImGui::SetWindowPos(
         {
-            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2,
+            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2 + transitionX,
             globalWindowSize.y / 2.4f - welcomeWindowSize.y / 2
         }, 
         ImGuiCond_Always
@@ -69,7 +69,7 @@ void Introduction::render() {
 
 
 
-    ImGui::PopStyleVar(9);
+    ImGui::PopStyleVar(10);
 
     ImGui::End();
 }

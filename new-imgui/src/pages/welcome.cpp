@@ -8,7 +8,10 @@
 #include "languages.hpp"
 #include "hoverbutton.hpp"
 
+Welcome* Welcome::instance = nullptr;
+
 void Welcome::render() {
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Welcome", NULL, 
         ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoDecoration |
@@ -25,7 +28,7 @@ void Welcome::render() {
 
     ImGui::SetWindowPos(
         {
-            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2,
+            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2 + transitionX,
             globalWindowSize.y / 2.0f - welcomeWindowSize.y / 2
         }, 
         ImGuiCond_Always
@@ -58,7 +61,7 @@ void Welcome::render() {
         }
     }
 
-    ImGui::PopStyleVar(3);
+    ImGui::PopStyleVar(4);
 
     ImGui::End();
 }

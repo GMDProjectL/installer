@@ -1,7 +1,17 @@
 #pragma once
 
-namespace Welcome {
+#include "basepage.hpp"
 
-    void render();
+class Welcome : public BasePage {
+    static Welcome* instance;
 
-}
+public:
+    static Welcome* getInstance() {
+        if (!instance) {
+            instance = new Welcome();
+        }
+        return instance;
+    }
+
+    void render() override;
+};
