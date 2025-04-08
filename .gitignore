@@ -29,5 +29,11 @@ vite.config.ts.timestamp-*
 new-imgui/build/**
 new-imgui/.cache/**
 
+new-imgui/cmake-build-debug/**
+new-imgui/.idea/**
+/.idea
+/.vscode
+/.cache
+
 imgui.ini
 **/imgui.ini

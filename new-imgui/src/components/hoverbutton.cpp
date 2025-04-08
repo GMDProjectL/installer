@@ -20,7 +20,7 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
         buttonsSmoothFactor[label] = smoothFactor;
     }
 
-    const auto transparent = ImVec4(0, 0, 0, 0);
+    constexpr auto transparent = ImVec4(0, 0, 0, 0);
     ImGui::PushStyleColor(ImGuiCol_Button, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, transparent);
@@ -62,7 +62,7 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
     const auto rounding = ImGui::GetStyle().FrameRounding;
 
     drawList->AddRectFilled(buttonMin, buttonMax, ImColor(currentColor), rounding);
-    drawList->AddText(ImVec2(buttonMin.x + center.x / 2 - textSize.x / 2, buttonMin.y + center.y / 2 - textSize.y / 2), ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)), label.c_str());
+    drawList->AddText(ImVec2(buttonMin.x + (center.x - textSize.x) / 2, buttonMin.y + (center.y - textSize.y) / 2), ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)), label.c_str());
 
     return ret;
 }
