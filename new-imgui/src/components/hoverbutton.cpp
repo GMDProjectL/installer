@@ -2,14 +2,22 @@
 // Created by shine on 4/6/25.
 //
 
-#include "components/hoverbutton.hpp"
+#include "hoverbutton.hpp"
 #include <unordered_map>
 
 bool Components::HoverButton(const std::string& label, const ImVec2& size)
 {
-    const auto colorFrom = ImGui::GetStyleColorVec4(ImGuiCol_Button);
-    const auto colorInto = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
-    const auto colorActivated = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
+    auto colorFrom = ImGui::GetStyleColorVec4(ImGuiCol_Button);
+    auto colorInto = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
+    auto colorActivated = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
+    auto textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+
+    const auto opacity = ImGui::GetStyle().Alpha;
+
+    colorFrom.w *= opacity;
+    colorInto.w *= opacity;
+    colorActivated.w *= opacity;
+    textColor.w *= opacity;
 
     float smoothFactor = 0;
     if (buttonsSmoothFactor.contains(label)) {
@@ -59,7 +67,7 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
     const auto rounding = ImGui::GetStyle().FrameRounding;
 
     drawList->AddRectFilled(buttonMin, buttonMax, ImColor(currentColor), rounding);
-    drawList->AddText(ImVec2(buttonMin.x + (center.x - textSize.x) / 2, buttonMin.y + (center.y - textSize.y) / 2), ImColor(ImGui::GetStyleColorVec4(ImGuiCol_Text)), label.c_str());
+    drawList->AddText(ImVec2(buttonMin.x + (center.x - textSize.x) / 2, buttonMin.y + (center.y - textSize.y) / 2), ImColor(textColor), label.c_str());
 
     return ret;
 }
