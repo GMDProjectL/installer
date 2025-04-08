@@ -1,6 +1,7 @@
 #include "globalview.hpp"
 #include "imgui.h"
 #include "installationstate.hpp"
+#include "introduction.hpp"
 #include "navigation.hpp"
 #include "pagecounter.hpp"
 #include "welcome.hpp"
@@ -10,6 +11,10 @@ void GlobalView::render() {
     switch (InstallationState::page) {
         case 0:
             Welcome::render();
+            break;
+
+        case 1:
+            Introduction::render();
             break;
         
         default:

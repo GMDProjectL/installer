@@ -1,6 +1,7 @@
 #include "welcome.hpp"
 #include "centeredtext.hpp"
 #include "imgui.h"
+#include "installationstate.hpp"
 #include "styleshit.hpp"
 #include "titletext.hpp"
 #include "windowstate.hpp"
@@ -49,6 +50,7 @@ void Welcome::render() {
         if (Components::HoverButton(language.second["lang_name"], {-1, 0})) {
 
             Languages::changeLanguage(language.first);
+            InstallationState::info.language = language.first;
         }
 
         if (currentLanguage) {
