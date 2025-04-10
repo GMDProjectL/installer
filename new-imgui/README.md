@@ -11,6 +11,7 @@ ONLY FOR ARCH LINUX!!!
 - git
 - glfw
 - mesa
+- glew
 
 
 ## Credits: 

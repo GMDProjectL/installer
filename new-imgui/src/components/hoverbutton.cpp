@@ -7,31 +7,27 @@
 
 bool Components::HoverButton(const std::string& label, const ImVec2& size)
 {
-    auto colorFrom = ImGui::GetStyleColorVec4(ImGuiCol_Button);
-    auto colorInto = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
-    auto colorActivated = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
+    auto buttonNormalColor = ImGui::GetStyleColorVec4(ImGuiCol_Button);
+    auto buttonHoverColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
+    auto buttonActivatedColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
     auto textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
 
-    const auto opacity = ImGui::GetStyle().Alpha;
+    const auto style = ImGui::GetStyle();
+    const auto opacity = style.Alpha;
 
-    colorFrom.w *= opacity;
-    colorInto.w *= opacity;
-    colorActivated.w *= opacity;
+    buttonNormalColor.w *= opacity;
+    buttonHoverColor.w *= opacity;
+    buttonActivatedColor.w *= opacity;
     textColor.w *= opacity;
 
-    float smoothFactor = 0;
-    if (buttonsSmoothFactor.contains(label)) {
-        smoothFactor = buttonsSmoothFactor[label];
-    } else {
-        buttonsSmoothFactor[label] = smoothFactor;
-    }
+    float& smoothFactor = buttonsSmoothFactor[label];
 
     constexpr auto transparent = ImVec4(0, 0, 0, 0);
     ImGui::PushStyleColor(ImGuiCol_Button, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, transparent);
     ImGui::PushStyleColor(ImGuiCol_ButtonActive, transparent);
     ImGui::PushStyleColor(ImGuiCol_Text, transparent);
-    auto ret = ImGui::Button(label.c_str(), size);
+    auto isClicked = ImGui::Button(label.c_str(), size);
     ImGui::PopStyleColor(4);
 
     const auto isHovered = ImGui::IsItemHovered();
@@ -47,27 +43,25 @@ bool Components::HoverButton(const std::string& label, const ImVec2& size)
             smoothFactor = 0.0f;
     }
 
-    buttonsSmoothFactor[label] = smoothFactor;
-
-    ImVec4 currentColor = ImVec4(
-        colorFrom.x + (colorInto.x - colorFrom.x) * smoothFactor,
-        colorFrom.y + (colorInto.y - colorFrom.y) * smoothFactor,
-        colorFrom.z + (colorInto.z - colorFrom.z) * smoothFactor,
-        colorFrom.w + (colorInto.w - colorFrom.w) * smoothFactor
+    ImVec4 buttonHoverTransition = ImVec4(
+        buttonNormalColor.x + (buttonHoverColor.x - buttonNormalColor.x) * smoothFactor,
+        buttonNormalColor.y + (buttonHoverColor.y - buttonNormalColor.y) * smoothFactor,
+        buttonNormalColor.z + (buttonHoverColor.z - buttonNormalColor.z) * smoothFactor,
+        buttonNormalColor.w + (buttonHoverColor.w - buttonNormalColor.w) * smoothFactor
     );
 
     if (ImGui::IsItemActive())
-        currentColor = colorActivated;
+        buttonHoverTransition = buttonActivatedColor;
 
     const auto drawList = ImGui::GetWindowDrawList();
     const auto buttonMin = ImGui::GetItemRectMin();
     const auto buttonMax = ImGui::GetItemRectMax();
-    const auto center = ImVec2(buttonMax.x - buttonMin.x, buttonMax.y - buttonMin.y);
+    const auto buttonCenterPoint = ImVec2(buttonMax.x - buttonMin.x, buttonMax.y - buttonMin.y);
     const auto textSize = ImGui::CalcTextSize(label.c_str());
-    const auto rounding = ImGui::GetStyle().FrameRounding;
+    const auto rounding = style.FrameRounding;
 
-    drawList->AddRectFilled(buttonMin, buttonMax, ImColor(currentColor), rounding);
-    drawList->AddText(ImVec2(buttonMin.x + (center.x - textSize.x) / 2, buttonMin.y + (center.y - textSize.y) / 2), ImColor(textColor), label.c_str());
+    drawList->AddRectFilled(buttonMin, buttonMax, ImColor(buttonHoverTransition), rounding);
+    drawList->AddText(ImVec2(buttonMin.x + (buttonCenterPoint.x - textSize.x) / 2, buttonMin.y + (buttonCenterPoint.y - textSize.y) / 2), ImColor(textColor), label.c_str());
 
-    return ret;
+    return isClicked;
 }

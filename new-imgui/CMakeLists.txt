@@ -6,6 +6,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(OpenGL REQUIRED)
 find_package(glfw3 CONFIG REQUIRED)
+find_package(GLEW REQUIRED)
 
 file(GLOB_RECURSE PROJ_SRC src/*.c*)
 file(GLOB_RECURSE IMGUI_SRC thirdparty/imgui/*.c*)
@@ -28,4 +29,5 @@ file(COPY ./resources DESTINATION ${CMAKE_BINARY_DIR})
 target_link_libraries(${PROJECT_NAME} PUBLIC
     OpenGL::OpenGL
     glfw
+    GLEW
 )

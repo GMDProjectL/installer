@@ -1,3 +1,4 @@
+#include "GL/glew.h"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -35,6 +36,13 @@ int main(int, char**)
         return 1;
 
     glfwMakeContextCurrent(WindowState::window);
+
+    glewExperimental = GL_TRUE;
+    GLenum err = glewInit();
+    if (err != GLEW_OK) {
+        return 1;
+    }
+
     glfwSwapInterval(0); // Enable vsync
 
     // Setup Dear ImGui context
