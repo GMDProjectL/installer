@@ -1,8 +1,7 @@
 #pragma once
 
 #include <imgui.h>
-#include <string>
 
 namespace Components {
-    bool MutedButton(const std::string& label, const ImVec2& size);
+    bool MutedButton(const char* label, const ImVec2& size = {0, 0}, bool disable = false);
 }

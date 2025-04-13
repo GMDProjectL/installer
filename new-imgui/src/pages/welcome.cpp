@@ -50,7 +50,7 @@ void Welcome::render() {
             ImGui::PushFont(StyleShit::g_boldFont);
         }
 
-        if (Components::HoverButton(language.second["lang_name"], {-1, 0})) {
+        if (Components::HoverButton(language.second["lang_name"].c_str(), {-1, 0})) {
 
             Languages::changeLanguage(language.first);
             InstallationState::info.language = language.first;

@@ -4,29 +4,27 @@
 #include "installationstate.hpp"
 #include "navigation.hpp"
 #include "pagecounter.hpp"
+#include "bgglow.hpp"
+#include "hoverbutton.hpp"
+#include <algorithm>
 
+constexpr int opacityTransitionScale = 8;
+constexpr int moveTransitionScale = 350;
 
 void GlobalView::render() {
-    auto deltaTime = ImGui::GetIO().DeltaTime;
+    auto dt = ImGui::GetIO().DeltaTime;
 
     if (nextPage) {
-        nextPage->opacity += deltaTime * 8;
-        currentPage->opacity -= deltaTime * 8;
-        nextPage->transitionX -= deltaTime * 350;
-        currentPage->transitionX -= deltaTime * 350;
+        currentPage->opacity -= dt * opacityTransitionScale;
+        currentPage->transitionX -= dt * moveTransitionScale;
+        nextPage->opacity += dt * opacityTransitionScale;
+        nextPage->transitionX -= dt * moveTransitionScale;
 
-        if (nextPage->transitionX < 0.0f) {
-            nextPage->transitionX = 0.0f;
-        }
-        if (nextPage->opacity > 1.0f) {
-            nextPage->opacity = 1.0f;
-        }
-        if (currentPage->transitionX < -60.0f) {
-            currentPage->transitionX = -60.0f;
-        }
-        if (currentPage->opacity < 0.0f) {
-            currentPage->opacity = 0.0f;
-        }
+        currentPage->opacity = std::clamp(currentPage->opacity, 0.f, 1.f);
+        currentPage->transitionX = std::clamp(currentPage->transitionX, -60.f, 0.f);
+
+        nextPage->opacity = std::clamp(nextPage->opacity, 0.f, 1.f);
+        nextPage->transitionX = std::clamp(nextPage->transitionX, 0.f, 60.f);
 
         if (nextPage->transitionX <= 0 && nextPage->opacity >= 1 && currentPage->opacity <= 0 && currentPage->transitionX <= -60) {
             currentPage->opacity = 0.0f;
@@ -35,6 +33,10 @@ void GlobalView::render() {
             nextPage = nullptr;
         }
     }
+
+    //BGGlow::render();
+
+    //ImGui::GetBackgroundDrawList()->AddCallback(ImDrawCallback(BGGlow::render), nullptr);
 
     if (currentPage) {
         currentPage->render();
@@ -45,8 +47,8 @@ void GlobalView::render() {
     }
 
     Components::PageCounter(InstallationState::page, 6);
-
     Components::Navigation();
+    Components::CleanupHover();
 }
 
 void GlobalView::changePage(BasePage* page) {

@@ -35,22 +35,19 @@ void Components::Navigation() {
     ImGui::PushFont(StyleShit::g_fontAwesome);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {40.f, ImGui::GetStyle().FramePadding.y});
 
-    if (InstallationState::page > 0) {
-        
-        if (Components::MutedButton(std::format(
-            "{}   {}", ICON_FA_CHEVRON_CIRCLE_LEFT, Languages::getLanguageString("back")
-        ), {0.f, 0.f})) {
 
-            InstallationState::goBack();
-        }
+    if (Components::MutedButton(std::format(
+        "{}   {}", ICON_FA_CHEVRON_CIRCLE_LEFT, Languages::getLanguageString("back")
+    ).c_str(), {0.f, 0.f}, !(InstallationState::page > 0))) {
 
-        ImGui::SameLine(0, 40);
+        InstallationState::goBack();
     }
-    
+
+    ImGui::SameLine(0, 40);
 
     if (Components::MutedButton(std::format(
         "{}   {}", ICON_FA_CHEVRON_CIRCLE_RIGHT, Languages::getLanguageString("next")
-    ), {0.f, 0.f})) {
+    ).c_str(), {0.f, 0.f})) {
 
         InstallationState::goNext();
     }

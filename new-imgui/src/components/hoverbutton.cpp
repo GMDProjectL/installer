@@ -1,67 +1,109 @@
 //
 // Created by shine on 4/6/25.
 //
+#include <iostream>
+#define IMGUI_DEFINE_MATH_OPERATORS
 
 #include "hoverbutton.hpp"
-#include <unordered_map>
+#include <algorithm>
 
-bool Components::HoverButton(const std::string& label, const ImVec2& size)
-{
-    auto buttonNormalColor = ImGui::GetStyleColorVec4(ImGuiCol_Button);
-    auto buttonHoverColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered);
-    auto buttonActivatedColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive);
-    auto textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);
+constexpr int hoverSmoothFactorScaling = 5;
+constexpr int activeSmoothFactorScaling = 10;
 
-    const auto style = ImGui::GetStyle();
-    const auto opacity = style.Alpha;
+template<typename Tuple>
+decltype(auto) getLast(Tuple&& tuple) {
+    constexpr std::size_t last = std::tuple_size_v<std::remove_reference_t<Tuple>> - 1;
+    return std::get<last>(std::forward<Tuple>(tuple));
+}
 
-    buttonNormalColor.w *= opacity;
-    buttonHoverColor.w *= opacity;
-    buttonActivatedColor.w *= opacity;
-    textColor.w *= opacity;
-
-    float& smoothFactor = buttonsSmoothFactor[label];
-
-    constexpr auto transparent = ImVec4(0, 0, 0, 0);
-    ImGui::PushStyleColor(ImGuiCol_Button, transparent);
-    ImGui::PushStyleColor(ImGuiCol_ButtonHovered, transparent);
-    ImGui::PushStyleColor(ImGuiCol_ButtonActive, transparent);
-    ImGui::PushStyleColor(ImGuiCol_Text, transparent);
-    auto isClicked = ImGui::Button(label.c_str(), size);
-    ImGui::PopStyleColor(4);
-
-    const auto isHovered = ImGui::IsItemHovered();
-    const auto deltaTime = ImGui::GetIO().DeltaTime;
-
-    if (isHovered) {
-        smoothFactor += deltaTime * 5;
-        if (smoothFactor > 1.0f)
-            smoothFactor = 1.0f;
+template<typename Tuple, std::size_t N = 0>
+void logTuple(Tuple&& tuple, const char* label) {
+    if constexpr (N < std::tuple_size_v<std::remove_reference_t<Tuple>>) {
+        if (N == 0) std::cout << label << ": ";
+        std::cout << std::get<N>(std::forward<Tuple>(tuple)) << " ";
+        logTuple<Tuple, N + 1>(std::forward<Tuple>(tuple), label);
     } else {
-        smoothFactor -= deltaTime * 5;
-        if (smoothFactor < 0.0f)
-            smoothFactor = 0.0f;
+        std::cout << std::endl;
     }
+}
 
-    ImVec4 buttonHoverTransition = ImVec4(
-        buttonNormalColor.x + (buttonHoverColor.x - buttonNormalColor.x) * smoothFactor,
-        buttonNormalColor.y + (buttonHoverColor.y - buttonNormalColor.y) * smoothFactor,
-        buttonNormalColor.z + (buttonHoverColor.z - buttonNormalColor.z) * smoothFactor,
-        buttonNormalColor.w + (buttonHoverColor.w - buttonNormalColor.w) * smoothFactor
-    );
+inline ImVec4 ImLerpColor(const ImVec4& firstColor, const ImVec4& secondColor, const float& smoothFactor) {
+    return firstColor + (secondColor - firstColor) * smoothFactor;
+}
 
-    if (ImGui::IsItemActive())
-        buttonHoverTransition = buttonActivatedColor;
+bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, ImVec4& disableColor) {
+    const auto window = ImGui::GetCurrentWindow();
+    const auto& style = ImGui::GetStyle();
+    const auto id = window->GetID(label);
 
-    const auto drawList = ImGui::GetWindowDrawList();
-    const auto buttonMin = ImGui::GetItemRectMin();
-    const auto buttonMax = ImGui::GetItemRectMax();
-    const auto buttonCenterPoint = ImVec2(buttonMax.x - buttonMin.x, buttonMax.y - buttonMin.y);
-    const auto textSize = ImGui::CalcTextSize(label.c_str());
-    const auto rounding = style.FrameRounding;
+    const auto labelSize = ImGui::CalcTextSize(label);
+    const auto pos = window->DC.CursorPos;
+    const auto size = ImGui::CalcItemSize(size_arg, labelSize.x + style.FramePadding.x * 2.0f, labelSize.y + style.FramePadding.y * 2.0f);
 
-    drawList->AddRectFilled(buttonMin, buttonMax, ImColor(buttonHoverTransition), rounding);
-    drawList->AddText(ImVec2(buttonMin.x + (buttonCenterPoint.x - textSize.x) / 2, buttonMin.y + (buttonCenterPoint.y - textSize.y) / 2), ImColor(textColor), label.c_str());
+    const ImRect bb(pos, pos + size);
+    ImGui::ItemSize(bb, style.FramePadding.y);
+    
+    if (!disable)
+        if (!ImGui::ItemAdd(bb, id))
+            return false;
+
+    bool hover, held;
+    auto isClicked = ImGui::ButtonBehavior(bb, id, &hover, &held);
+
+    const auto dt = ImGui::GetIO().DeltaTime;
+    auto& [hoverSmoothFactor, activeSmoothFactor, disableSmoothFactor, isUsed] = buttonsSmoothFactor[id];
+    if (!isUsed) isUsed = true;
+
+    hoverSmoothFactor += (hover ? 1.0f : -1.0f) * dt * hoverSmoothFactorScaling;
+    hoverSmoothFactor = std::clamp(hoverSmoothFactor, 0.f, 1.0f);
+
+    activeSmoothFactor += (held ? 1.0f : -1.0f) * dt * activeSmoothFactorScaling;
+    activeSmoothFactor = std::clamp(activeSmoothFactor, 0.0f, 1.0f);
+
+    disableSmoothFactor += (disable ? 1.0f : -1.0f) * dt * activeSmoothFactorScaling;
+    disableSmoothFactor = std::clamp(disableSmoothFactor, 0.0f, 1.0f);
+
+    RenderHoverButton(label, bb, labelSize, hoverSmoothFactor, activeSmoothFactor, disableSmoothFactor, disableColor);
 
     return isClicked;
+}
+
+void Components::RenderHoverButton(const char *label, const ImRect &bb, const ImVec2 &labelSize, float hoverSmooth, float activeSmooth, float disabledSmooth, ImVec4 disableColor) {
+    const auto& style = ImGui::GetStyle();
+
+    auto normalColor = ImGui::GetStyleColorVec4(ImGuiCol_Button);   normalColor.w *= style.Alpha;
+    auto hoverColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonHovered); hoverColor.w *= style.Alpha;
+    auto activeColor = ImGui::GetStyleColorVec4(ImGuiCol_ButtonActive); activeColor.w *= style.Alpha;
+    auto textColor = ImGui::GetStyleColorVec4(ImGuiCol_Text);   textColor.w *= style.Alpha;
+    auto disableTextColor = StyleShit::g_ButtonDisabledTextColor; disableTextColor.w *= style.Alpha;
+    disableColor.w *= style.Alpha;
+
+    const auto hover = ImLerpColor(normalColor, hoverColor, hoverSmooth);
+    const auto active = ImLerpColor(hover, activeColor, activeSmooth);
+    const auto finalColor = ImLerpColor(active, disableColor, disabledSmooth);
+
+    const auto textFinalColor = ImLerpColor(textColor, disableTextColor, disabledSmooth);
+
+    const auto drawList = ImGui::GetWindowDrawList();
+    drawList->AddRectFilled(bb.Min, bb.Max, ImColor(finalColor), style.FrameRounding);
+    drawList->AddText(
+        ImVec2(
+            bb.GetCenter().x - labelSize.x / 2,
+            bb.GetCenter().y - labelSize.y / 2
+        ),
+        ImColor(textFinalColor),
+        label
+    );
+}
+
+void Components::CleanupHover() {
+    for (auto it = buttonsSmoothFactor.begin(); it != buttonsSmoothFactor.end();) {
+        auto& isUsed = getLast(it->second);
+        if (isUsed) isUsed = false;
+        else {
+            it = buttonsSmoothFactor.erase(it);
+            continue;
+        }
+        ++it;
+    }
 }
