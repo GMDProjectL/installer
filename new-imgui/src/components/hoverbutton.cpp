@@ -24,13 +24,13 @@ bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool dis
 
     const ImRect bb(pos, pos + size);
     ImGui::ItemSize(bb, style.FramePadding.y);
-    
+
     if (!disable && !ImGui::ItemAdd(bb, id))
         return false;
 
     bool hover, held;
-    auto isClicked = ImGui::ButtonBehavior(bb, id, &hover, &held);
 
+    const auto isClicked = ImGui::ButtonBehavior(bb, id, &hover, &held);
     const auto& dt = ImGui::GetIO().DeltaTime;
 
     if (disable && !smoothFactorStore.contains(id)) {
