@@ -38,8 +38,8 @@ bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool dis
     }
 
     auto& item = smoothFactorStore[id];
-    if (!item.isUsed) item.isUsed = true;
 
+    item.isUsed = true;
     item.hoverSmoothFactor += (hover ? 1.0f : -1.0f) * dt * hoverSmoothFactorScaling;
     item.hoverSmoothFactor = std::clamp(item.hoverSmoothFactor, 0.f, 1.0f);
 
