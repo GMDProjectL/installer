@@ -1,7 +1,6 @@
 //
 // Created by shine on 4/6/25.
 //
-#include <iostream>
 #define IMGUI_DEFINE_MATH_OPERATORS
 
 #include "hoverbutton.hpp"
@@ -15,25 +14,24 @@ inline ImVec4 ImLerpColor(const ImVec4& firstColor, const ImVec4& secondColor, c
 }
 
 bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, ImVec4& disableColor) {
-    const auto window = ImGui::GetCurrentWindow();
+    const auto& window = ImGui::GetCurrentWindow();
     const auto& style = ImGui::GetStyle();
-    const auto id = window->GetID(label);
+    const auto&  id = window->GetID(label);
 
-    const auto labelSize = ImGui::CalcTextSize(label);
-    const auto pos = window->DC.CursorPos;
-    const auto size = ImGui::CalcItemSize(size_arg, labelSize.x + style.FramePadding.x * 2.0f, labelSize.y + style.FramePadding.y * 2.0f);
+    const auto& labelSize = ImGui::CalcTextSize(label);
+    const auto& pos = window->DC.CursorPos;
+    const auto& size = ImGui::CalcItemSize(size_arg, labelSize.x + style.FramePadding.x * 2.0f, labelSize.y + style.FramePadding.y * 2.0f);
 
     const ImRect bb(pos, pos + size);
     ImGui::ItemSize(bb, style.FramePadding.y);
     
-    if (!disable)
-        if (!ImGui::ItemAdd(bb, id))
-            return false;
+    if (!disable && !ImGui::ItemAdd(bb, id))
+        return false;
 
     bool hover, held;
     auto isClicked = ImGui::ButtonBehavior(bb, id, &hover, &held);
 
-    const auto dt = ImGui::GetIO().DeltaTime;
+    const auto& dt = ImGui::GetIO().DeltaTime;
 
     if (disable && !smoothFactorStore.contains(id)) {
         smoothFactorStore[id].disableSmoothFactor = 1.0f; // Skips the color transition if disabled from the first call or on language change
