@@ -29,8 +29,8 @@ bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool dis
         return false;
 
     bool hover, held;
-
     const auto isClicked = ImGui::ButtonBehavior(bb, id, &hover, &held);
+
     const auto dt = ImGui::GetIO().DeltaTime;
 
     if (disable && !smoothFactorStore.contains(id)) {
