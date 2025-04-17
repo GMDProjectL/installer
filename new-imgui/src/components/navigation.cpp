@@ -47,7 +47,7 @@ void Components::Navigation() {
 
     if (Components::MutedButton(std::format(
         "{}   {}", ICON_FA_CHEVRON_CIRCLE_RIGHT, Languages::getLanguageString("next")
-    ).c_str(), {0.f, 0.f})) {
+    ).c_str(), {0.f, 0.f}, !(InstallationState::page < InstallationState::maxPages - 1))) {
 
         InstallationState::goNext();
     }

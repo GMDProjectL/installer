@@ -26,13 +26,13 @@ void Components::PageCounter(int page, int total) {
 
     if (previousPage != page) {
         auto previousIter = std::ranges::find_if(jobIndexes.begin(), jobIndexes.end(), [](auto& item) {
-            return item.first == previousPage;
+            return item.pageNum == previousPage;
         });
         if (previousIter != jobIndexes.end()) {
             jobIndexes.erase(previousIter);
         }
         auto currentIter = std::ranges::find_if(jobIndexes.begin(), jobIndexes.end(), [page](auto& item) {
-            return item.first == page;
+            return item.pageNum == page;
         });
         if (currentIter != jobIndexes.end()) {
             jobIndexes.erase(currentIter);
@@ -63,16 +63,16 @@ void Components::PageCounter(int page, int total) {
     const auto deltaTime = ImGui::GetIO().DeltaTime;
 
     for (auto it = jobIndexes.begin(); it != jobIndexes.end();) {
-        if (it->second) {
-            circleRadius[it->first] += deltaTime * 10;
-            if (circleRadius[it->first] > 5.0f) {
-                circleRadius[it->first] = 5.0f;
+        if (it->increase) {
+            circleRadius[it->pageNum] += deltaTime * 10;
+            if (circleRadius[it->pageNum] > 5.0f) {
+                circleRadius[it->pageNum] = 5.0f;
                 it = jobIndexes.erase(it);
             } else ++it;
         } else {
-            circleRadius[it->first] -= deltaTime * 10;
-            if (circleRadius[it->first] < 2.0f) {
-                circleRadius[it->first] = 2.0f;
+            circleRadius[it->pageNum] -= deltaTime * 10;
+            if (circleRadius[it->pageNum] < 2.0f) {
+                circleRadius[it->pageNum] = 2.0f;
                 it = jobIndexes.erase(it);
             } else ++it;
         }

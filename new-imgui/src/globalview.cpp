@@ -46,7 +46,7 @@ void GlobalView::render() {
         nextPage->render();
     }
 
-    Components::PageCounter(InstallationState::page, 6);
+    Components::PageCounter(InstallationState::page, InstallationState::maxPages);
     Components::Navigation();
     Components::CleanupHover();
 }

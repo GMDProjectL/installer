@@ -83,8 +83,7 @@ void Components::RenderHoverButton(const char *label, const ImRect &bb, const Im
 
 void Components::CleanupHover() {
     for (auto it = smoothFactorStore.begin(); it != smoothFactorStore.end();) {
-        auto& isUsed = it->second.isUsed;
-        if (isUsed) isUsed = false;
+        if (it->second.isUsed) it->second.isUsed = false;
         else {
             it = smoothFactorStore.erase(it);
             continue;
