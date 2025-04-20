@@ -36,6 +36,7 @@ int main(int, char**)
         return 1;
 
     glfwMakeContextCurrent(WindowState::window);
+    glfwSetWindowSizeLimits(WindowState::window, 1280, 720, GLFW_DONT_CARE, GLFW_DONT_CARE);
 
     glewExperimental = GL_TRUE;
     GLenum err = glewInit();
