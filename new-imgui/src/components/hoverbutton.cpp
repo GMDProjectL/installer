@@ -9,7 +9,7 @@
 constexpr int hoverSmoothFactorScaling = 5;
 constexpr int activeSmoothFactorScaling = 10;
 
-bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, ImVec4& disableColor) {
+bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, const ImVec4& disableColor) {
     const auto& window = ImGui::GetCurrentWindow();
     const auto& style = ImGui::GetStyle();
     const auto  id = window->GetID(label);
