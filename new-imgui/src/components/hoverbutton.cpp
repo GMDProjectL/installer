@@ -9,10 +9,6 @@
 constexpr int hoverSmoothFactorScaling = 5;
 constexpr int activeSmoothFactorScaling = 10;
 
-inline ImVec4 ImLerpColor(const ImVec4& firstColor, const ImVec4& secondColor, const float& smoothFactor) {
-    return firstColor + (secondColor - firstColor) * smoothFactor;
-}
-
 bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, ImVec4& disableColor) {
     const auto& window = ImGui::GetCurrentWindow();
     const auto& style = ImGui::GetStyle();
@@ -64,10 +60,10 @@ void Components::HoverButtonEx::RenderHoverButton(const char *label, const ImRec
     auto disableTextColor = StyleShit::g_ButtonDisabledTextColor; disableTextColor.w *= style.Alpha;
     disableColor.w *= style.Alpha;
 
-    const auto hover = ImLerpColor(normalColor, hoverColor, hoverSmooth);
-    const auto active = ImLerpColor(hover, activeColor, activeSmooth);
-    const auto finalColor = ImLerpColor(active, disableColor, disabledSmooth);
-    const auto textFinalColor = ImLerpColor(textColor, disableTextColor, disabledSmooth);
+    const auto hover = ImLerp(normalColor, hoverColor, hoverSmooth);
+    const auto active = ImLerp(hover, activeColor, activeSmooth);
+    const auto finalColor = ImLerp(active, disableColor, disabledSmooth);
+    const auto textFinalColor = ImLerp(textColor, disableTextColor, disabledSmooth);
 
     const auto drawList = ImGui::GetWindowDrawList();
     drawList->AddRectFilled(bb.Min, bb.Max, ImColor(finalColor), style.FrameRounding);
