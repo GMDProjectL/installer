@@ -49,7 +49,7 @@ void GlobalView::render() {
     Components::PageCounterEx::doAnimationStep();
     Components::PageCounter(InstallationState::page, InstallationState::maxPages);
     Components::Navigation();
-    Components::CleanupHover();
+    Components::HoverButtonEx::CleanupHover();
 }
 
 void GlobalView::changePage(BasePage* page) {

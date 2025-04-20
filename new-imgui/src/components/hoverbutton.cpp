@@ -49,12 +49,12 @@ bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool dis
     item.disableSmoothFactor += (disable ? 1.0f : -1.0f) * dt * activeSmoothFactorScaling;
     item.disableSmoothFactor = std::clamp(item.disableSmoothFactor, 0.0f, 1.0f);
 
-    RenderHoverButton(label, bb, labelSize, item.hoverSmoothFactor, item.activeSmoothFactor, item.disableSmoothFactor, disableColor);
+    HoverButtonEx::RenderHoverButton(label, bb, labelSize, item.hoverSmoothFactor, item.activeSmoothFactor, item.disableSmoothFactor, disableColor);
 
     return isClicked;
 }
 
-void Components::RenderHoverButton(const char *label, const ImRect &bb, const ImVec2 &labelSize, float hoverSmooth, float activeSmooth, float disabledSmooth, ImVec4 disableColor) {
+void Components::HoverButtonEx::RenderHoverButton(const char *label, const ImRect &bb, const ImVec2 &labelSize, float hoverSmooth, float activeSmooth, float disabledSmooth, ImVec4 disableColor) {
     const auto& style = ImGui::GetStyle();
 
     auto normalColor = ImGui::GetStyleColorVec4(ImGuiCol_Button);   normalColor.w *= style.Alpha;
@@ -81,7 +81,7 @@ void Components::RenderHoverButton(const char *label, const ImRect &bb, const Im
     );
 }
 
-void Components::CleanupHover() {
+void Components::HoverButtonEx::CleanupHover() {
     for (auto it = smoothFactorStore.begin(); it != smoothFactorStore.end();) {
         if (it->second.isUsed) it->second.isUsed = false;
         else {
