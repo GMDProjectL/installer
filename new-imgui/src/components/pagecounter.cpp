@@ -5,23 +5,21 @@
 #include "imgui.h"
 #include "windowstate.hpp"
 
-constexpr float padding = 15.0f;
-
 void Components::PageCounter(int page, int total) {
     ImGui::Begin("#PageCounter", NULL, 
-        ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoNav
+        ImGuiWindowFlags_NoNav |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
     );
 
     // Init for animation
     if (circleRadius.size() != total)
-        circleRadius.resize(total, 2.0f);
+        circleRadius.resize(total, minSize);
 
     if (!initDone) {
-        circleRadius[page] = 5.0f;
+        circleRadius[page] = maxSize;
         initDone = true;
     }
 
@@ -33,15 +31,15 @@ void Components::PageCounter(int page, int total) {
     const auto framePadding = ImGui::GetStyle().FramePadding.x;
 
     ImGui::SetWindowSize({
-        padding * total + framePadding, 50
+        spacing * total + framePadding, 35
     }, ImGuiCond_Always);
 
     auto globalWindowSize = WindowState::getWindowSize();
 
     ImGui::SetWindowPos(
         {
-            (globalWindowSize.x - padding * total + framePadding) / 2.0f,
-            globalWindowSize.y - 50.0f
+            (globalWindowSize.x - ImGui::GetWindowWidth()) / 2.0f,
+            globalWindowSize.y - 35
         }, 
         ImGuiCond_Always
     );
@@ -56,7 +54,7 @@ void Components::PageCounter(int page, int total) {
         } else {
             draw_list->AddCircleFilled(pos, circleRadius[i], IM_COL32(150, 150, 150, 255));
         }
-        pos.x += padding;
+        pos.x += spacing;
         ImGui::PopID();
     }
 
@@ -87,14 +85,14 @@ void Components::PageCounterEx::doAnimationStep() {
     for (auto it = animationQueue.begin(); it != animationQueue.end();) {
         if (it->increase) {
             circleRadius[it->pageNum] += dt * 10;
-            if (circleRadius[it->pageNum] > 5.0f) {
-                circleRadius[it->pageNum] = 5.0f;
+            if (circleRadius[it->pageNum] > maxSize) {
+                circleRadius[it->pageNum] = maxSize;
                 it = animationQueue.erase(it);
             } else ++it;
         } else {
             circleRadius[it->pageNum] -= dt * 10;
-            if (circleRadius[it->pageNum] < 2.0f) {
-                circleRadius[it->pageNum] = 2.0f;
+            if (circleRadius[it->pageNum] < minSize) {
+                circleRadius[it->pageNum] = minSize;
                 it = animationQueue.erase(it);
             } else ++it;
         }

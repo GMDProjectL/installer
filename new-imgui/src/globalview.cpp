@@ -34,9 +34,10 @@ void GlobalView::render() {
         }
     }
 
-    //BGGlow::render();
-
-    //ImGui::GetBackgroundDrawList()->AddCallback(ImDrawCallback(BGGlow::render), nullptr);
+    Components::Navigation();
+    Components::PageCounterEx::doAnimationStep();
+    Components::PageCounter(InstallationState::page, InstallationState::maxPages);
+    Components::HoverButtonEx::CleanupHover();
 
     if (currentPage) {
         currentPage->render();
@@ -45,11 +46,6 @@ void GlobalView::render() {
     if (nextPage) {
         nextPage->render();
     }
-
-    Components::PageCounterEx::doAnimationStep();
-    Components::PageCounter(InstallationState::page, InstallationState::maxPages);
-    Components::Navigation();
-    Components::HoverButtonEx::CleanupHover();
 }
 
 void GlobalView::changePage(BasePage* page) {

@@ -58,16 +58,15 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(WindowState::window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-
     io.Fonts->AddFontDefault();
 
     ImFont* font = io.Fonts->AddFontFromFileTTF(
-        "/usr/share/fonts/Adwaita/AdwaitaSans-Regular.ttf", 18.0f, nullptr, 
+        "./resources/fonts/Roboto-Regular.ttf", 18.0f, nullptr, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
-    StyleShit::g_boldFont = io.Fonts->AddFontFromFileTTF(
-        "./resources/fonts/inter-bold.ttf", 18.0f, nullptr, 
+    StyleShit::g_fonts[StyleShit::Fonts::boldFont] = io.Fonts->AddFontFromFileTTF(
+        "./resources/fonts/Roboto-Bold.ttf", 18.0f, nullptr, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
@@ -76,22 +75,35 @@ int main(int, char**)
     iconsConfig.MergeMode = true;
     iconsConfig.PixelSnapH = true;
 
-    StyleShit::g_fontAwesome = io.Fonts->AddFontFromMemoryCompressedTTF(
+    StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px] = io.Fonts->AddFontFromMemoryCompressedTTF(
         FontAwesome::font_awesome_data, 
         FontAwesome::font_awesome_size, 
-        14, &iconsConfig, iconsRange);
+        14, &iconsConfig, iconsRange
+    );
+
+    auto mergeFont = io.Fonts->AddFontFromFileTTF("./resources/fonts/Roboto-SemiBold.ttf", 28.f, nullptr,
+        io.Fonts->GetGlyphRangesCyrillic()
+    );
+
+    StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px] = io.Fonts->AddFontFromMemoryCompressedTTF(
+        FontAwesome::font_awesome_data, 
+        FontAwesome::font_awesome_size, 
+        24, &iconsConfig, iconsRange
+    );
 
     ImFontConfig titleFontConfig;
 
-    StyleShit::g_titleFont = io.Fonts->AddFontFromFileTTF(
-        "./resources/fonts/inter-bold.ttf", 42.0f, &titleFontConfig, 
+    StyleShit::g_fonts[StyleShit::Fonts::titleFont] = io.Fonts->AddFontFromFileTTF(
+        "./resources/fonts/Roboto-Bold.ttf", 36.0f, &titleFontConfig, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
     IM_ASSERT(font != nullptr);
-    IM_ASSERT(StyleShit::g_boldFont != nullptr);
-    IM_ASSERT(StyleShit::g_fontAwesome != nullptr);
-    IM_ASSERT(StyleShit::g_titleFont != nullptr);
+    IM_ASSERT(mergeFont != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::boldFont] != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px] != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::titleFont] != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px] != nullptr);
 
     io.FontDefault = font;
 
@@ -115,16 +127,16 @@ int main(int, char**)
         ImGui::NewFrame();
 
         globalView.render();
-        ImGui::ShowStyleEditor();
+        //ImGui::ShowStyleEditor();
         
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(WindowState::window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glClearColor(
-            StyleShit::g_GlobalBgColor.x * StyleShit::g_GlobalBgColor.w, 
-            StyleShit::g_GlobalBgColor.y * StyleShit::g_GlobalBgColor.w, 
-            StyleShit::g_GlobalBgColor.z * StyleShit::g_GlobalBgColor.w, 
+            StyleShit::g_GlobalBgColor.x, 
+            StyleShit::g_GlobalBgColor.y, 
+            StyleShit::g_GlobalBgColor.z, 
             StyleShit::g_GlobalBgColor.w
         );
         glClear(GL_COLOR_BUFFER_BIT);

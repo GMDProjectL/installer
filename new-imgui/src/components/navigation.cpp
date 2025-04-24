@@ -11,11 +11,11 @@
 
 void Components::Navigation() {
     ImGui::Begin("#Navigation", NULL, 
-        ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoNav
+        ImGuiWindowFlags_NoNav |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
     );
 
     auto globalWindowSize = WindowState::getWindowSize();
@@ -32,7 +32,8 @@ void Components::Navigation() {
         ImGuiCond_Always
     );
 
-    ImGui::PushFont(StyleShit::g_fontAwesome);
+    auto font = StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px];
+    ImGui::PushFont(font);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {40.f, ImGui::GetStyle().FramePadding.y});
 
 

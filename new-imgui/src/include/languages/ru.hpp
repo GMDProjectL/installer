@@ -8,6 +8,7 @@ namespace Languages {
         {"lang_name", "Русский"},
         {"welcome", "Добро пожаловать в установщик GDL!"},
         {"welcome_subtitle", "Лёгкий в использовании дистрибутив Linux."},
+        {"lang_title", "Для начала, выбери язык:"},
         {"back", "Назад"},
         {"next", "Вперёд"},
         {"introduce_yourself", "Представьтесь, пожалуйста"},

@@ -8,6 +8,7 @@ namespace Languages {
         {"lang_name", "English"},
         {"welcome", "Welcome to Project GDL Installer!"},
         {"welcome_subtitle", "Easy-to-use Linux distribution."},
+        {"lang_title", "First, select the language:"},
         {"back", "Back"},
         {"next", "Next"},
         {"introduce_yourself", "Introduce yourself"},

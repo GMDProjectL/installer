@@ -7,6 +7,9 @@ namespace Components {
         bool increase;
     };
 
+    inline constexpr float maxSize = 4.00f;
+    inline constexpr float minSize = 2.00f;
+    inline constexpr float spacing = 15.0f;
     inline std::vector<float> circleRadius;
     inline std::vector<JobItem> animationQueue;
     inline bool initDone = false;

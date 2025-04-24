@@ -1,5 +1,6 @@
 #include "welcome.hpp"
 #include "centeredtext.hpp"
+#include "font_awesome.h"
 #include "imgui.h"
 #include "installationstate.hpp"
 #include "styleshit.hpp"
@@ -7,33 +8,33 @@
 #include "windowstate.hpp"
 #include "languages.hpp"
 #include "hoverbutton.hpp"
+#include <format>
 
 Welcome* Welcome::instance = nullptr;
 
 void Welcome::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Welcome", NULL, 
-        ImGuiWindowFlags_NoTitleBar |
         ImGuiWindowFlags_NoDecoration |
         ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoNav
+        ImGuiWindowFlags_NoNav |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
     );
-
-    ImVec2 welcomeWindowSize = { 700.0, 400.0 };
-
-    ImGui::SetWindowSize(welcomeWindowSize, ImGuiCond_Always);
 
     auto globalWindowSize = WindowState::getWindowSize();
 
+    ImGui::SetWindowSize(globalWindowSize, ImGuiCond_Always);
+
     ImGui::SetWindowPos(
         {
-            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2 + transitionX,
-            globalWindowSize.y / 2.0f - welcomeWindowSize.y / 2
+            transitionX,
+            0
         }, 
         ImGuiCond_Always
     );
-
+    
+    ImGui::SetCursorPosY(40);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     Components::TitleText(Languages::getLanguageString("welcome").c_str());
 
@@ -42,12 +43,39 @@ void Welcome::render() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
 
+    ImVec2 langWindowSize = { 350.0, 400.0 };
+
+    auto fontAwesome = StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px];
+    ImGui::PushFont(fontAwesome);
+    
+    auto langSubtitleText = std::format("{}   {}", ICON_FA_GLOBE, Languages::getLanguageString("lang_title"));
+    auto offset = 30;
+
+    ImGui::SetNextWindowPos({
+        (globalWindowSize.x - langWindowSize.x) / 2 + transitionX,
+        (globalWindowSize.y - langWindowSize.y) / 2 + ImGui::GetCursorPosY() - offset - ImGui::CalcTextSize(langSubtitleText.c_str()).y
+    });
+
+    ImGui::BeginChild("#Languages", langWindowSize, 0,
+    ImGuiWindowFlags_NoDecoration |
+        ImGuiWindowFlags_NoMove |
+        ImGuiWindowFlags_NoNav |
+        ImGuiWindowFlags_NoBackground |
+        ImGuiWindowFlags_NoBringToFrontOnFocus
+    );
+    
+    Components::CenteredText(langSubtitleText.c_str());
+    ImGui::PopFont();
+
+    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + offset);
+
     for (auto language : Languages::langsMap) {
 
         auto currentLanguage = language.first == Languages::getCurrentLanguage();
 
         if (currentLanguage) {
-            ImGui::PushFont(StyleShit::g_boldFont);
+            auto boldFont = StyleShit::g_fonts[StyleShit::Fonts::boldFont];
+            ImGui::PushFont(boldFont);
         }
 
         if (Components::HoverButton(language.second["lang_name"].c_str(), {-1, 0})) {
@@ -60,6 +88,7 @@ void Welcome::render() {
             ImGui::PopFont();
         }
     }
+    ImGui::EndChild();
 
     ImGui::PopStyleVar(4);
 
