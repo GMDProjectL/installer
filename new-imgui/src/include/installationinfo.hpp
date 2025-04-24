@@ -4,10 +4,10 @@
 class InstallationInfo {
 public:
     std::string language = "en";
-    std::string username = "";
-    std::string hostname = "";
-    std::string password = "";
-    std::string password2 = "";
+    char* username = new char[64]();
+    char* hostname = new char[64]();
+    char* password = new char[64]();
+    char* password2 = new char[64]();
     std::string timezoneRegion = "";
     std::string timezoneInfo = "";
     std::string selectedDrive = "";

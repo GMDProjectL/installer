@@ -8,6 +8,7 @@
 #include "languages.hpp"
 #include "font_awesome.h"
 #include <format>
+#include "navigation.hpp"
 
 Introduction* Introduction::instance = nullptr;
 
@@ -43,12 +44,14 @@ void Introduction::render() {
 
     ImGui::BeginChild("#InputFields", inputWindowSize, 0, StyleShit::g_defaultWindowFlags);
 
+    auto& info = InstallationState::info;
+
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
     ImGui::TextDisabled("%s  %s", ICON_FA_USER, Languages::getLanguageString("username").c_str());
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
-    ImGui::InputText("###username", InstallationState::info.username.data(), 64);
+    ImGui::InputText("###username", info.username, 64);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -56,7 +59,7 @@ void Introduction::render() {
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
-    ImGui::InputText("###hostname", InstallationState::info.hostname.data(), 64);
+    ImGui::InputText("###hostname", info.hostname, 64);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -64,7 +67,7 @@ void Introduction::render() {
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
-    ImGui::InputText("###password", InstallationState::info.password.data(), 64, ImGuiInputTextFlags_Password);
+    ImGui::InputText("###password", info.password, 64, ImGuiInputTextFlags_Password);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -72,7 +75,16 @@ void Introduction::render() {
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
-    ImGui::InputText("###password2", InstallationState::info.password2.data(), 64, ImGuiInputTextFlags_Password);
+    ImGui::InputText("###password2", info.password2, 64, ImGuiInputTextFlags_Password);
+
+    if(strlen(info.username) == 0||
+        strlen(info.hostname) == 0 ||
+        strlen(info.password) == 0 ||
+        strlen(info.password2) == 0 ||
+        strcmp(info.password, info.password2) != 0)
+    {
+        Components::NavigationEx::disableNext = true;
+    }
 
     ImGui::PopStyleVar(10);
     ImGui::EndChild();
