@@ -58,9 +58,7 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(WindowState::window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    io.Fonts->AddFontDefault();
-
-    ImFont* font = io.Fonts->AddFontFromFileTTF(
+    io.FontDefault = io.Fonts->AddFontFromFileTTF(
         "./resources/fonts/Roboto-Regular.ttf", 18.0f, nullptr, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
@@ -98,14 +96,11 @@ int main(int, char**)
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
-    IM_ASSERT(font != nullptr);
     IM_ASSERT(mergeFont != nullptr);
     IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::boldFont] != nullptr);
     IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px] != nullptr);
     IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::titleFont] != nullptr);
     IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px] != nullptr);
-
-    io.FontDefault = font;
 
     StyleShit::setupStyles();
 
