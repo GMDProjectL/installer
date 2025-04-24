@@ -14,13 +14,7 @@ Welcome* Welcome::instance = nullptr;
 
 void Welcome::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
-    ImGui::Begin("#Welcome", NULL, 
-        ImGuiWindowFlags_NoDecoration |
-        ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoNav |
-        ImGuiWindowFlags_NoBackground |
-        ImGuiWindowFlags_NoBringToFrontOnFocus
-    );
+    ImGui::Begin("#Welcome", NULL, StyleShit::g_defaultWindowFlags);
 
     auto globalWindowSize = WindowState::getWindowSize();
 
@@ -45,10 +39,10 @@ void Welcome::render() {
 
     ImVec2 langWindowSize = { 350.0, 400.0 };
 
-    auto fontAwesome = StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px];
+    auto fontAwesome = StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont];
     ImGui::PushFont(fontAwesome);
     
-    auto langSubtitleText = std::format("{}   {}", ICON_FA_GLOBE, Languages::getLanguageString("lang_title"));
+    auto langSubtitleText = std::format("{}  {}", ICON_FA_GLOBE, Languages::getLanguageString("lang_title"));
     auto offset = 30;
 
     ImGui::SetNextWindowPos({
@@ -56,13 +50,7 @@ void Welcome::render() {
         (globalWindowSize.y - langWindowSize.y) / 2 + ImGui::GetCursorPosY() - offset - ImGui::CalcTextSize(langSubtitleText.c_str()).y
     });
 
-    ImGui::BeginChild("#Languages", langWindowSize, 0,
-    ImGuiWindowFlags_NoDecoration |
-        ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoNav |
-        ImGuiWindowFlags_NoBackground |
-        ImGuiWindowFlags_NoBringToFrontOnFocus
-    );
+    ImGui::BeginChild("#Languages", langWindowSize, 0, StyleShit::g_defaultWindowFlags);
     
     Components::CenteredText(langSubtitleText.c_str());
     ImGui::PopFont();

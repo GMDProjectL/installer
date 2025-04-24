@@ -58,13 +58,8 @@ int main(int, char**)
     ImGui_ImplGlfw_InitForOpenGL(WindowState::window, true);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
-    io.FontDefault = io.Fonts->AddFontFromFileTTF(
+    auto defaultFontMerge = io.Fonts->AddFontFromFileTTF(
         "./resources/fonts/Roboto-Regular.ttf", 18.0f, nullptr, 
-        io.Fonts->GetGlyphRangesCyrillic()
-    );
-
-    StyleShit::g_fonts[StyleShit::Fonts::boldFont] = io.Fonts->AddFontFromFileTTF(
-        "./resources/fonts/Roboto-Bold.ttf", 18.0f, nullptr, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
@@ -73,7 +68,18 @@ int main(int, char**)
     iconsConfig.MergeMode = true;
     iconsConfig.PixelSnapH = true;
 
-    StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px] = io.Fonts->AddFontFromMemoryCompressedTTF(
+    io.FontDefault = io.Fonts->AddFontFromMemoryCompressedTTF(
+        FontAwesome::font_awesome_data, 
+        FontAwesome::font_awesome_size, 
+        14, &iconsConfig, iconsRange
+    );
+
+    auto mergeBoldFont = io.Fonts->AddFontFromFileTTF(
+        "./resources/fonts/Roboto-Bold.ttf", 18.0f, nullptr, 
+        io.Fonts->GetGlyphRangesCyrillic()
+    );
+
+    StyleShit::g_fonts[StyleShit::Fonts::boldFont] = io.Fonts->AddFontFromMemoryCompressedTTF(
         FontAwesome::font_awesome_data, 
         FontAwesome::font_awesome_size, 
         14, &iconsConfig, iconsRange
@@ -83,7 +89,7 @@ int main(int, char**)
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
-    StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px] = io.Fonts->AddFontFromMemoryCompressedTTF(
+    StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont] = io.Fonts->AddFontFromMemoryCompressedTTF(
         FontAwesome::font_awesome_data, 
         FontAwesome::font_awesome_size, 
         24, &iconsConfig, iconsRange
@@ -91,17 +97,26 @@ int main(int, char**)
 
     ImFontConfig titleFontConfig;
 
-    StyleShit::g_fonts[StyleShit::Fonts::titleFont] = io.Fonts->AddFontFromFileTTF(
+    auto titleMergeFont = io.Fonts->AddFontFromFileTTF(
         "./resources/fonts/Roboto-Bold.ttf", 36.0f, &titleFontConfig, 
         io.Fonts->GetGlyphRangesCyrillic()
     );
 
-    IM_ASSERT(mergeFont != nullptr);
-    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::boldFont] != nullptr);
-    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px] != nullptr);
-    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::titleFont] != nullptr);
-    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::fontAwesome24px] != nullptr);
+    StyleShit::g_fonts[StyleShit::Fonts::titleFont] = io.Fonts->AddFontFromMemoryCompressedTTF(
+        FontAwesome::font_awesome_data, 
+        FontAwesome::font_awesome_size, 
+        32, &iconsConfig, iconsRange
+    );
 
+    IM_ASSERT(mergeFont != nullptr);
+    IM_ASSERT(mergeBoldFont != nullptr);
+    IM_ASSERT(titleMergeFont != nullptr);
+    IM_ASSERT(io.FontDefault != nullptr);
+    IM_ASSERT(defaultFontMerge != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::boldFont] != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::titleFont] != nullptr);
+    IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont] != nullptr);
+    
     StyleShit::setupStyles();
 
     auto& globalView = GlobalView::getInstance();

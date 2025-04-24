@@ -2,42 +2,49 @@
 
 #include "imgui.h"
 #include "installationstate.hpp"
+#include "styleshit.hpp"
 #include "titletext.hpp"
 #include "windowstate.hpp"
 #include "languages.hpp"
+#include "font_awesome.h"
+#include <format>
 
 Introduction* Introduction::instance = nullptr;
 
 void Introduction::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
-    ImGui::Begin("#Introduction", NULL, 
-        ImGuiWindowFlags_NoTitleBar |
-        ImGuiWindowFlags_NoDecoration |
-        ImGuiWindowFlags_NoMove |
-        ImGuiWindowFlags_NoResize |
-        ImGuiWindowFlags_NoNav
-    );
+    ImGui::Begin("#Introduction", NULL, StyleShit::g_defaultWindowFlags);
 
-    ImVec2 welcomeWindowSize = { 600.0, 500.0 };
-
-    ImGui::SetWindowSize(welcomeWindowSize, ImGuiCond_Always);
+    ImVec2 inputWindowSize = { 600.0, 400.0 };
 
     auto globalWindowSize = WindowState::getWindowSize();
 
+    ImGui::SetWindowSize(globalWindowSize, ImGuiCond_Always);
+
     ImGui::SetWindowPos(
         {
-            globalWindowSize.x / 2.0f - welcomeWindowSize.x / 2 + transitionX,
-            globalWindowSize.y / 2.4f - welcomeWindowSize.y / 2
+            transitionX,
+            0
         }, 
         ImGuiCond_Always
     );
 
+    ImGui::SetCursorPosY(40);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 40.0});
-    Components::TitleText(Languages::getLanguageString("introduce_yourself").c_str());
+    Components::TitleText(std::format("{}  {}",
+        ICON_FA_USER,
+        Languages::getLanguageString("introduce_yourself")
+    ).c_str());
 
+    ImGui::SetNextWindowPos({
+        (globalWindowSize.x - inputWindowSize.x) / 2 + transitionX,
+        (globalWindowSize.y - inputWindowSize.y) / 2
+    });
+
+    ImGui::BeginChild("#InputFields", inputWindowSize, 0, StyleShit::g_defaultWindowFlags);
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
-    ImGui::TextDisabled("%s", Languages::getLanguageString("username").c_str());
+    ImGui::TextDisabled("%s  %s", ICON_FA_USER, Languages::getLanguageString("username").c_str());
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
@@ -45,7 +52,7 @@ void Introduction::render() {
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
-    ImGui::TextDisabled("%s", Languages::getLanguageString("hostname").c_str());
+    ImGui::TextDisabled("%s  %s", ICON_FA_DESKTOP, Languages::getLanguageString("hostname").c_str());
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
@@ -53,7 +60,7 @@ void Introduction::render() {
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
-    ImGui::TextDisabled("%s", Languages::getLanguageString("password").c_str());
+    ImGui::TextDisabled("%s  %s", ICON_FA_LOCK, Languages::getLanguageString("password").c_str());
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
@@ -61,15 +68,14 @@ void Introduction::render() {
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
-    ImGui::TextDisabled("%s", Languages::getLanguageString("password2").c_str());
+    ImGui::TextDisabled("%s  %s", ICON_FA_LOCK, Languages::getLanguageString("password2").c_str());
     
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     ImGui::InputText("###password2", InstallationState::info.password2.data(), 64, ImGuiInputTextFlags_Password);
 
-
-
     ImGui::PopStyleVar(10);
+    ImGui::EndChild();
 
     ImGui::End();
 }

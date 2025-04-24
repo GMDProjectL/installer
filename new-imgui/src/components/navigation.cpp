@@ -32,7 +32,7 @@ void Components::Navigation() {
         ImGuiCond_Always
     );
 
-    auto font = StyleShit::g_fonts[StyleShit::Fonts::fontAwesome14px];
+    auto font = StyleShit::g_fonts[StyleShit::Fonts::boldFont];
     ImGui::PushFont(font);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {40.f, ImGui::GetStyle().FramePadding.y});
 

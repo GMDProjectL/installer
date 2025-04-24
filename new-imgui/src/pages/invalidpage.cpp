@@ -1,12 +1,13 @@
 #include "invalidpage.hpp"
 #include "imgui.h"
+#include "styleshit.hpp"
 #include "windowstate.hpp"
 
 InvalidPage* InvalidPage::instance = nullptr;
 
 void InvalidPage::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
-    ImGui::Begin("#Notfound", NULL, ImGuiWindowFlags_NoDecoration | ImGuiWindowFlags_NoMove);
+    ImGui::Begin("#Notfound", NULL, StyleShit::g_defaultWindowFlags);
     auto globalWindowSize = WindowState::getWindowSize();
     auto notFoundWindowSize = ImGui::CalcTextSize("Invalid page selected");
     ImGui::SetWindowPos(
