@@ -9,6 +9,7 @@
 #include "font_awesome.h"
 #include <format>
 #include "navigation.hpp"
+#include "inputpreviewtext.hpp"
 
 Introduction* Introduction::instance = nullptr;
 
@@ -52,6 +53,7 @@ void Introduction::render() {
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     ImGui::InputText("###username", info.username, 64);
+    Components::InputPreviewText("relative", info.username);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -60,6 +62,7 @@ void Introduction::render() {
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     ImGui::InputText("###hostname", info.hostname, 64);
+    Components::InputPreviewText("relatives-pc", info.hostname);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -68,6 +71,7 @@ void Introduction::render() {
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     ImGui::InputText("###password", info.password, 64, ImGuiInputTextFlags_Password);
+    Components::InputPreviewText("**************", info.password);
 
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 10.0});
@@ -76,6 +80,8 @@ void Introduction::render() {
     ImGui::SetNextItemWidth(-1);
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
     ImGui::InputText("###password2", info.password2, 64, ImGuiInputTextFlags_Password);
+    Components::InputPreviewText("**************", info.password2);
+
 
     if(strlen(info.username) == 0||
         strlen(info.hostname) == 0 ||
