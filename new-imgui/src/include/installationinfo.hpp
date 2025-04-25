@@ -9,7 +9,6 @@ public:
     char* password = new char[64]();
     char* password2 = new char[64]();
     std::string timezoneRegion = "";
-    std::string timezoneInfo = "";
     std::string selectedDrive = "";
     std::string method = "nuke-drive";
     std::string bootPartition = "";

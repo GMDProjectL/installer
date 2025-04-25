@@ -4,6 +4,7 @@
 #include "welcome.hpp"
 #include "introduction.hpp"
 #include "invalidpage.hpp"
+#include "location.hpp"
 
 void InstallationState::goBack(int count) {
     page--;
@@ -21,6 +22,8 @@ BasePage* InstallationState::getPageForNum(int num) {
             return Welcome::getInstance();
         case 1:
             return Introduction::getInstance();
+        case 2:
+            return Location::getInstance();
         default:
             return InvalidPage::getInstance();
     }

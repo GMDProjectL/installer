@@ -3,6 +3,7 @@
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include "installationstate.hpp"
+#include "location.hpp"
 #include "windowstate.hpp"
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
@@ -118,6 +119,8 @@ int main(int, char**)
     IM_ASSERT(StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont] != nullptr);
     
     StyleShit::setupStyles();
+
+    Location::getInstance()->initRegions();
 
     auto& globalView = GlobalView::getInstance();
     globalView.changePage(InstallationState::getPageForNum(InstallationState::page));

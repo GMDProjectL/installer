@@ -1,5 +1,4 @@
 #include "languages.hpp"
-#include <map>
 
 void Languages::changeLanguage(const std::string &language) {
     g_currentLanguage = language;
@@ -17,4 +16,18 @@ std::string Languages::getLanguageString(std::string key) {
     } else {
         return key;
     }
+}
+
+std::string Languages::getCityTranslation(std::string countryName) {
+    if (g_currentLanguage == "en" || !cityLangsMap[g_currentLanguage].contains(countryName))
+        return countryName;
+
+    return cityLangsMap[g_currentLanguage][countryName];
+}
+
+std::string Languages::getRegionTranslation(std::string regionName) {
+    if (g_currentLanguage == "en" || !regionLangsMap[g_currentLanguage].contains(regionName))
+        return regionName;
+
+    return regionLangsMap[g_currentLanguage][regionName];
 }

@@ -37,17 +37,17 @@ void Welcome::render() {
 
     ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, {-1, 20.0});
 
-    ImVec2 langWindowSize = { 350.0, 400.0 };
+    ImVec2 langWindowSize = { 350.0, 210.0 };
 
-    auto fontAwesome = StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont];
-    ImGui::PushFont(fontAwesome);
+    auto semiBoldFont = StyleShit::g_fonts[StyleShit::Fonts::semiBoldFont];
+    ImGui::PushFont(semiBoldFont);
     
     auto langSubtitleText = std::format("{}  {}", ICON_FA_GLOBE, Languages::getLanguageString("lang_title"));
     auto offset = 30;
 
     ImGui::SetNextWindowPos({
         (globalWindowSize.x - langWindowSize.x) / 2 + transitionX,
-        (globalWindowSize.y - langWindowSize.y) / 2 + ImGui::GetCursorPosY() - offset - ImGui::CalcTextSize(langSubtitleText.c_str()).y
+        (globalWindowSize.y - langWindowSize.y) / 2 + offset - ImGui::CalcTextSize(langSubtitleText.c_str()).y
     });
 
     ImGui::BeginChild("#Languages", langWindowSize, 0, StyleShit::g_defaultWindowFlags);

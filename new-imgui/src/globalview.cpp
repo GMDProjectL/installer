@@ -66,6 +66,9 @@ void GlobalView::changePage(BasePage* page) {
 void GlobalView::changePageWithTransition(BasePage* page) {
     if (currentPage != page) {
         if(nextPage && nextPage != page) {
+            page->opacity = nextPage->opacity;
+            page->transitionX = nextPage->transitionX;
+            
             nextPage->opacity = 0.0f;
             nextPage->transitionX = 60.f;
         }

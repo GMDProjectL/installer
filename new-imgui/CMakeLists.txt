@@ -21,6 +21,7 @@ target_include_directories(
     src/include
     src/include/components
     src/include/languages
+    src/include/backend
     src/include/pages
 )
 

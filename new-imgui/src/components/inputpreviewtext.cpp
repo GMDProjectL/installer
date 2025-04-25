@@ -1,6 +1,5 @@
-#define IMGUI_DEFINE_MATH_OPERATORS
-
 #include "inputpreviewtext.hpp"
+#include "imgui.h"
 
 void Components::InputPreviewText(const char* text, const char* buf) {
     const auto draw = ImGui::GetWindowDrawList();

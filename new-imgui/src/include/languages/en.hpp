@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
-#include <map>
+#include <unordered_map>
 
 
 namespace Languages {
-    inline std::map<std::string, std::string> g_englishStrings = {
+    inline std::unordered_map<std::string, std::string> g_englishStrings = {
         {"lang_name", "English"},
         {"welcome", "Welcome to Project GDL Installer!"},
         {"welcome_subtitle", "Easy-to-use Linux distribution."},
@@ -16,6 +16,10 @@ namespace Languages {
         {"hostname", "Computer name"},
         {"password", "Password"},
         {"password2", "Repeat password"},
+        {"where_are_you", "Where are you?"},
+        {"youre_in", "You're timezone is:"},
+        {"select_region", "Select region first."},
+        {"no_city", "No cities is for that region."},
         {"timezone", "Timezone"},
         {"timezone_region", "Region"},
         {"timezone_info", "Timezone info"},
