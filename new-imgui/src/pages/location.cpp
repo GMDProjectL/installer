@@ -77,7 +77,8 @@ void Location::render() {
         ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoNav |
-        ImGuiWindowFlags_NoBringToFrontOnFocus
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_AlwaysUseWindowPadding
     );
 
     for (auto regionButton : regionButtonStore) {
@@ -97,7 +98,8 @@ void Location::render() {
         ImGuiWindowFlags_NoCollapse |
         ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoNav |
-        ImGuiWindowFlags_NoBringToFrontOnFocus
+        ImGuiWindowFlags_NoBringToFrontOnFocus |
+        ImGuiWindowFlags_AlwaysUseWindowPadding
     );
 
     if (!currentRegion) {
@@ -116,8 +118,6 @@ void Location::render() {
 }
 
 void Location::getRegionButton(const std::string buttonLabel, const std::string region) {
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
     if(Components::HoverButton(Languages::getRegionTranslation(region).c_str(), {-1, 0})) {
         if(countryButtonMap.contains(region)) {
             currentRegion = &countryButtonMap[region];
@@ -130,9 +130,6 @@ void Location::getRegionButton(const std::string buttonLabel, const std::string 
 }
 
 void Location::getLocationButton(std::string buttonLabel, const std::string location) {
-    ImGui::SetCursorPosX(ImGui::GetCursorPosX() + 10);
-    ImGui::SetCursorPosY(ImGui::GetCursorPosY() + 10);
-
     auto pos = buttonLabel.find("/");
     if (pos != buttonLabel.npos)
         buttonLabel.erase(0, pos + 1);

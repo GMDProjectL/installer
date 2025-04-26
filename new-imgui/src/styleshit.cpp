@@ -45,7 +45,7 @@ void StyleShit::setupColors() {
     colors[ImGuiCol_TitleBgActive]              = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
     colors[ImGuiCol_TitleBgCollapsed]           = ImVec4(0.00f, 0.00f, 0.00f, 0.51f);
     colors[ImGuiCol_MenuBarBg]                  = ImVec4(0.14f, 0.14f, 0.14f, 1.00f);
-    colors[ImGuiCol_ScrollbarBg]                = ImVec4(0.02f, 0.02f, 0.02f, 0.53f);
+    colors[ImGuiCol_ScrollbarBg]                = ImVec4(0.31f, 0.31f, 0.31f, 0.25f);
     colors[ImGuiCol_ScrollbarGrab]              = ImVec4(0.31f, 0.31f, 0.31f, 1.00f);
     colors[ImGuiCol_ScrollbarGrabHovered]       = ImVec4(0.41f, 0.41f, 0.41f, 1.00f);
     colors[ImGuiCol_ScrollbarGrabActive]        = ImVec4(0.51f, 0.51f, 0.51f, 1.00f);
@@ -54,7 +54,7 @@ void StyleShit::setupColors() {
     colors[ImGuiCol_SliderGrabActive]           = ImVec4(1.00f, 1.00f, 1.00f, 1.00f);
     colors[ImGuiCol_Button]                     = ImVec4(0.15f, 0.15f, 0.16f, 0.75f);
     colors[ImGuiCol_ButtonHovered]              = ImVec4(0.25f, 0.25f, 0.27f, 0.75f);
-    colors[ImGuiCol_ButtonActive]               = colors[ImGuiCol_Button];
+    colors[ImGuiCol_ButtonActive]               =                      colors[ImGuiCol_Button];
     colors[ImGuiCol_Header]                     = ImVec4(0.33f, 0.33f, 0.33f, 0.31f);
     colors[ImGuiCol_HeaderHovered]              = ImVec4(0.97f, 0.97f, 0.96f, 0.80f);
     colors[ImGuiCol_HeaderActive]               = ImVec4(0.30f, 0.30f, 0.30f, 1.00f);
