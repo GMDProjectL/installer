@@ -1,8 +1,9 @@
 #pragma once
+#include <deque>
 #include <vector>
 
 namespace Components {
-    struct JobItem {
+    struct AnimationItem {
         int pageNum = 0;
         bool increase;
     };
@@ -11,7 +12,7 @@ namespace Components {
     inline constexpr float minSize = 2.00f;
     inline constexpr float spacing = 15.0f;
     inline std::vector<float> circleRadius;
-    inline std::vector<JobItem> animationQueue;
+    inline std::deque<AnimationItem> animationQueue;
     inline bool initDone = false;
     inline int previousPage = 0;
 

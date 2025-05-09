@@ -19,7 +19,7 @@ namespace Languages {
         {"where_are_you", "Where are you?"},
         {"youre_in", "You're timezone is:"},
         {"select_region", "Select region first."},
-        {"no_city", "No cities is for that region."},
+        {"no_city", "No locations for that region."},
         {"timezone", "Timezone"},
         {"timezone_region", "Region"},
         {"timezone_info", "Timezone info"},
