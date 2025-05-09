@@ -150,12 +150,17 @@ void Location::initRegions() {
     for (auto [region, countries] : parsedRegions) {
 
         regionButtonStore.push_back(std::bind(&Location::getRegionButton, this, region, region));
-
+        
         for (auto country : countries) {
             if(country == "Kiev")
                 continue;
 
-            countryButtonMap[region].push_back(std::bind(&Location::getLocationButton, this, country, region + "/" + country));
+            countryButtonMap[region].push_back(std::bind(
+                &Location::getLocationButton, 
+                this, 
+                country, 
+                region + "/" + country
+            ));
         }
     }
 }
