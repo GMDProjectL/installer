@@ -5,8 +5,7 @@
 #include <windowstate.hpp>
 
 void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* cmd) {
-    //glPushAttrib(GL_ALL_ATTRIB_BITS);
-    
+
     if (!init) {
         circleProgram = createShaderProgram(circleVertexShader, circleFragShader);
 
@@ -55,8 +54,7 @@ void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* 
     glBindVertexArray(quadVAO);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
-    //glPopAttrib();
+    
 }
 
 void checkCompileErrors(GLuint shader, bool frag = false, bool program = false) {
