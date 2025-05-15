@@ -44,9 +44,7 @@ namespace Components::BGGlowEx {
         out vec4 color;
 
         void main() {
-            vec2 uv = fragCoord;
-
-            float dist = 1.0 - length(uv);
+            float dist = 1.0 - length(fragCoord);
             float intensity = pow(dist, 1.5);
             
             if (dist > 0.0)
@@ -54,6 +52,7 @@ namespace Components::BGGlowEx {
             else discard;
         }
     )";
+
     void render(const ImDrawList* draw_list, const ImDrawCmd* cmd);
     GLuint createShaderProgram(const char* vertexShader, const char* fragShader);
 }
