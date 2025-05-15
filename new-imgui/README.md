@@ -12,6 +12,7 @@ ONLY FOR ARCH LINUX!!!
 - glfw
 - mesa
 - glew
+- glm
 
 
 ## Credits: 
