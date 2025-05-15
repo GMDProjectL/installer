@@ -12,7 +12,10 @@ constexpr int opacityTransitionScale = 8;
 constexpr int moveTransitionScale = 350;
 
 void GlobalView::render() {
+    Components::BGGlow();
+
     auto dt = ImGui::GetIO().DeltaTime;
+
 
     if (nextPage) {
         currentPage->opacity -= dt * opacityTransitionScale;

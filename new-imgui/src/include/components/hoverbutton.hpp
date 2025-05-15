@@ -18,7 +18,9 @@ namespace Components {
         bool isUsed = true;
     };
     
-    inline std::unordered_map<ImGuiID, SmoothFactorItem> smoothFactorStore;
+    namespace {
+        inline std::unordered_map<ImGuiID, SmoothFactorItem> smoothFactorStore;
+    }
 
     [[nodiscard]]
     bool HoverButton(const char* label, const ImVec2& size = {0, 0}, bool disabled = false, const ImVec4& disableColor = StyleShit::g_ButtonDisabledColor);

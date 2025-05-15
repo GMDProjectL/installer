@@ -5,7 +5,7 @@
 
 bool Components::MutedButton(const char* label, const ImVec2& size, bool disable)
 {
-    ImGui::PushStyleColor(ImGuiCol_Button, StyleShit::g_GlobalBgColor);
+    ImGui::PushStyleColor(ImGuiCol_Button, ImVec4(0, 0, 0, 0));
     ImGui::PushStyleColor(ImGuiCol_ButtonHovered, {
         StyleShit::g_GlobalBgColor.x + 0.05f,
         StyleShit::g_GlobalBgColor.y + 0.05f,
@@ -19,7 +19,8 @@ bool Components::MutedButton(const char* label, const ImVec2& size, bool disable
         StyleShit::g_GlobalBgColor.w
     });
 
-    auto ret = HoverButton(label, size, disable, StyleShit::g_GlobalBgColor);
+
+    auto ret = HoverButton(label, size, disable, ImVec4(0, 0, 0, 0));
 
     ImGui::PopStyleColor(3);
 
