@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
-#include <windowstate.hpp>
 
 void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* cmd) {
 
@@ -45,8 +44,6 @@ void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* 
     model = glm::translate(model, glm::vec3(0, translationY, 0));
     model = glm::scale(model, glm::vec3(2, 2, 1));
 
-    auto winSize = WindowState::getWindowSize();
-
     glUseProgram(circleProgram);
     
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, &model[0][0]);
@@ -54,7 +51,7 @@ void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* 
     glBindVertexArray(quadVAO);
 
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-    
+
 }
 
 void checkCompileErrors(GLuint shader, bool frag = false, bool program = false) {
