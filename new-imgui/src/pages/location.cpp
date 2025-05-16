@@ -13,6 +13,7 @@
 #include "titletext.hpp"
 #include "utils.hpp"
 #include "centeredtext.hpp"
+#include "navigation.hpp"
 
 Location* Location::instance = nullptr;
 constexpr float padding = 100.f;
@@ -114,6 +115,12 @@ void Location::render() {
     }
 
     ImGui::EndChild();
+
+#ifndef PASS_INSTALLER_CHECKS
+    if (InstallationState::info.timezoneRegion.empty()) {
+        Components::NavigationEx::disableNext = true;
+    }
+#endif
 
     ImGui::PopStyleVar(2);
     ImGui::End();

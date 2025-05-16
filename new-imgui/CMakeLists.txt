@@ -26,6 +26,10 @@ target_include_directories(
     src/include/pages
 )
 
+if(PASS_CHECKS)
+    add_compile_definitions(PASS_INSTALLER_CHECKS)
+endif()
+
 file(COPY ./resources DESTINATION ${CMAKE_BINARY_DIR})
 
 target_link_libraries(${PROJECT_NAME} PUBLIC

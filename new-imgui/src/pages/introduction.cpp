@@ -82,15 +82,16 @@ void Introduction::render() {
     ImGui::InputText("###password2", info.password2, 64, ImGuiInputTextFlags_Password);
     Components::InputPreviewText("**************", info.password2);
 
-
-    // if(strlen(info.username) == 0||
-    //     strlen(info.hostname) == 0 ||
-    //     strlen(info.password) == 0 ||
-    //     strlen(info.password2) == 0 ||
-    //     strcmp(info.password, info.password2) != 0)
-    // {
-    //     Components::NavigationEx::disableNext = true;
-    // }
+#ifndef PASS_INSTALLER_CHECKS
+    if(strlen(info.username) == 0||
+        strlen(info.hostname) == 0 ||
+        strlen(info.password) == 0 ||
+        strlen(info.password2) == 0 ||
+        strcmp(info.password, info.password2) != 0)
+    {
+        Components::NavigationEx::disableNext = true;
+    }
+#endif
 
     ImGui::PopStyleVar(10);
     ImGui::EndChild();
