@@ -45,8 +45,7 @@ namespace Components::BGGlowEx {
 
         void main() {
             float dist = 1.0 - length(fragCoord);
-            float intensity = pow(dist, 1.5);
-            
+
             if (dist > 0.0)
                 color = vec4(dist * 0.4);
             else discard;
