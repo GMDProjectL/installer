@@ -126,12 +126,13 @@ void Location::getRegionButton(const std::string buttonLabel, const std::string 
     ImGui::PopID();
 
     if (clicked){
-        if(countryButtonMap.contains(region)) {
-            currentRegion = &countryButtonMap[region];
+        if(auto it = countryButtonMap.find(region); it != countryButtonMap.end()) {
+            currentRegion = &it->second;
             return;
         }
 
         currentRegion = &noCities;
+        InstallationState::info.timezoneRegion = region;
     }
 }
 
