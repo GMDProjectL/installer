@@ -78,7 +78,8 @@ void Location::render() {
         ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoNav |
         ImGuiWindowFlags_NoBringToFrontOnFocus |
-        ImGuiWindowFlags_AlwaysUseWindowPadding
+        ImGuiWindowFlags_AlwaysUseWindowPadding |
+        ImGuiWindowFlags_NoBackground
     );
 
     for (auto regionButton : regionButtonStore) {
@@ -99,7 +100,8 @@ void Location::render() {
         ImGuiWindowFlags_NoMove |
         ImGuiWindowFlags_NoNav |
         ImGuiWindowFlags_NoBringToFrontOnFocus |
-        ImGuiWindowFlags_AlwaysUseWindowPadding
+        ImGuiWindowFlags_AlwaysUseWindowPadding |
+        ImGuiWindowFlags_NoBackground
     );
 
     if (!currentRegion) {
@@ -118,14 +120,18 @@ void Location::render() {
 }
 
 void Location::getRegionButton(const std::string buttonLabel, const std::string region) {
-    if(Components::HoverButton(Languages::getRegionTranslation(region).c_str(), {-1, 0})) {
+    ImGui::PushID(region.c_str());
+
+    auto clicked = Components::HoverButton(Languages::getRegionTranslation(region).c_str(), {-1, 0});
+    ImGui::PopID();
+
+    if (clicked){
         if(countryButtonMap.contains(region)) {
             currentRegion = &countryButtonMap[region];
             return;
         }
 
         currentRegion = &noCities;
-        InstallationState::info.timezoneRegion = region;
     }
 }
 
@@ -134,9 +140,11 @@ void Location::getLocationButton(std::string buttonLabel, const std::string loca
     if (pos != buttonLabel.npos)
         buttonLabel.erase(0, pos + 1);
 
+    ImGui::PushID(location.c_str());
     if(Components::HoverButton(Languages::getCityTranslation(buttonLabel).c_str(), {-1, 0})) {
         InstallationState::info.timezoneRegion = location;
     }
+    ImGui::PopID();
 }
 
 void Location::getEmptyCityText() {
@@ -152,15 +160,13 @@ void Location::initRegions() {
         regionButtonStore.push_back(std::bind(&Location::getRegionButton, this, region, region));
         
         for (auto country : countries) {
-            if(country == "Kiev")
-                continue;
-
             countryButtonMap[region].push_back(std::bind(
-                &Location::getLocationButton, 
+                &Location::getLocationButton,
                 this, 
                 country, 
                 region + "/" + country
             ));
         }
+
     }
 }
