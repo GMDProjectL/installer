@@ -18,11 +18,9 @@ namespace Languages {
         {"password2", "Repeat password"},
         {"where_are_you", "Where are you?"},
         {"youre_in", "You're timezone is:"},
+        {"desktop_environment", "Desktop Environment"},
+
         {"select_region", "Select region first."},
-        {"no_city", "No locations for that region."},
-        {"timezone", "Timezone"},
-        {"timezone_region", "Region"},
-        {"timezone_info", "Timezone info"},
         {"selected_drive", "Selected drive"},
         {"boot_partition", "Boot partition"},
         {"root_partition", "Root partition"},

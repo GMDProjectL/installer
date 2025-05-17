@@ -39,7 +39,6 @@ int main(int, char**)
     glfwMakeContextCurrent(WindowState::window);
     glfwSetWindowAttrib(WindowState::window, GLFW_RESIZABLE, GLFW_FALSE);
 
-    glewExperimental = GL_TRUE;
     GLenum err = glewInit();
     if (err != GLEW_OK) {
         return 1;

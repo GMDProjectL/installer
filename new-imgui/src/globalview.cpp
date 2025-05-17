@@ -16,7 +16,6 @@ void GlobalView::render() {
 
     auto dt = ImGui::GetIO().DeltaTime;
 
-
     if (nextPage) {
         currentPage->opacity -= dt * opacityTransitionScale;
         currentPage->transitionX -= dt * moveTransitionScale;

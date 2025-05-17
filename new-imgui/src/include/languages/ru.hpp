@@ -20,9 +20,9 @@ namespace Languages {
         {"youre_in", "Ваш часовой пояс:"},
         {"select_region", "Сначала выберите регион."},
         {"no_city", "Нету городов для этого часового пояса."},
-        {"timezone", "Часовой пояс"},
-        {"timezone_region", "Регион"},
-        {"timezone_info", "Информация о часовом поясе"},
+        {"desktop_environment", "Рабочий стол"},
+        
+
         {"selected_drive", "Выбранный диск"},
         {"boot_partition", "Загрузочный раздел"},
         {"root_partition", "Корневой раздел"},

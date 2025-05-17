@@ -24,6 +24,10 @@ namespace Components::BGGlowEx {
         inline GLint modelLoc;
         bool moveDown = true;
         float translationY = 1.5f;
+        constexpr float duration = 10.0f;
+        constexpr float startPos = 1.5f;
+        constexpr float endPos = 1.0f;
+        float currentTime = 0.0f;
     }
 
     inline const char* circleVertexShader = R"(

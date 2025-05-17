@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp>
+#include "easings.hpp"
 
 void Components::BGGlowEx::render(const ImDrawList* draw_list, const ImDrawCmd* cmd) {
 
@@ -103,16 +104,24 @@ void Components::BGGlow() {
     auto dt = ImGui::GetIO().DeltaTime;
     auto drawList = ImGui::GetBackgroundDrawList();
 
-    if (BGGlowEx::translationY >= 1.5) {
+    // if (BGGlowEx::translationY >= 1.5) {
+    //     BGGlowEx::moveDown = true;
+    // } else if (BGGlowEx::translationY <= 1) {
+    //     BGGlowEx::moveDown = false;
+    // }
+
+    if (BGGlowEx::currentTime >= BGGlowEx::duration) {
         BGGlowEx::moveDown = true;
-    } else if (BGGlowEx::translationY <= 1) {
+    } else if (BGGlowEx::currentTime <= 0) {
         BGGlowEx::moveDown = false;
     }
     
     if (BGGlowEx::moveDown) {
-        BGGlowEx::translationY -= 0.15 * dt;
+        BGGlowEx::currentTime -= dt;
+        BGGlowEx::translationY = BGGlowEx::startPos + (BGGlowEx::endPos - BGGlowEx::startPos) * Easings::easeInOutCubic(BGGlowEx::currentTime / BGGlowEx::duration);
     } else {
-        BGGlowEx::translationY += 0.15 * dt;
+        BGGlowEx::currentTime += dt;
+        BGGlowEx::translationY = BGGlowEx::startPos + (BGGlowEx::endPos - BGGlowEx::startPos) * Easings::easeInOutCubic(BGGlowEx::currentTime / BGGlowEx::duration);
     }
 
     drawList->AddCallback(&BGGlowEx::render, nullptr);
