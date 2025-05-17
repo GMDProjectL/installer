@@ -44,8 +44,6 @@ int main(int, char**)
         return 1;
     }
 
-    glfwSwapInterval(0); // Enable vsync
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
