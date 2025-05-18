@@ -1,4 +1,5 @@
 #include "GL/glew.h"
+#include "desktopbutton.hpp"
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
@@ -119,6 +120,8 @@ int main(int, char**)
 
     Location::getInstance()->initRegions();
 
+    Components::DesktopButtonEx::PreloadDETextures();
+
     auto& globalView = GlobalView::getInstance();
     globalView.changePage(InstallationState::getPageForNum(InstallationState::page));
 
@@ -137,7 +140,6 @@ int main(int, char**)
         ImGui::NewFrame();
 
         globalView.render();
-        //ImGui::ShowStyleEditor();
         
         ImGui::Render();
         int display_w, display_h;

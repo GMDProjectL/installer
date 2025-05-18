@@ -5,7 +5,7 @@
 #include "navigation.hpp"
 #include "pagecounter.hpp"
 #include "bgglow.hpp"
-#include "hoverbutton.hpp"
+#include "smoothfactor.hpp"
 #include <algorithm>
 
 constexpr int opacityTransitionScale = 8;
@@ -39,7 +39,7 @@ void GlobalView::render() {
     Components::Navigation();
     Components::PageCounterEx::doAnimationStep();
     Components::PageCounter(InstallationState::page, InstallationState::maxPages);
-    Components::HoverButtonEx::CleanupHover();
+    SmoothFactor::Cleanup();
 
     if (currentPage) {
         currentPage->render();

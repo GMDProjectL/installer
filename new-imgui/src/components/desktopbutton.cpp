@@ -3,17 +3,21 @@
 //
 #define IMGUI_DEFINE_MATH_OPERATORS
 
-#include "hoverbutton.hpp"
+#include <GL/glew.h>
+
+#include "desktopbutton.hpp"
+
+#include "utils.hpp"
 
 #include <algorithm>
-#include <smoothfactor.hpp>
 
 constexpr int hoverSmoothFactorScaling = 5;
 constexpr int activeSmoothFactorScaling = 10;
+constexpr float imagePadding = 40.f;
 
 using namespace SmoothFactor;
 
-bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool disable, const ImVec4& disableColor) {
+bool Components::DesktopButton(const char* label, const char* imagePath, const ImVec2& size_arg, bool disable, const ImVec4& disableColor) {
     const auto& window = ImGui::GetCurrentWindow();
     const auto& style = ImGui::GetStyle();
     const auto  id = window->GetID(label);
@@ -49,12 +53,23 @@ bool Components::HoverButton(const char* label, const ImVec2& size_arg, bool dis
     item.disableSmoothFactor += (disable ? 1.0f : -1.0f) * dt * activeSmoothFactorScaling;
     item.disableSmoothFactor = std::clamp(item.disableSmoothFactor, 0.0f, 1.0f);
 
-    HoverButtonEx::RenderHoverButton(label, bb, labelSize, item.hoverSmoothFactor, item.activeSmoothFactor, item.disableSmoothFactor, disableColor);
+    if (auto it = DesktopButtonEx::textureStorage.find(imagePath); it != DesktopButtonEx::textureStorage.end()) {
+        DesktopButtonEx::RenderDesktopButton(label, &it->second, bb, labelSize, item, disableColor);
 
+        return isClicked;
+    }
+
+    auto texture = &DesktopButtonEx::textureStorage[imagePath];
+
+    if (!Backend::Utils::loadTexture(imagePath, &texture->textureID, &texture->width, &texture->height)) {
+        return isClicked;
+    }
+
+    DesktopButtonEx::RenderDesktopButton(label, texture, bb, labelSize, item, disableColor);
     return isClicked;
 }
 
-void Components::HoverButtonEx::RenderHoverButton(const char *label, const ImRect &bb, const ImVec2 &labelSize, float hoverSmooth, float activeSmooth, float disabledSmooth, ImVec4 disableColor) {
+void Components::DesktopButtonEx::RenderDesktopButton(const char* label, const Texture* texture, const ImRect& bb, const ImVec2& labelSize, SmoothFactorItem& smoothItem, ImVec4 disableColor) {
     const auto& style = ImGui::GetStyle();
 
     auto normalColor = ImGui::GetStyleColorVec4(ImGuiCol_Button);   normalColor.w *= style.Alpha;
@@ -64,19 +79,37 @@ void Components::HoverButtonEx::RenderHoverButton(const char *label, const ImRec
     auto disableTextColor = StyleShit::g_ButtonDisabledTextColor; disableTextColor.w *= style.Alpha;
     disableColor.w *= style.Alpha;
 
-    const auto hover = ImLerp(normalColor, hoverColor, hoverSmooth);
-    const auto active = ImLerp(hover, activeColor, activeSmooth);
-    const auto finalColor = ImLerp(active, disableColor, disabledSmooth);
-    const auto textFinalColor = ImLerp(textColor, disableTextColor, disabledSmooth);
+    const auto hover = ImLerp(normalColor, hoverColor, smoothItem.hoverSmoothFactor);
+    const auto active = ImLerp(hover, activeColor, smoothItem.activeSmoothFactor);
+    const auto finalColor = ImLerp(active, disableColor, smoothItem.disableSmoothFactor);
+    const auto textFinalColor = ImLerp(textColor, disableTextColor, smoothItem.disableSmoothFactor);
 
     const auto drawList = ImGui::GetWindowDrawList();
+
     drawList->AddRectFilled(bb.Min, bb.Max, ImColor(finalColor), style.FrameRounding);
+
+    drawList->AddImageRounded(texture->textureID,
+        {bb.Min.x + imagePadding, bb.Min.y + imagePadding},
+        {bb.Max.x - imagePadding, bb.Max.y - (bb.GetSize().y / 4)},
+        {0, 0},
+        {1, 1},
+        ImColor(1.f, 1.f, 1.f, style.Alpha),
+        style.FrameRounding
+    );
+
     drawList->AddText(
         ImVec2(
             bb.GetCenter().x - labelSize.x / 2,
-            bb.GetCenter().y - labelSize.y / 2
+            bb.GetCenter().y - labelSize.y / 2 + (bb.GetSize().y / 2.75)
         ),
         ImColor(textFinalColor),
         label
     );
+}
+
+void Components::DesktopButtonEx::PreloadDETextures() {
+    for (auto it : textures) {
+        auto item = &textureStorage[it];
+        Backend::Utils::loadTexture(it, &item->textureID, &item->width, &item->height);
+    }
 }

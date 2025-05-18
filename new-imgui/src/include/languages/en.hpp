@@ -18,9 +18,14 @@ namespace Languages {
         {"password2", "Repeat password"},
         {"where_are_you", "Where are you?"},
         {"youre_in", "You're timezone is:"},
-        {"desktop_environment", "Desktop Environment"},
-
         {"select_region", "Select region first."},
+        {"desktop_environment", "Desktop Environment"},
+        {"kde_description", "KDE Plasma is a desktop environment from\nthe KDE community. It\'s very customizable\nand has a lot of features. Highly recommended for gaming."},
+        {"gnome_description", "GNOME is a desktop environment from the\nGNOME community. It\'s strict and determined.\nHighly recommended for productivity."},
+        {"you_selected", "You selected:"},
+        {"kde", "KDE"},
+        {"gnome", "GNOME"},
+        
         {"selected_drive", "Selected drive"},
         {"boot_partition", "Boot partition"},
         {"root_partition", "Root partition"},

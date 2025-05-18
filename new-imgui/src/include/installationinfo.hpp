@@ -24,6 +24,6 @@ public:
     bool installGnomeDisks = false;
     bool installIntelMedia = false;
     bool setupBluetooth = false;
-    std::string de = "kde";
+    std::string de = "";
 
 };
