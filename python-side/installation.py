@@ -136,7 +136,7 @@ def start_installation(installation_object: InstallInfo):
             installation_root, 
             [
                 "grub", "efibootmgr", 
-                "electron33", "nodejs", "npm",
+                "electron34", "nodejs", "npm",
                 "pamac", "apple-fonts", "yay",
                 "p7zip", "zip", "unzip", "unrar", 
                 "neofetch",
