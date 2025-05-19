@@ -22,12 +22,12 @@ namespace Components::BGGlowEx {
         inline GLuint quadVAO, quadVBO, quadEBO;
         inline GLuint circleProgram;
         inline GLint modelLoc;
-        bool moveDown = true;
-        float translationY = 1.5f;
-        constexpr float duration = 10.0f;
-        constexpr float startPos = 1.5f;
-        constexpr float endPos = 1.0f;
-        float currentTime = 0.0f;
+        inline constexpr float duration = 10.0f;
+        inline constexpr float startPos = 1.5f;
+        inline constexpr float endPos = 1.0f;
+        inline float translationY = startPos;
+        inline float currentTime = 0.0f;
+        inline bool moveDown = true;
     }
 
     inline const char* circleVertexShader = R"(
