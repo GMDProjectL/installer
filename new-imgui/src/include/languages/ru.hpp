@@ -26,21 +26,19 @@ namespace Languages {
         {"you_selected", "Вы выбрали"},
         {"kde", "KDE"},
         {"gnome", "GNOME"},
+        {"additional_software", "Дополнительное ПО"},
+        {"enable_multilib_repo", "Включить репозиторий multilib"},
+        {"install_steam", "Установить Steam"},
+        {"install_wine", "Установить WineHQ для запуска Windows-приложений"},
+        {"install_winetricks", "Установить Winetricks"},
+        {"install_gnome_disks", "Установить Gnome Disks (для управления дисками)"},
+        {"install_intel_media", "Установить Intel Media (QSV, VA-API, etc.)"},
+        {"setup_bluetooth", "Настроить Bluetooth"},
 
         {"selected_drive", "Выбранный диск"},
         {"boot_partition", "Загрузочный раздел"},
         {"root_partition", "Корневой раздел"},
-        {"format_boot_partition", "Отформатировать загрузочный раздел"},
-        {"enable_multilib_repo", "Включить репозиторий multilib"},
-        {"install_steam", "Установить Steam"},
-        {"install_wine", "Установить Wine"},
-        {"install_winetricks", "Установить Winetricks"},
-        {"vulkan_nvidia", "Драйверы Vulkan для Nvidia"},
-        {"vulkan_amd", "Драйверы Vulkan для AMD"},
-        {"vulkan_intel", "Драйверы Vulkan для Intel"},
-        {"install_gnome_disks", "Установить Gnome Disks"},
-        {"install_intel_media", "Установить драйверы Intel Media"},
-        {"setup_bluetooth", "Настроить Bluetooth"}
+        {"format_boot_partition", "Отформатировать загрузочный раздел"}
     };
 
     inline std::unordered_map<std::string, std::string> russianRegionsTranslations = {

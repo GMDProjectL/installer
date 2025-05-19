@@ -6,6 +6,7 @@
 #include "invalidpage.hpp"
 #include "location.hpp"
 #include "depage.hpp"
+#include "additionalsoftpage.hpp"
 
 void InstallationState::goBack(int count) {
     page--;
@@ -27,6 +28,8 @@ BasePage* InstallationState::getPageForNum(int num) {
             return Location::getInstance();
         case 3:
             return DEPage::getInstance();
+        case 4:
+            return AdditionalSoftPage::getInstance();
         default:
             return InvalidPage::getInstance();
     }

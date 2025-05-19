@@ -25,20 +25,18 @@ namespace Languages {
         {"you_selected", "You selected:"},
         {"kde", "KDE"},
         {"gnome", "GNOME"},
+        {"additional_software", "Additional Software"},
+        {"enable_multilib_repo", "Enable multilib repository"},
+        {"install_steam", "Install Steam"},
+        {"install_wine", "Install WineHQ to run Windows applications"},
+        {"install_winetricks", "Install Winetricks"},
+        {"install_gnome_disks", "Install Gnome Disks (for managing disks)"},
+        {"install_intel_media", "Install Intel Media (QSV, VA-API, etc.)"},
+        {"setup_bluetooth", "Setup Bluetooth"},
         
         {"selected_drive", "Selected drive"},
         {"boot_partition", "Boot partition"},
         {"root_partition", "Root partition"},
-        {"format_boot_partition", "Format boot partition"},
-        {"enable_multilib_repo", "Enable multilib repo"},
-        {"install_steam", "Install Steam"},
-        {"install_wine", "Install Wine"},
-        {"install_winetricks", "Install Winetricks"},
-        {"vulkan_nvidia", "Vulkan Nvidia drivers"},
-        {"vulkan_amd", "Vulkan AMD drivers"},
-        {"vulkan_intel", "Vulkan Intel drivers"},
-        {"install_gnome_disks", "Install Gnome Disks"},
-        {"install_intel_media", "Install Intel Media Drivers"},
-        {"setup_bluetooth", "Setup Bluetooth"}
+        {"format_boot_partition", "Format boot partition"}
     };
 }

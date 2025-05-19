@@ -140,7 +140,7 @@ int main(int, char**)
         ImGui::NewFrame();
 
         globalView.render();
-        
+
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(WindowState::window, &display_w, &display_h);
