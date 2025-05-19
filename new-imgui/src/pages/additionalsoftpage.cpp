@@ -97,29 +97,17 @@ void AdditionalSoftPage::render() {
     ImGui::EndDisabled();
 
     ImGui::Checkbox(
-        std::format(
-            "{}   {}",
-            Languages::getLanguageString("install_gnome_disks"),
-            ICON_FA_BOX
-        ).c_str(),
+        Languages::getLanguageString("install_gnome_disks").c_str(),
         &InstallationState::info.installGnomeDisks
     );
 
     ImGui::Checkbox(
-        std::format(
-            "{}   {}",
-            Languages::getLanguageString("install_intel_media"),
-            ICON_FA_QUESTION
-        ).c_str(),
+        Languages::getLanguageString("install_intel_media").c_str(),
         &InstallationState::info.installIntelMedia
     );
 
     ImGui::Checkbox(
-        std::format(
-            "{}   {}",
-            Languages::getLanguageString("setup_bluetooth"),
-            ICON_FA_BLENDER
-        ).c_str(),
+        Languages::getLanguageString("setup_bluetooth").c_str(),
         &InstallationState::info.setupBluetooth
     );
 
