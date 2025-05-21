@@ -3,8 +3,6 @@
 #include "styleshit.hpp"
 #include "windowstate.hpp"
 
-InvalidPage* InvalidPage::instance = nullptr;
-
 void InvalidPage::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Notfound", NULL, StyleShit::g_defaultWindowFlags);

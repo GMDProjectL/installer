@@ -13,6 +13,8 @@ ONLY FOR ARCH LINUX!!!
 - mesa
 - glew
 - glm
+- stb
+- rapidjson
 
 
 ## Credits: 

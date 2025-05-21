@@ -1,14 +1,12 @@
 #include "basepage.hpp"
 
 class DEPage : public BasePage {
-    static DEPage* instance;
+    
 public:
 
     static BasePage* getInstance() {
-        if (!instance) {
-            instance = new DEPage();
-        }
-        return instance;
+        static DEPage instance;
+        return &instance;
     }
 
     void render() override;

@@ -15,7 +15,6 @@
 #include "centeredtext.hpp"
 #include "navigation.hpp"
 
-Location* Location::instance = nullptr;
 constexpr float padding = 100.f;
 constexpr ImVec2 regionAndCityWindowsSize = { 350.0, 400.0 };
 

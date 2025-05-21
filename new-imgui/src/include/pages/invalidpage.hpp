@@ -5,10 +5,8 @@ class InvalidPage : public BasePage {
 
 public:
     static InvalidPage* getInstance() {
-        if (!instance) {
-            instance = new InvalidPage();
-        }
-        return instance;
+        static InvalidPage instance;
+        return &instance;
     }
     void render() override;
 };

@@ -10,8 +10,6 @@
 #include "hoverbutton.hpp"
 #include <format>
 
-Welcome* Welcome::instance = nullptr;
-
 void Welcome::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Welcome", NULL, StyleShit::g_defaultWindowFlags);

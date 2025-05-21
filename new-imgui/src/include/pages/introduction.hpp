@@ -3,14 +3,12 @@
 #include "basepage.hpp"
 
 class Introduction : public BasePage {
-    static Introduction* instance;
+    
     
 public:
     static Introduction* getInstance() {
-        if(!instance) {
-            instance = new Introduction();
-        }
-        return instance;
+        static Introduction instance;
+        return &instance;
     }
 
     void render() override;

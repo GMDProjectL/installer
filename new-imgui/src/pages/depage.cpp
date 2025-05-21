@@ -12,8 +12,6 @@
 #include "centeredtext.hpp"
 #include "navigation.hpp"
 
-DEPage* DEPage::instance = nullptr;
-
 constexpr ImVec2 buttonSize = {400, 300};
 constexpr float spacing = 80.0f;
 

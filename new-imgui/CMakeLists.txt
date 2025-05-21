@@ -21,6 +21,7 @@ target_include_directories(
     thirdparty/imgui/backends
     thirdparty/fontawesome
     /usr/include/stb/
+    /usr/include/rapidjson/
     src/include
     src/include/components
     src/include/languages

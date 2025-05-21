@@ -7,14 +7,10 @@
 #include <vector>
 
 class Location : public BasePage {
-    static Location* instance;
-    
 public:
     static Location* getInstance() {
-        if(!instance) {
-            instance = new Location();
-        }
-        return instance;
+        static Location instance;
+        return &instance;
     }
 
     const std::vector<std::function<void()>> noCities = {

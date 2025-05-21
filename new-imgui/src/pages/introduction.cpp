@@ -11,8 +11,6 @@
 #include "navigation.hpp"
 #include "inputpreviewtext.hpp"
 
-Introduction* Introduction::instance = nullptr;
-
 void Introduction::render() {
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, opacity);
     ImGui::Begin("#Introduction", NULL, StyleShit::g_defaultWindowFlags);

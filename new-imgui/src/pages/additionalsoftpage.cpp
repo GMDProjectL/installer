@@ -10,8 +10,6 @@
 #include "languages.hpp"
 #include "navigation.hpp"
 
-AdditionalSoftPage* AdditionalSoftPage::instance = nullptr;
-
 constexpr float intendation = 50.0f;
 constexpr float windowWidth = 500.0f;
 
@@ -52,6 +50,15 @@ void AdditionalSoftPage::render() {
         &InstallationState::info.enableMultilibRepo
     );
 
+    if(!InstallationState::info.enableMultilibRepo) {
+        InstallationState::info.installSteam = false;
+        InstallationState::info.vulkanIntel = false;
+        InstallationState::info.vulkanNvidia = false;
+        InstallationState::info.vulkanAmd = false;
+        InstallationState::info.installWine = false;
+        InstallationState::info.installWinetricks = false;
+    }
+
     ImGui::BeginDisabled(!InstallationState::info.enableMultilibRepo);
         ImGui::Checkbox(
             std::format(
@@ -61,6 +68,12 @@ void AdditionalSoftPage::render() {
             ).c_str(),
             &InstallationState::info.installSteam
         );
+
+        if (!InstallationState::info.installSteam) {
+            InstallationState::info.vulkanIntel = false;
+            InstallationState::info.vulkanNvidia = false;
+            InstallationState::info.vulkanAmd = false;
+        }
 
         ImGui::BeginDisabled(!InstallationState::info.installSteam);
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + intendation);
@@ -86,6 +99,10 @@ void AdditionalSoftPage::render() {
             Languages::getLanguageString("install_wine").c_str(),
             &InstallationState::info.installWine
         );
+
+        if (!InstallationState::info.installWine) {
+            InstallationState::info.installWinetricks = false;
+        }
 
         ImGui::BeginDisabled(!InstallationState::info.installWine);
             ImGui::SetCursorPosX(ImGui::GetCursorPosX() + intendation);

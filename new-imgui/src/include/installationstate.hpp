@@ -8,7 +8,7 @@ inline auto& globalView = GlobalView::getInstance();
 namespace InstallationState {
 
     inline int page = 0;
-    inline constexpr int maxPages = 6;
+    inline constexpr int maxPages = 7;
     inline InstallationInfo info;
 
     void goBack(int count = 1);
