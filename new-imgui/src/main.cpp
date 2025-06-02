@@ -5,7 +5,9 @@
 #include "imgui_impl_opengl3.h"
 #include "installationstate.hpp"
 #include "location.hpp"
+#include "utils.hpp"
 #include "windowstate.hpp"
+#include <iostream>
 #include <stdio.h>
 #define GL_SILENCE_DEPRECATION
 #include <GLFW/glfw3.h>
@@ -125,6 +127,12 @@ int main(int, char**)
     auto& globalView = GlobalView::getInstance();
     globalView.changePage(InstallationState::getPageForNum(InstallationState::page));
 
+    auto disks = Backend::Utils::getDisks();
+
+    for (auto disk : disks) {
+        std::cout << "location: /dev/" << disk.location << ", name: " << disk.diskNaming << ", size: " << disk.size << "\n";
+    }
+ 
     while (!glfwWindowShouldClose(WindowState::window))
     {
         glfwPollEvents();

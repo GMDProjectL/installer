@@ -1,10 +1,12 @@
 #include "utils.hpp"
 #include "execute.hpp"
+#include <format>
 #include <sstream>
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <GL/glew.h>
+#include <document.h>
 
 
 std::map<std::string, std::vector<std::string>> Backend::Utils::getTimezones() {
@@ -54,5 +56,33 @@ bool Backend::Utils::loadTexture(const char *path, unsigned int *outTextureID, i
     *outHeight = imageHeight;
 
     return true;
+}
 
+std::vector<DiskObject> Backend::Utils::getDisks() {
+    rapidjson::Document document;
+    document.Parse(execute("lsblk -AJ").c_str());
+    std::vector<DiskObject> ret;
+
+    if (!document.HasMember("blockdevices") || !document["blockdevices"].IsArray())
+        return ret;
+    
+    auto array = document["blockdevices"].GetArray();
+    for (auto it = array.begin(); it != array.end(); ++it) {
+        if (!it->HasMember("type") || std::strcmp(it->GetObject()["type"].GetString(), "disk") != 0) 
+            continue;
+        
+        DiskObject obj;
+
+        obj.location = it->GetObject()["name"].GetString();
+
+        auto naming = execute(std::format("cat /sys/block/{}/device/model", obj.location).c_str());
+        naming.erase(naming.size() - 1, naming.size()); // Erasing the '\n' at the end
+
+        obj.diskNaming = naming;
+        obj.size = it->GetObject()["size"].GetString();
+
+        ret.push_back(obj);
+    }
+
+    return ret;
 }
