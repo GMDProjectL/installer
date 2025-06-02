@@ -1,8 +1,14 @@
 #pragma once
 
+#define INSTANCE_FUNC(TYPE) \
+    static TYPE* getInstance() { \
+        static TYPE instance; \
+        return &instance; \
+    }
+
 class BasePage {
 public:
-    float transitionX = 60;
+    float flyOffset = 60;
     float opacity = 0.0f;
 
     virtual ~BasePage() = default;

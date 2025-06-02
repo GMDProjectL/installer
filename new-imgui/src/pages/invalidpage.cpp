@@ -10,7 +10,7 @@ void InvalidPage::render() {
     auto notFoundWindowSize = ImGui::CalcTextSize("Invalid page selected");
     ImGui::SetWindowPos(
         {
-            globalWindowSize.x / 2.0f - notFoundWindowSize.x / 2.0f + transitionX,
+            globalWindowSize.x / 2.0f - notFoundWindowSize.x / 2.0f + flyOffset,
             globalWindowSize.y / 2.0f - notFoundWindowSize.y / 2.0f
         }, 
         ImGuiCond_Always

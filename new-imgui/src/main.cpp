@@ -124,14 +124,14 @@ int main(int, char**)
 
     Components::DesktopButtonEx::PreloadDETextures();
 
-    auto& globalView = GlobalView::getInstance();
-    globalView.changePage(InstallationState::getPageForNum(InstallationState::page));
-
     auto disks = Backend::Utils::getDisks();
 
     for (auto disk : disks) {
         std::cout << "location: /dev/" << disk.location << ", name: " << disk.diskNaming << ", size: " << disk.size << "\n";
     }
+
+    auto& globalView = GlobalView::getInstance();
+    globalView.changePage(InstallationState::getPageForNum(InstallationState::page));
  
     while (!glfwWindowShouldClose(WindowState::window))
     {

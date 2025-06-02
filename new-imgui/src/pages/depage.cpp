@@ -24,7 +24,7 @@ void DEPage::render() {
     ImGui::SetWindowSize(globalWindowSize);
 
     ImGui::SetWindowPos({
-            transitionX,
+            flyOffset,
             0
         }, ImGuiCond_Always
     );
@@ -40,7 +40,9 @@ void DEPage::render() {
 
     Components::CenteredText(std::format("{} {}",
         Languages::getLanguageString("you_selected"),
-        Languages::getLanguageString(InstallationState::info.de)
+        (InstallationState::info.de.empty()) ?
+            Languages::getLanguageString("no_selection") :
+            Languages::getLanguageString(InstallationState::info.de)
     ).c_str(), true);
     
     ImGui::PopStyleVar();

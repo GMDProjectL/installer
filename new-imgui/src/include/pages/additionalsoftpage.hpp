@@ -1,13 +1,8 @@
 #include "basepage.hpp"
 
 class AdditionalSoftPage : public BasePage {
-    
 public:
-
-    static BasePage* getInstance() {
-        static AdditionalSoftPage instance;
-        return &instance;
-    }
+    INSTANCE_FUNC(AdditionalSoftPage);
 
     void render() override;
 };

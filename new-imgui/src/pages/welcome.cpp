@@ -20,7 +20,7 @@ void Welcome::render() {
 
     ImGui::SetWindowPos(
         {
-            transitionX,
+            flyOffset,
             0
         }, 
         ImGuiCond_Always
@@ -44,7 +44,7 @@ void Welcome::render() {
     auto offset = 30;
 
     ImGui::SetNextWindowPos({
-        (globalWindowSize.x - langWindowSize.x) / 2 + transitionX,
+        (globalWindowSize.x - langWindowSize.x) / 2 + flyOffset,
         (globalWindowSize.y - langWindowSize.y) / 2 + offset - ImGui::CalcTextSize(langSubtitleText.c_str()).y
     });
 

@@ -7,10 +7,11 @@
 #include "location.hpp"
 #include "depage.hpp"
 #include "additionalsoftpage.hpp"
+#include "partitionpage.hpp"
 
 void InstallationState::goBack(int count) {
     page--;
-    globalView.changePageWithTransition(getPageForNum(page)); 
+    globalView.changePageWithTransition(getPageForNum(page));
 }
 
 void InstallationState::goNext(int count) {
@@ -30,6 +31,8 @@ BasePage* InstallationState::getPageForNum(int num) {
             return DEPage::getInstance();
         case 4:
             return AdditionalSoftPage::getInstance();
+        case 5:
+            return PartitionPage::getInstance();
         default:
             return InvalidPage::getInstance();
     }

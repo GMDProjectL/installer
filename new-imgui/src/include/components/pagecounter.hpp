@@ -23,5 +23,5 @@ namespace Components {
 
 namespace Components::PageCounterEx {
     void queueAnimation(int previousPage, int currentPage);
-    void doAnimationStep();
+    void updateAnimation();
 }

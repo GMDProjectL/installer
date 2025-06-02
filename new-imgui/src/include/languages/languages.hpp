@@ -10,7 +10,7 @@ namespace Languages {
     std::string getCurrentLanguage();
     void changeLanguage(const std::string& language);
     std::string getLanguageString(std::string key);
-    std::string getCityTranslation(std::string countryName);
+    std::string getTimezoneTranslation(std::string countryName);
     std::string getRegionTranslation(std::string regionName);
 
     inline std::map<std::string, std::unordered_map<std::string, std::string>> langsMap = {

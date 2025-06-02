@@ -72,7 +72,6 @@ std::vector<DiskObject> Backend::Utils::getDisks() {
             continue;
         
         DiskObject obj;
-
         obj.location = it->GetObject()["name"].GetString();
 
         auto naming = execute(std::format("cat /sys/block/{}/device/model", obj.location).c_str());

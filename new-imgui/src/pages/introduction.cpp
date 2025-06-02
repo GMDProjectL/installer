@@ -23,7 +23,7 @@ void Introduction::render() {
 
     ImGui::SetWindowPos(
         {
-            transitionX,
+            flyOffset,
             0
         }, 
         ImGuiCond_Always
@@ -37,7 +37,7 @@ void Introduction::render() {
     ).c_str());
 
     ImGui::SetNextWindowPos({
-        (globalWindowSize.x - inputWindowSize.x) / 2 + transitionX,
+        (globalWindowSize.x - inputWindowSize.x) / 2 + flyOffset,
         (globalWindowSize.y - inputWindowSize.y) / 2
     });
 

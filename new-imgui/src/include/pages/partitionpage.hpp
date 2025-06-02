@@ -2,10 +2,7 @@
 
 class PartitionPage : public BasePage {
 public:
-    static BasePage* getInstance() {
-        static PartitionPage instance;
-        return &instance;
-    }
+    INSTANCE_FUNC(PartitionPage);
 
     void render() override;
 };

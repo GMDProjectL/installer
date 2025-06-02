@@ -5,6 +5,8 @@
 #include "imgui.h"
 #include "windowstate.hpp"
 
+constexpr int animationSpeed = 10;
+
 void Components::PageCounter(int page, int total) {
     ImGui::Begin("#PageCounter", NULL, 
         ImGuiWindowFlags_NoDecoration |
@@ -79,18 +81,18 @@ void Components::PageCounterEx::queueAnimation(int previousPage, int currentPage
     animationQueue.emplace_back(currentPage, true);
 }
 
-void Components::PageCounterEx::doAnimationStep() {
+void Components::PageCounterEx::updateAnimation() {
     const auto dt = ImGui::GetIO().DeltaTime;
 
     for (auto it = animationQueue.begin(); it != animationQueue.end();) {
         if (it->increase) {
-            circleRadius[it->pageNum] += dt * 10;
+            circleRadius[it->pageNum] += dt * animationSpeed;
             if (circleRadius[it->pageNum] > maxSize) {
                 circleRadius[it->pageNum] = maxSize;
                 it = animationQueue.erase(it);
             } else ++it;
         } else {
-            circleRadius[it->pageNum] -= dt * 10;
+            circleRadius[it->pageNum] -= dt * animationSpeed;
             if (circleRadius[it->pageNum] < minSize) {
                 circleRadius[it->pageNum] = minSize;
                 it = animationQueue.erase(it);

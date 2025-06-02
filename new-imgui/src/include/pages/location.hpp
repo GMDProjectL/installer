@@ -8,10 +8,7 @@
 
 class Location : public BasePage {
 public:
-    static Location* getInstance() {
-        static Location instance;
-        return &instance;
-    }
+    INSTANCE_FUNC(Location);
 
     const std::vector<std::function<void()>> noCities = {
         {&getEmptyCityText}

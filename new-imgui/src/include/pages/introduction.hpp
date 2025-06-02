@@ -3,13 +3,8 @@
 #include "basepage.hpp"
 
 class Introduction : public BasePage {
-    
-    
 public:
-    static Introduction* getInstance() {
-        static Introduction instance;
-        return &instance;
-    }
+    INSTANCE_FUNC(Introduction);
 
     void render() override;
 };

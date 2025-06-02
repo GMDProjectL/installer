@@ -28,22 +28,22 @@ void Location::render() {
 
     ImGui::SetWindowPos(
         {
-            transitionX,
+            flyOffset,
             0
         }, 
         ImGuiCond_Always
     );
 
-    auto region = InstallationState::info.timezoneRegion;
-    std::string regionStr = "";
-    auto pos = region.find("/");
-    if (pos != region.npos) {
-        regionStr = region.substr(0, pos);
-        region.erase(0, pos + 1);
+    auto timezone = InstallationState::info.timezoneRegion;
+    std::string region = "";
+    auto pos = timezone.find("/");
+    if (pos != timezone.npos) {
+        region = timezone.substr(0, pos);
+        timezone.erase(0, pos + 1);
     }
-    pos = region.find("/");
-    if (pos != region.npos) {
-        region.erase(0, pos + 1);
+    pos = timezone.find("/");
+    if (pos != timezone.npos) {
+        timezone.erase(0, pos + 1);
     }
 
     ImGui::SetCursorPosY(40);
@@ -58,14 +58,14 @@ void Location::render() {
     Components::CenteredText(std::format("{}  {} {}{}",
         ICON_FA_USER,
         Languages::getLanguageString("youre_in"),
-        Languages::getCityTranslation(region),
-        (regionStr.empty()) ? "" : ", " + Languages::getRegionTranslation(regionStr)
+        Languages::getTimezoneTranslation(timezone),
+        (region.empty()) ? "" : ", " + Languages::getRegionTranslation(region)
     ).c_str(), true);
     
     ImGui::PopStyleVar();
 
     ImGui::SetNextWindowPos({
-        globalWindowSize.x / 2 - regionAndCityWindowsSize.x - padding / 2 + transitionX,
+        globalWindowSize.x / 2 - regionAndCityWindowsSize.x - padding / 2 + flyOffset,
         (globalWindowSize.y - regionAndCityWindowsSize.y) / 2 
     });
 
@@ -89,7 +89,7 @@ void Location::render() {
     ImGui::EndChild();
 
     ImGui::SetNextWindowPos({
-        (globalWindowSize.x + padding) / 2 + transitionX,
+        (globalWindowSize.x + padding) / 2 + flyOffset,
         (globalWindowSize.y - regionAndCityWindowsSize.y) / 2 
     });
 
@@ -148,7 +148,7 @@ void Location::getLocationButton(std::string buttonLabel, const std::string loca
         buttonLabel.erase(0, pos + 1);
 
     ImGui::PushID(location.c_str());
-    if(Components::HoverButton(Languages::getCityTranslation(buttonLabel).c_str(), {-1, 0})) {
+    if(Components::HoverButton(Languages::getTimezoneTranslation(buttonLabel).c_str(), {-1, 0})) {
         InstallationState::info.timezoneRegion = location;
     }
     ImGui::PopID();

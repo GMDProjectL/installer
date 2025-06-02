@@ -22,7 +22,7 @@ void AdditionalSoftPage::render() {
     ImGui::SetWindowSize(globalWindowSize);
 
     ImGui::SetWindowPos({
-            transitionX,
+            flyOffset,
             0
         }, ImGuiCond_Always
     );
@@ -33,7 +33,7 @@ void AdditionalSoftPage::render() {
         Languages::getLanguageString("additional_software")
     ).c_str());
 
-    ImGui::SetNextWindowPos({(WindowState::getWindowSize().x - windowWidth) / 2 + transitionX, ImGui::GetCursorPosY() + 60});
+    ImGui::SetNextWindowPos({(WindowState::getWindowSize().x - windowWidth) / 2 + flyOffset, ImGui::GetCursorPosY() + 60});
     
     ImGui::BeginChild("#Checkboxes", {windowWidth, WindowState::getWindowSize().y - ImGui::GetCursorPosY() - 60}, ImGuiChildFlags_None, StyleShit::g_defaultWindowFlags);
     ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, {6,6});

@@ -1,12 +1,8 @@
 #include "basepage.hpp"
 
 class InvalidPage : public BasePage {
-    static InvalidPage* instance;
-
 public:
-    static InvalidPage* getInstance() {
-        static InvalidPage instance;
-        return &instance;
-    }
+    INSTANCE_FUNC(InvalidPage);
+
     void render() override;
 };

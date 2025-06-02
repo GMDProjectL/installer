@@ -18,26 +18,26 @@ void GlobalView::render() {
 
     if (nextPage) {
         currentPage->opacity -= dt * opacityTransitionScale;
-        currentPage->transitionX -= dt * moveTransitionScale;
+        currentPage->flyOffset -= dt * moveTransitionScale;
         nextPage->opacity += dt * opacityTransitionScale;
-        nextPage->transitionX -= dt * moveTransitionScale;
+        nextPage->flyOffset -= dt * moveTransitionScale;
 
         currentPage->opacity = std::clamp(currentPage->opacity, 0.f, 1.f);
-        currentPage->transitionX = std::clamp(currentPage->transitionX, -60.f, 0.f);
+        currentPage->flyOffset = std::clamp(currentPage->flyOffset, -60.f, 0.f);
 
         nextPage->opacity = std::clamp(nextPage->opacity, 0.f, 1.f);
-        nextPage->transitionX = std::clamp(nextPage->transitionX, 0.f, 60.f);
+        nextPage->flyOffset = std::clamp(nextPage->flyOffset, 0.f, 60.f);
 
-        if (nextPage->transitionX <= 0 && nextPage->opacity >= 1 && currentPage->opacity <= 0 && currentPage->transitionX <= -60) {
+        if (nextPage->flyOffset <= 0 && nextPage->opacity >= 1 && currentPage->opacity <= 0 && currentPage->flyOffset <= -60) {
             currentPage->opacity = 0.0f;
-            currentPage->transitionX = 60;
+            currentPage->flyOffset = 60;
             currentPage = nextPage;
             nextPage = nullptr;
         }
     }
 
     Components::Navigation();
-    Components::PageCounterEx::doAnimationStep();
+    Components::PageCounterEx::updateAnimation();
     Components::PageCounter(InstallationState::page, InstallationState::maxPages);
     SmoothFactor::Cleanup();
 
@@ -53,14 +53,14 @@ void GlobalView::render() {
 void GlobalView::changePage(BasePage* page) {
     if(nextPage) {
         nextPage->opacity = 0.0f;
-        nextPage->transitionX = 60.f;
+        nextPage->flyOffset = 60.f;
         nextPage = nullptr;
     }
     if (currentPage) {
         currentPage->opacity = 0.0f;
-        currentPage->transitionX = 60.0f;
+        currentPage->flyOffset = 60.0f;
     }
-    page->transitionX = 0;
+    page->flyOffset = 0;
     page->opacity = 1.0f;
     currentPage = page;
 }
@@ -69,10 +69,10 @@ void GlobalView::changePageWithTransition(BasePage* page) {
     if (currentPage != page) {
         if(nextPage && nextPage != page) {
             page->opacity = nextPage->opacity;
-            page->transitionX = nextPage->transitionX;
+            page->flyOffset = nextPage->flyOffset;
             
             nextPage->opacity = 0.0f;
-            nextPage->transitionX = 60.f;
+            nextPage->flyOffset = 60.f;
         }
         nextPage = page;
     }

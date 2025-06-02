@@ -18,7 +18,7 @@ std::string Languages::getLanguageString(std::string key) {
     }
 }
 
-std::string Languages::getCityTranslation(std::string countryName) {
+std::string Languages::getTimezoneTranslation(std::string countryName) {
     if (g_currentLanguage == "en" || !cityLangsMap[g_currentLanguage].contains(countryName))
         return countryName;
 

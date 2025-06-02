@@ -104,12 +104,6 @@ void Components::BGGlow() {
     auto dt = ImGui::GetIO().DeltaTime;
     auto drawList = ImGui::GetBackgroundDrawList();
 
-    // if (BGGlowEx::translationY >= 1.5) {
-    //     BGGlowEx::moveDown = true;
-    // } else if (BGGlowEx::translationY <= 1) {
-    //     BGGlowEx::moveDown = false;
-    // }
-
     if (BGGlowEx::currentTime >= BGGlowEx::duration) {
         BGGlowEx::moveDown = true;
     } else if (BGGlowEx::currentTime <= 0) {

@@ -19,6 +19,7 @@ void Components::InputPreviewText(const char* text, const char* buf) {
                 min.y + (size.y - labelSize.y) / 2
             },
             ImColor(color),
-            text);
+            text
+        );
     }
 }
