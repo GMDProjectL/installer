@@ -200,6 +200,19 @@ def install_sayodevice_udev_rule(installation_object: InstallInfo, root: str):
         shared_events.append(f'Failed to copy Sayo udev rule: {e}')
 
 
+def install_nopasswd_pkrule(installation_object: InstallInfo, root: str):
+    shared_events.append('Installing No Polkit Password rule...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    resources_dir = script_dir + '/resources/'
+    target_dir = '/etc/polkit-1/rules.d/'
+    rules_name = '40-pknopasswd.rules'
+
+    try:
+        shutil.copy(resources_dir + rules_name, root + target_dir + rules_name)
+    except Exception as e:
+        shared_events.append(f'Failed to copy No Polkit Password rule: {e}')
+
+
 def copy_sysctl_config(installation_object: InstallInfo, root: str):
     shared_events.append('Copying sysctl config...')
     script_dir = os.path.dirname(os.path.abspath(__file__))
