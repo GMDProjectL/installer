@@ -23,6 +23,8 @@ type InstallInfo = {
     installGnomeDisks: boolean,
     installIntelMedia: boolean,
     setupBluetooth: boolean,
+    setupCachyosKernel: boolean,
+    runRussianReflector: boolean,
     de: string
 }
 
@@ -49,6 +51,8 @@ let installInfo = writable<InstallInfo>({
     installGnomeDisks: false,
     installIntelMedia: false,
     setupBluetooth: false,
+    setupCachyosKernel: true,
+    runRussianReflector: false,
     de: 'kde'
 });
 

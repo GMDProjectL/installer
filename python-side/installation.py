@@ -2,7 +2,7 @@ from gdltypes import InstallInfo
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
-from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur
+from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
 from admin_utils import sudo_wheel, change_password, create_user, add_to_input
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
@@ -62,6 +62,15 @@ def start_installation(installation_object: InstallInfo):
         return
     
     shared_progress.append('Done mounting the boot partition');
+
+    shared_progress.append('Running mirror sorting...');
+    
+    if installation_object.runRussianReflector:
+        run_reflector(country='Russia')
+    else:
+        run_reflector()
+    shared_progress.append('Mirrors are sorted (probably)');
+    
 
     if not pacstrap(installation_boot, installation_root):
         failmsg()
@@ -137,7 +146,8 @@ def start_installation(installation_object: InstallInfo):
             [
                 "grub", "efibootmgr", 
                 "electron34", "nodejs", "npm",
-                "pamac", "apple-fonts", "yay",
+                "pnpm",
+                "pamac", "adwaita-fonts", "yay",
                 "p7zip", "zip", "unzip", "unrar", 
                 "neofetch",
                 "sof-firmware", "fastfetch", "btop", "aptpac"
@@ -175,6 +185,20 @@ def start_installation(installation_object: InstallInfo):
     activate_systemd_service(installation_object, installation_root, "NetworkManager")
 
     shared_progress.append('Done Network');
+
+    if installation_object.setupCachyosKernel:
+        if not pacman_install(
+                installation_object, 
+                installation_root, 
+                [
+                    "linux-cachyos", "linux-cachyos-headers"
+                ]
+            ):
+            failmsg()
+            return
+        
+        shared_progress.append('CachyOS Kernel installed');
+        
     
     try_install_nvidia(installation_object, installation_root)
 

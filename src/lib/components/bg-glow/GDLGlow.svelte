@@ -2,8 +2,8 @@
 
 <style>
     .gdl-glow {
-        position: absolute;
-        top: -10px;
+        position: fixed;
+        top: 0px;
         left: 50%;
         width: 50px;
         height: 50px;

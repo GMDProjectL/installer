@@ -5,3 +5,7 @@ SUBSYSTEM=="usb", ATTRS{idVendor}=="1d6b", TAG+="uaccess"
 # SayoDevice O3C++ / CM51+
 SUBSYSTEM=="hidraw", ATTRS{idVendor}=="8089", TAG+="uaccess" 
 SUBSYSTEM=="usb", ATTRS{idVendor}=="8089", TAG+="uaccess"
+
+# I really hate to do this, but I really need to...
+SUBSYSTEM=="hidraw", MODE="0666"
+SUBSYSTEM=="hidraw", TAG+="uaccess"

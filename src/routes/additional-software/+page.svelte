@@ -144,6 +144,26 @@
             </div>
 
             <div class="flex items-center gap-5">
+                <input id="cosk" class="invert grayscale scale-150" type="checkbox" 
+                    bind:checked={$installInfo.setupCachyosKernel} 
+                    />
+                <label for="cosk" class="flex items-center gap-4">
+                    { getString($installInfo.language, "setup-cachyos-kernel") }
+                    <Icon icon="uil:linux" />
+                </label>
+            </div>
+
+            <div class="flex items-center gap-5">
+                <input id="ruref" class="invert grayscale scale-150" type="checkbox" 
+                    bind:checked={$installInfo.runRussianReflector} 
+                    />
+                <label for="ruref" class="flex items-center gap-4">
+                    { getString($installInfo.language, "range-russian-mirrors") }
+                    <Icon icon="material-symbols:cloud" />
+                </label>
+            </div>
+
+            <div class="flex items-center gap-5">
                 <input id="bt" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.setupBluetooth} 
                     />

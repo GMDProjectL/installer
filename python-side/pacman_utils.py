@@ -21,6 +21,30 @@ def enable_multilib(root: str):
         f.write(pacman_conf)
 
 
+def run_reflector(root: str = '', country: str = ''):
+
+    if country == '':
+        process = subprocess.Popen([
+            'reflector', '--latest', '5', '--sort', 'rate', '--save', root + '/etc/pacman.d/mirrorlist'
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    else:
+        process = subprocess.Popen([
+            'reflector', '--country', 'Russia', '--age', '12', '--protocol', 'https', '--sort', 'rate', '--save', '/etc/pacman.d/mirrorlist'
+        ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'Running reflector: {line.strip()}')
+    process.wait()
+    
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to run reflector: {line.strip()}')
+        
+        return False
+    
+    return True
+
+
 def connect_chaotic_aur(installation_object: InstallInfo, root: str):
     shared_events.append('Installing Chaotic AUR...')
 

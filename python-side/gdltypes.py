@@ -24,4 +24,6 @@ class InstallInfo:
     installGnomeDisks: bool
     installIntelMedia: bool
     setupBluetooth: bool
+    setupCachyosKernel: bool
+    runRussianReflector: bool
     de: str

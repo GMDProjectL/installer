@@ -234,5 +234,7 @@
         "Yangon": "Янгон",
         "Yekaterinburg": "Екатеринбург",
         "Yerevan": "Ереван"
-    }
+    },
+    "setup-cachyos-kernel": "Установить ядро CachyOS",
+    "range-russian-mirrors": "Российские зеркала"
 }

@@ -4,7 +4,11 @@
 @import "@fontsource/roboto";
 
 * {
-    font-family: 'Roboto';
+  font-family: 'Adwaita Sans';
+}
+
+pre {
+  font-family: 'Adwaita Mono';
 }
 
 body {

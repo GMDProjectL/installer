@@ -3,7 +3,7 @@
 </script>
 
 <div class="w-full justify-end flex">
-    <div class="w-full font-medium flex justify-between gap-20">
+    <div class="w-full font-medium flex justify-between gap-5">
         {@render children()}
     </div>
 </div>
