@@ -12,6 +12,7 @@ from misc_utils import (
     patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
     install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config, install_geode_installer
 )
+from hiddify_utils import install_hiddify
 
 
 def failmsg():
@@ -332,8 +333,9 @@ def start_installation(installation_object: InstallInfo):
     install_sayodevice_udev_rule(installation_object, installation_root)
     install_nopasswd_pkrule(installation_object, installation_root)
     copy_sysctl_config(installation_object, installation_root)
+    install_hiddify(installation_object, installation_root)
 
-    shared_progress.append('Done Sayo and sysctl');
+    shared_progress.append('Done udev, polkit, sysctl and hiddify');
 
     install_geode_installer(installation_object, installation_root)
 
