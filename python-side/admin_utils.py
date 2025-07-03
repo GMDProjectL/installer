@@ -12,8 +12,8 @@ def sudo_wheel(installation_object: InstallInfo, root: str):
 
     with open(f'{root}/etc/sudoers', 'w') as file:
         for line in lines:
-            if '%wheel ALL=(ALL:ALL) NOPASSWD:ALL' in line:
-                file.write(line.replace('#', '', 1))
+            if '%wheel ALL=(ALL:ALL) ALL' in line:
+                file.write(line.replace('#', '', 1).replace(') ALL', ') NOPASSWD:ALL'))
             else:
                 file.write(line)
             file.write('\n')

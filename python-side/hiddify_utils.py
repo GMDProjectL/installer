@@ -25,7 +25,7 @@ def download_zstd(url: str, dest: str):
 def install_hiddify(installation_object: InstallInfo, root: str):
     try:
         zstd_url = get_zstd()
-        zstd_dest = '/tmp/hiddify-next-bin.pkg.tar.zstd'
+        zstd_dest = '/var/cache/pacman/pkg/hiddify-next-bin.pkg.tar.zstd'
         download_zstd(zstd_url, root + zstd_dest)
         pacman_install_from_file(installation_object, root, zstd_dest)
         
