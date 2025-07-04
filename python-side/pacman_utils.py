@@ -21,6 +21,16 @@ def enable_multilib(root: str):
         f.write(pacman_conf)
 
 
+def make_pacman_more_fun(installation_object: InstallInfo, root: str):
+    with open(root + '/etc/pacman.conf', 'r') as f:
+        pacman_conf = f.read()
+    
+    pacman_conf = pacman_conf.replace('#Color', 'Color\nILoveCandy')
+
+    with open(root + '/etc/pacman.conf', 'w') as f:
+        f.write(pacman_conf)
+
+
 def run_reflector(root: str = '', country: str = ''):
 
     if country == '':
@@ -88,7 +98,7 @@ def pacstrap(installation_object: InstallInfo, destination: str):
         '-K', destination,
         'base', 'base-devel', 'linux', 'linux-firmware', 
         'linux-headers', 'dkms', 'vim', 'networkmanager',
-        'nano', 'firefox', 'sudo'
+        'nano', 'firefox', 'sudo', 'fish'
     ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
     
     for line in iter(process.stdout.readline, ''):

@@ -62,18 +62,38 @@ def generate_locales(installation_object: InstallInfo, root: str, locales: list)
     return True
 
 
+def fix_home_permissions(installation_object: InstallInfo, root: str):
+    shared_events.append(f'Fixing home permissions for {installation_object.username}...')
+    process = subprocess.run([
+        'arch-chroot', root,
+        'chown', '-R', '1000:1000', '/home/' + installation_object.username
+        ], capture_output=True)
+    
+    if process.returncode != 0:
+        shared_events.append(f'Failed to adjust: {process.stderr.decode()}')
+
+
 def activate_systemd_service(installation_object: InstallInfo, destination: str, service: str, user: str = ''):
     shared_events.append(f'Activating {service}...')
 
     if user != '':
+        try:
+            os.system(f'mkdir -p {destination}/home/{user}/.config/systemd/user/default.target.wants')
+        except Exception as e:
+            print('Ok that exists')
+        
+        fix_home_permissions(installation_object, destination)
+
         process = subprocess.run([
             'arch-chroot', destination,
-            'su', '-', user, '-c', f'systemctl enable --user {service}'
+            'ln', '-s', f'/usr/lib/systemd/user/{service}.service', f'/home/{user}/.config/systemd/user/default.target.wants/{service}.service'
             ], capture_output=True)
         
         if process.returncode != 0:
             shared_events.append(f'Failed to activate {service}: {process.stderr.decode()}')
             return False
+        
+        fix_home_permissions(installation_object, destination)
         
         return True
 
@@ -306,6 +326,22 @@ def copy_hidden_apps(installation_object: InstallInfo, root: str):
     
     if process.returncode != 0:
         shared_events.append('Failed to chown hidden apps directory')
+
+
+def copy_fastfetch_config(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying fastfetch config...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    res_dir = script_dir + '/resources/'
+    user_config_dir = root + '/home/' + installation_object.username + '/.config'
+
+    try:
+        os.system("mkdir -p " + user_config_dir + '/fastfetch')
+    except:
+        print('FASTFETCH CONFIG DIRECTORY ALREADY EXISTS?!?!')
+
+    os.system(f'cp -r {res_dir}.config/fastfetch/* {user_config_dir}/fastfetch/')
+
+    fix_home_permissions(installation_object, root)
 
 
 def copy_kde_config(installation_object: InstallInfo, root: str):

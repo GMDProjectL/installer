@@ -2,13 +2,13 @@ from gdltypes import InstallInfo
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
-from pacman_utils import pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
+from pacman_utils import make_pacman_more_fun, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
 from admin_utils import sudo_wheel, change_password, create_user, add_to_input
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
 from oobe_utils import adjust_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
 from misc_utils import (
-    activate_systemd_service, copy_hidden_apps, copy_nvidia_prime_steam, generate_fstab, generate_locales, generate_localtime, install_nopasswd_pkrule, 
+    activate_systemd_service, copy_fastfetch_config, copy_hidden_apps, copy_nvidia_prime_steam, generate_fstab, generate_locales, generate_localtime, install_nopasswd_pkrule, 
     patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
     install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config, install_geode_installer
 )
@@ -376,8 +376,10 @@ def start_installation(installation_object: InstallInfo):
             failmsg()
             return
 
-
+    copy_fastfetch_config(installation_object, installation_root)
     install_geode_installer(installation_object, installation_root)
+
+    make_pacman_more_fun(installation_object, installation_root)
 
     shared_progress.append('Done Geode');
     

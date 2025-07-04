@@ -62,7 +62,7 @@ def create_user(installation_object: InstallInfo, root: str):
     process = subprocess.run([
         'arch-chroot', root, 
         'useradd', '-m', '-G',
-        'wheel', '-s', '/bin/bash', user_name
+        'wheel', '-s', '/bin/fish', user_name
     ], capture_output=True)
 
     result = process.returncode
