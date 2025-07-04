@@ -123,6 +123,23 @@ def pacman_install(installation_object: InstallInfo, destination: str, packages:
     return True
 
 
+def pacman_remove(installation_object: InstallInfo, destination: str, packages: list):
+    process = subprocess.Popen([
+        'arch-chroot', destination,
+        'pacman', '-R', '--noconfirm', '--noprogressbar', *packages
+    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    
+    for line in iter(process.stdout.readline, ''):
+        shared_events.append(f'Removing: {line.strip()}')
+    process.wait()
+
+    if process.returncode != 0:
+        for line in iter(process.stderr.readline, ''):
+            shared_events.append(f'Failed to remove: {line.strip()}')
+        return False
+    return True
+
+
 def pacman_install_from_file(installation_object: InstallInfo, destination: str, filename: str):
     process = subprocess.Popen([
         'arch-chroot', destination,

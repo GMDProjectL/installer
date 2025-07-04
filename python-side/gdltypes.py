@@ -26,4 +26,5 @@ class InstallInfo:
     setupBluetooth: bool
     setupCachyosKernel: bool
     runRussianReflector: bool
+    installLact: bool
     de: str

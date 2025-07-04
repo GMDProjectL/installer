@@ -30,7 +30,9 @@
 
 		}, 1000);
 
-
+		return () => {
+			clearInterval(timeout);
+		}
 	});
 
 </script>

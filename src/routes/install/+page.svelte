@@ -35,8 +35,15 @@
     const sleepAwait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 
+    const startInstallationOnClient = () => {
+        if (!pbVisible) {
+            startInstallation($installInfo);
+        }
+    };
+
+
     onMount(() => {
-        startInstallation($installInfo);
+        startInstallationOnClient();
 
         const eventCheckerInterval = setInterval(async() => {
             const newEvents = await getInstallationEvents();

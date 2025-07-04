@@ -13,6 +13,7 @@
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
+    import GdlButton from "$lib/components/button/GDLButton.svelte";
 
     let partitions: PartitionsResponse = {};
 
@@ -87,6 +88,14 @@
                         </option>
                     {/each}
                 </select>
+            </div>
+            
+            <div class="mt-3">
+                <GdlButton on:click={async() => {
+                    partitions = await getPartitions($installInfo.selectedDrive);
+                }}>
+                    { getString($installInfo.language, "drive-update") }
+            </GdlButton>
             </div>
         </div>
     </div>

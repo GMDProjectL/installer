@@ -4,7 +4,10 @@
         getString, installInfo, checkInternetConnection,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
 
-        installationPage
+        installationPage,
+
+        reboot
+
 
     } from "$lib";
     import { goto } from "$app/navigation";
@@ -60,7 +63,7 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => window.close()}>
+        <GDLButton on:click={() => reboot()}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
         <GDLButton secondary disabled={!internetConnectionAvailable} 

@@ -1,0 +1,43 @@
+[Desktop Entry]
+Exec=gsr-ui-cli toggle-show
+Name=GPU Screen Recorder Overlay
+StartupNotify=false
+Type=Application
+Icon=/home/myuser/.local/share/applications/com.dec05eba.gpu_screen_recorder.png
+Actions=toggle-show;toggle-record;toggle-replay;replay-save;replay-save-1-min;replay-save-10-min;
+
+[Desktop Action toggle-show]
+Exec=gsr-ui-cli toggle-show
+Name[en]=Toggle Show Overlay
+Name[ru]=Показать/скрыть оверлей
+
+
+[Desktop Action toggle-record]
+Exec=gsr-ui-cli toggle-record
+Name[en]=Toggle Record
+Name[ru]=Начать/остановить запись
+
+
+[Desktop Action toggle-replay]
+Exec=gsr-ui-cli toggle-replay
+Name[en]=Toggle Replay
+Name[ru]=Начать/остановить реплей
+
+
+[Desktop Action replay-save]
+Exec=gsr-ui-cli replay-save
+Name[en]=Save Replay
+Name[ru]=Сохранить реплей
+
+
+[Desktop Action replay-save-1-min]
+Exec=gsr-ui-cli replay-save-1-min
+Name[en]=Save Replay (1m)
+Name[ru]=Сохранить реплей (1 мин.)
+
+
+[Desktop Action replay-save-10-min]
+Exec=gsr-ui-cli replay-save-10-min
+Name[en]=Save Replay (10m)
+Name[ru]=Сохранить реплей (10 мин.)
+

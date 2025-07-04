@@ -64,5 +64,6 @@
     "desktop-environment": "Desktop Environment",
     "recommended": "Recommended",
     "setup-cachyos-kernel": "Setup CachyOS kernel",
-    "range-russian-mirrors": "Russian mirrors"
+    "range-russian-mirrors": "Russian mirrors",
+    "install-lact": "Install LACT (GPU Control Panel)"
 }

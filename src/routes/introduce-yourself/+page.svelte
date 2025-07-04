@@ -44,7 +44,12 @@
     </SetupPageTitle>
 
     <div class="flex justify-between items-center flex-col px-20 w-full gap-10">
-        <form on:submit|preventDefault={() => next()} class="w-96 flex flex-col gap-5 overflow-y-auto p-2">
+        <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+        <form on:keypress={(e) => {
+            if (e.key == "Enter") {
+                next();
+            }
+        }} class="w-96 flex flex-col gap-5 overflow-y-auto p-2">
             <div>
                 <span class="flex gap-2">
                     <Icon icon="material-symbols-light:person-outline-rounded" width="24" height="24" />

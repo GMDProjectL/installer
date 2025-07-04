@@ -164,6 +164,16 @@
             </div>
 
             <div class="flex items-center gap-5">
+                <input id="lact" class="invert grayscale scale-150" type="checkbox" 
+                    bind:checked={$installInfo.installLact} 
+                    />
+                <label for="lact" class="flex items-center gap-4">
+                    { getString($installInfo.language, "install-lact") }
+                    <Icon icon="mdi:gpu" />
+                </label>
+            </div>
+
+            <div class="flex items-center gap-5">
                 <input id="bt" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.setupBluetooth} 
                     />

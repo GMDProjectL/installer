@@ -2,16 +2,17 @@ from gdltypes import InstallInfo
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive
-from pacman_utils import pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
+from pacman_utils import pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
 from admin_utils import sudo_wheel, change_password, create_user, add_to_input
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia
 from oobe_utils import adjust_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
 from misc_utils import (
-    activate_systemd_service, copy_nvidia_prime_steam, generate_fstab, generate_locales, generate_localtime, install_nopasswd_pkrule, 
+    activate_systemd_service, copy_hidden_apps, copy_nvidia_prime_steam, generate_fstab, generate_locales, generate_localtime, install_nopasswd_pkrule, 
     patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
     install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config, install_geode_installer
 )
+from gsr_utils import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from hiddify_utils import install_hiddify
 
 
@@ -130,8 +131,7 @@ def start_installation(installation_object: InstallInfo):
     if installation_object.de == "gnome":
         de_packages = [
             "gdm", "gnome", "gnome-tweaks", 
-            "gnome-photos", "dconf", "dconf-editor",
-            "adw-gtk-theme"
+            "gnome-photos", "dconf", "dconf-editor"
         ]
     
     if installation_object.de == "kde":
@@ -147,11 +147,11 @@ def start_installation(installation_object: InstallInfo):
             [
                 "grub", "efibootmgr", 
                 "electron34", "nodejs", "npm",
-                "pnpm",
+                "pnpm", "base-devel",
                 "pamac", "adwaita-fonts", "yay",
                 "p7zip", "zip", "unzip", "unrar", 
-                "neofetch",
-                "sof-firmware", "fastfetch", "btop", "aptpac"
+                "fastfetch", "gpu-screen-recorder-gtk",
+                "sof-firmware", "fastfetch", "btop", "aptpac", "adw-gtk-theme"
             ] + de_packages
         ):
         failmsg()
@@ -197,6 +197,13 @@ def start_installation(installation_object: InstallInfo):
             ):
             failmsg()
             return
+        
+        pacman_remove(
+            installation_object, installation_root,
+            [
+                "linux", "linux-headers"
+            ]
+        )
         
         shared_progress.append('CachyOS Kernel installed');
         
@@ -287,12 +294,22 @@ def start_installation(installation_object: InstallInfo):
             "intel-media-driver",
             "intel-media-sdk"
         ])
+    
+    if installation_object.installLact:
+        if not pacman_install(installation_object, installation_root, [
+            "lact"
+        ]):
+            failmsg()
+            return
+
+        activate_systemd_service(installation_object, installation_root, "lactd")
 
     shared_progress.append('Done Additional software');
     
     shared_events.append('Setting up default KDE settings...')
 
     copy_kde_config(installation_object, installation_root)
+    copy_hidden_apps(installation_object, installation_root)
     install_plymouth(installation_object, installation_root)
     add_to_input(installation_object, installation_root)
 
@@ -336,6 +353,29 @@ def start_installation(installation_object: InstallInfo):
     install_hiddify(installation_object, installation_root)
 
     shared_progress.append('Done udev, polkit, sysctl and hiddify');
+
+    if installation_object.de == 'kde':
+        pacman_remove(installation_object, installation_root, ['plasma-welcome'])
+
+        if not install_gsrn(installation_object, installation_root):
+            failmsg()
+            return
+        
+        if not install_gsrui(installation_object, installation_root):
+            failmsg()
+            return
+        
+        if not activate_systemd_service(
+            installation_object, installation_root, 
+            'gpu-screen-recorder-ui', installation_object.username
+        ):
+            failmsg()
+            return
+        
+        if not copy_gsr_handler_stuff(installation_object, installation_root):
+            failmsg()
+            return
+
 
     install_geode_installer(installation_object, installation_root)
 

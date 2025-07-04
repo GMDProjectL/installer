@@ -25,6 +25,7 @@ type InstallInfo = {
     setupBluetooth: boolean,
     setupCachyosKernel: boolean,
     runRussianReflector: boolean,
+    installLact: boolean,
     de: string
 }
 
@@ -53,6 +54,7 @@ let installInfo = writable<InstallInfo>({
     setupBluetooth: false,
     setupCachyosKernel: true,
     runRussianReflector: false,
+    installLact: true,
     de: 'kde'
 });
 

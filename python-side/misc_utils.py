@@ -62,8 +62,20 @@ def generate_locales(installation_object: InstallInfo, root: str, locales: list)
     return True
 
 
-def activate_systemd_service(installation_object: InstallInfo, destination: str, service: str):
+def activate_systemd_service(installation_object: InstallInfo, destination: str, service: str, user: str = ''):
     shared_events.append(f'Activating {service}...')
+
+    if user != '':
+        process = subprocess.run([
+            'arch-chroot', destination,
+            'su', '-', user, '-c', f'systemctl enable --user {service}'
+            ], capture_output=True)
+        
+        if process.returncode != 0:
+            shared_events.append(f'Failed to activate {service}: {process.stderr.decode()}')
+            return False
+        
+        return True
 
     process = subprocess.run([
         'arch-chroot', destination,
@@ -276,6 +288,26 @@ def copy_nvidia_prime_steam(installation_object: InstallInfo, root: str):
         shared_events.append(f'Failed to copy NVIDIA PRIME Steam file: {e}')
 
 
+def copy_hidden_apps(installation_object: InstallInfo, root: str):
+    shared_events.append('Copying hidden apps...')
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    res_dir = script_dir + '/resources/'
+    user_app_dir = root + '/home/' + installation_object.username + '/.local/share/applications'
+
+    os.system("mkdir -p " + user_app_dir)
+    os.chown(user_app_dir, 1000, 1000)
+    os.system("chmod 755 " + user_app_dir)
+    os.system(f'cp -r {res_dir}hidden_apps/* {user_app_dir}/')
+
+    process = subprocess.run([
+        'arch-chroot', root,
+        'chown', '-R', '1000:1000', '/home/' + installation_object.username
+        ], capture_output=True)
+    
+    if process.returncode != 0:
+        shared_events.append('Failed to chown hidden apps directory')
+
+
 def copy_kde_config(installation_object: InstallInfo, root: str):
     shared_events.append('Copying KDE config files...')
     script_dir = os.path.dirname(os.path.abspath(__file__))
@@ -309,9 +341,21 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
 
 
     try:
+        shutil.copy(dotconfig_dir + '/kglobalshortcutsrc', user_config_dir + '/kglobalshortcutsrc')
+    except Exception as e:
+        shared_events.append(f'Failed to copy kglobalshortcutsrc file: {e}')
+
+
+    try:
         shutil.copy(dotconfig_dir + '/plasmarc', user_config_dir + '/plasmarc')
     except Exception as e:
         shared_events.append(f'Failed to copy plasmarc file: {e}')
+
+
+    try:
+        shutil.copy(dotconfig_dir + '/plasma-org.kde.plasma.desktop-appletsrc', user_config_dir + '/plasma-org.kde.plasma.desktop-appletsrc')
+    except Exception as e:
+        shared_events.append(f'Failed to copy plasma-org.kde.plasma.desktop-appletsrc file: {e}')
 
 
     try:
@@ -330,6 +374,14 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
         shutil.copy(dotconfig_dir + '/autostart/set-gd-wallpaper.desktop', autostart_dir + '/set-gd-wallpaper.desktop')
     except Exception as e:
         shared_events.append(f'Failed to copy set-gd-wallpaper.desktop file: {e}')
+
+    
+    try:
+        os.system(f'cp -r "{dotconfig_dir}/gtk-3.0" "{user_config_dir}/"')
+        os.system(f'cp -r "{dotconfig_dir}/gtk-4.0" "{user_config_dir}/"')
+        os.system(f'cp -r "{dotconfig_dir}/xsettingsd" "{user_config_dir}/"')
+    except Exception as e:
+        shared_events.append(f'Failed to copy gtk-3.0, gtk-4.0, xsettingsd files: {e}')
     
 
     with open(user_config_dir + '/plasmarc', 'r') as f:
@@ -340,6 +392,13 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
     with open(user_config_dir + '/plasmarc', 'w') as f:
         f.write(plasmarc)
 
+    try:
+        os.mkdir(user_config_dir + '/kdedefaults')
+    except Exception as e:
+        print("ok that exists")
+
+    with open(user_config_dir + '/kdedefaults/plasmarc', 'w') as f:
+        f.write(plasmarc)
 
     with open(user_config_dir + '/set-gd-wallpaper.sh', 'r') as f:
         sgd = f.read()
@@ -377,7 +436,7 @@ def copy_kde_config(installation_object: InstallInfo, root: str):
     
     if process.returncode != 0:
         shared_events.append(f'Failed to adjust sgd: {process.stderr.decode()}')
-    
+
 
 def get_latest_gi_release():
     url = 'https://api.github.com/repos/GMDProjectL/geode-installer/releases'

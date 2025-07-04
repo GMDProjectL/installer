@@ -7,7 +7,7 @@ type InstallationProgress = {
 
 let installProgress = writable<InstallationProgress>({
     progress: 0,
-    total: 30
+    total: 33
 });
 
 export default installProgress;
