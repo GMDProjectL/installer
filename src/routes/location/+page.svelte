@@ -12,8 +12,12 @@
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
+    import GdlInput from "$lib/components/input/GDLInput.svelte";
     
     let timezones: TimezonesResponse = {};
+    let filter1: string = "";
+    let filter2: string = "";
+
     $: regionZones = $installInfo.timezoneRegion == '' ? [] : timezones[$installInfo.timezoneRegion];
 
     onMount(async() => {
@@ -40,7 +44,12 @@
 
     <div class="flex justify-around items-center px-20 w-full gap-10">
         <div class="w-96 h-96 flex flex-col gap-5 overflow-y-auto p-2 masked-overflow">
-            {#each Object.keys(timezones).sort() as region}
+            <GdlInput inputType="text" placeholder={getString($installInfo.language, 'search-placeholder')} bind:value={filter1} />
+            {#each 
+                Object.keys(timezones).sort()
+                .filter((val, index, arr) => getRegionString($installInfo.language, val)
+                    .toLowerCase().includes(filter1.toLowerCase())
+                ) as region}
                 <GDLButton secondary={$installInfo.timezoneRegion == region} 
                     on:click={() => $installInfo.timezoneRegion = region}>
                     { getRegionString($installInfo.language, region) }
@@ -48,7 +57,11 @@
             {/each}
         </div>
         <div class="w-96 h-96 flex flex-col gap-5 overflow-y-auto p-2 masked-overflow">
-            {#each regionZones?.sort() as zone}
+            <GdlInput inputType="text" placeholder={getString($installInfo.language, 'search-placeholder')} bind:value={filter2} />
+            {#each regionZones?.sort()
+                .filter((val, index, arr) => getCityString($installInfo.language, val)
+                    .toLowerCase().includes(filter2.toLowerCase())
+                ) as zone}
                 <GDLButton secondary={
                     $installInfo.timezoneRegion == $installInfo.timezoneRegion 
                     && $installInfo.timezoneInfo == zone

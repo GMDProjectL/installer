@@ -237,5 +237,6 @@
     },
     "setup-cachyos-kernel": "Установить ядро CachyOS",
     "range-russian-mirrors": "Российские зеркала",
-    "install-lact": "Установить LACT (Панель управления видюхой)"
+    "install-lact": "Установить LACT (Панель управления видюхой)",
+    "search-placeholder": "Поиск..."
 }
