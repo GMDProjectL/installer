@@ -15,6 +15,8 @@ from misc_utils import (
 from gsr_utils import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from hiddify_utils import install_hiddify
 
+from spectacle_fix import install_spectacle_fix
+
 
 def failmsg():
     shared_events.append(f'Fatal error. Installation failed.')
@@ -351,6 +353,7 @@ def start_installation(installation_object: InstallInfo):
     install_nopasswd_pkrule(installation_object, installation_root)
     copy_sysctl_config(installation_object, installation_root)
     install_hiddify(installation_object, installation_root)
+    install_spectacle_fix(installation_object, installation_root)
 
     shared_progress.append('Done udev, polkit, sysctl and hiddify');
 
