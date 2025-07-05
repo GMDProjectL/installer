@@ -318,7 +318,6 @@ def start_installation(installation_object: InstallInfo):
     install_nopasswd_pkrule(installation_root)
     copy_sysctl_config(installation_root)
     install_hiddify(installation_root)
-    install_spectacle_fix(installation_root, installation_object.username)
 
     shared_progress.append('Done udev, polkit, sysctl and hiddify, fixed spectacle.')
 
@@ -340,9 +339,11 @@ def start_installation(installation_object: InstallInfo):
         if not copy_gsr_handler_stuff(installation_root, installation_object.username):
             failmsg()
             return
+        
+        install_spectacle_fix(installation_root, installation_object.username)
+        copy_konsole_config(installation_root, installation_object.username)
 
     copy_fastfetch_config(installation_root, installation_object.username)
-    copy_konsole_config(installation_root, installation_object.username)
     copy_fish_config(installation_root, installation_object.username)
     make_pacman_more_fun(installation_root)
 
