@@ -17,7 +17,6 @@ def get_zstd():
 
 def download_zstd(url: str, dest: str):
     response = requests.get(url, stream=True)
-    print(dest)
     with open(dest, 'wb') as f:
         for chunk in response.iter_content(chunk_size=1024): 
             if chunk:
