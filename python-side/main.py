@@ -1,7 +1,7 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from utils import check_internet_connection, get_drives, get_partitions, get_timezones
-from installation import start_installation
+from installation import start_safe_installation
 import threading
 from shared import shared_progress,shared_events 
 from gdltypes import InstallInfo
@@ -58,7 +58,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
             install_object = json.loads(body)
             self.wfile.write(json.dumps({'ok': True}).encode())
-            threading.Thread(target=start_installation, args=(InstallInfo(**install_object),)).start()
+            threading.Thread(target=start_safe_installation, args=(InstallInfo(**install_object),)).start()
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):

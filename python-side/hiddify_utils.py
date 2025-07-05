@@ -1,20 +1,15 @@
-from gdltypes import InstallInfo
 from shared import shared_events
-from github_utils import get_latest_github_release, get_github_rb_url, download_file
-from pacman_utils import pacman_install_from_file
+from github_utils import install_latest_gh_package
+import traceback
 
-def install_hiddify(installation_object: InstallInfo, root: str):
-    
+def install_hiddify(root: str):
+    shared_events.append('Installing Hiddify...')
     try:
-        release_result = get_latest_github_release('GMDProjectL/hiddify')
-        zstd_url = get_github_rb_url(release_result)
-        zstd_dest = root + '/var/cache/pacman/pkg/hiddify.pkg.tar.zstd'
-
-        download_file(zstd_url, zstd_dest)
-        pacman_install_from_file(installation_object, root, zstd_dest)
-        
+        install_latest_gh_package(root, 'GMDProjectL/hiddify', 'hiddify')
     except Exception as e:
-        shared_events.append(f'Failed to install Hiddify: {e}')
+        print(traceback.format_exc())
+        shared_events.append(f'Failed to install Hiddify: {e} {traceback.format_exc()}')
         return False
     
     return True
+

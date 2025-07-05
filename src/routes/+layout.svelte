@@ -1,12 +1,13 @@
 <script lang="ts">
 	import '../app.css';
-	let { children } = $props();
 
 	import { onNavigate } from '$app/navigation';
     import GdlGlow from '$lib/components/bg-glow/GDLGlow.svelte';
 
 	import { installationPage, getInstallationProgress, installProgress } from '$lib';
     import { onMount } from 'svelte';
+	
+	let { children } = $props();
 
 	onNavigate((navigation) => {
 		if (!document.startViewTransition) return;

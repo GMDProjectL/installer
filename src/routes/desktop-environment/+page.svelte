@@ -5,7 +5,6 @@
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installInfo, installationPage
     } from "$lib";
-    import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { Carousel } from "flowbite-svelte";
 

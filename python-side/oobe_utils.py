@@ -1,10 +1,12 @@
 import os
 import shutil
-from gdltypes import InstallInfo
-from shared import shared_events
-import subprocess
 import requests
 import zipfile
+from shared import shared_events
+from path_utils import get_user_autostart_dir
+from process_utils import run_command_in_chroot
+from resources_utils import copy_from_resources
+from permission_utils import fix_user_permissions
 
 
 def get_latest_oobe_release():
@@ -47,90 +49,52 @@ def download_oobe(root: str):
     
     return True
 
-def clone_oobe(installation_object: InstallInfo, root: str):
+def clone_oobe(root: str):
     return download_oobe(root)
 
 
-def adjust_permissions(installation_object: InstallInfo, root: str):
-    process = subprocess.Popen([
-        'arch-chroot', root,
+def adjust_oobe_permissions(root: str):
+    shared_events.append('Adjusting OOBE permissions...')
+
+    result = run_command_in_chroot(root, [
         'chmod', '-R', '7777', '/opt/oobe'
-    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    ])
     
-    for line in iter(process.stdout.readline, ''):
-        shared_events.append(f'Changing permissions: {line.strip()}')
-    process.wait()
-    
-    if process.returncode != 0:
-        for line in iter(process.stderr.readline, ''):
-            shared_events.append(f'Failed to change OOBE permissions: {line.strip()}')
-        
+    if result.returncode != 0:
+        shared_events.append(f'Failed to adjust OOBE permissions: {result.stderr}')
         return False
 
-
-    process = subprocess.Popen([
-        'arch-chroot', root,
-        'chown', '-R', installation_object.username, '/opt/oobe'
-    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    result = run_command_in_chroot(root, [
+        'chown', '-R', '1000:1000', '/opt/oobe'
+    ])
     
-    for line in iter(process.stdout.readline, ''):
-        shared_events.append(f'Changing ownership: {line.strip()}')
-    process.wait()
-    
-    if process.returncode != 0:
-        for line in iter(process.stderr.readline, ''):
-            shared_events.append(f'Failed to change OOBE ownership: {line.strip()}')
-        
+    if result.returncode != 0:
+        shared_events.append(f'Failed to change OOBE ownership: {result.stderr}')
         return False
-    
+
     return True
 
 
-def install_oobe_dependencies(installation_object: InstallInfo, root: str):
-    process = subprocess.Popen([
-        'arch-chroot', root,
+def install_oobe_dependencies(root: str):
+    shared_events.append('Installing OOBE dependencies...')
+
+    result = run_command_in_chroot(root, [
         '/opt/oobe/install_dependencies.sh'
-    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    ])
     
-    for line in iter(process.stdout.readline, ''):
-        shared_events.append(f'Installing OOBE dependencies: {line.strip()}')
-    process.wait()
-    
-    if process.returncode != 0:
-        for line in iter(process.stderr.readline, ''):
-            shared_events.append(f'Failed to install: {line.strip()}')
-        
+    if result.returncode != 0:
+        shared_events.append(f'Failed to install OOBE dependencies: {result.stderr}')
         return False
     
     return True
 
 
-def create_oobe_autostart(installation_object: InstallInfo, root: str):
-    username = installation_object.username
-    autostart_directory = '/home/' + username + '/.config/autostart'
-    script_dir = os.path.dirname(os.path.abspath(__file__))
-
+def create_oobe_autostart(root: str, username: str):
     shared_events.append(f'Installing OOBE autostart...')
 
-    try:
-        shutil.copy(script_dir + '/resources/.config/autostart/oobe.desktop', root + autostart_directory + '/oobe.desktop')
-    except Exception as e:
-        shared_events.append(f'Failed to install OOBE autostart: {str(e)}')
-        return
-    
-    process = subprocess.Popen([
-        'arch-chroot', root,
-        'chown', username, autostart_directory + '/oobe.desktop'
-    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
-    
-    for line in iter(process.stdout.readline, ''):
-        shared_events.append(f'Installing OOBE autostart perms: {line.strip()}')
-    process.wait()
-    
-    if process.returncode != 0:
-        for line in iter(process.stderr.readline, ''):
-            shared_events.append(f'Failed to install OOBE autostart perms: {line.strip()}')
-        
-        return False
+    autostart_directory = get_user_autostart_dir(root, username)
+
+    copy_from_resources('.config/autostart/oobe.desktop', autostart_directory)
+    fix_user_permissions(root, username)
     
     return True

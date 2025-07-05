@@ -1,0 +1,4 @@
+[Desktop Entry]
+Type=Application
+Name=Spectacle-Fix
+Exec=/usr/bin/spectacle_fix

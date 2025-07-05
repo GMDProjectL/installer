@@ -10,17 +10,6 @@
     import { goto } from "$app/navigation";
     import { tick } from "svelte";
 
-
-    const bugfixCheckbox = async() => {
-        await tick();
-        if ($installInfo.enableMultilibRepo == false) {
-            $installInfo.installSteam = false;
-            $installInfo.installWine = false;
-            $installInfo.installWinetricks = false;
-        }
-    }
-
-
     $: canGoFurther = !(
         $installInfo.installSteam == true && !(
             $installInfo.vulkanIntel ||

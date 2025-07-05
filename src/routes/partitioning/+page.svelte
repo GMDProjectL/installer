@@ -2,7 +2,7 @@
     import Icon from "@iconify/svelte";
     import { 
         getString, 
-        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
+        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         getDrives,
         installInfo,
         bytesToReadable,

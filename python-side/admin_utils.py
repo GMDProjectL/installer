@@ -1,10 +1,9 @@
-import os
-from gdltypes import InstallInfo
 from shared import shared_events
-import subprocess
+from process_utils import run_command, run_command_in_chroot
+from permission_utils import fix_user_permissions
 
 
-def sudo_wheel(installation_object: InstallInfo, root: str):
+def sudo_wheel(root: str):
     shared_events.append(f'Uncommenting wheel for {root}...')
 
     with open(f'{root}/etc/sudoers', 'r') as file:
@@ -21,76 +20,86 @@ def sudo_wheel(installation_object: InstallInfo, root: str):
     return True
 
 
-def change_password(installation_object: InstallInfo, root: str, user: str, password: str):
-    process = subprocess.run([
-        'arch-chroot', root, 
-        'sh', '-c', f'echo -e "{password}\n{password}" | (passwd {user})'
-    ], capture_output=True)
+def change_password(root: str, user: str, password: str):
+    shared_events.append(f'Changing password for {user}...')
+    
+    result = run_command_in_chroot(root, [
+        'sh', '-c', f'echo -e "{password}\n{password}" | passwd {user}'
+    ])
 
-    if process.returncode != 0:
-        shared_events.append(f'Failed to change password for root: {process.stderr.decode()}')
+    if result.returncode != 0:
+        shared_events.append(f'Failed to change password for root: {result.stderr}')
         return False
     
     return True
 
 
-def mkinitpcio(installation_object, root: str):
-    shared_events.append('Generating CPIO...')
+def mkinitpcio(root: str):
+    shared_events.append('Generating initramfs...')
 
-    process = subprocess.Popen([
-        'arch-chroot', root,
-        'mkinitcpio', '-P'
-    ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, bufsize=1, universal_newlines=True)
+    result = run_command_in_chroot(root, ['mkinitcpio', '-P'])
     
-    for line in iter(process.stdout.readline, ''):
-        shared_events.append(f'mkinitcpio: {line.strip()}')
-    process.wait()
-    
-    if process.returncode != 0:
-        for line in iter(process.stderr.readline, ''):
-            shared_events.append(f'Failed to mkinitcpio: {line.strip()}')
-        
+    if result.returncode != 0:
+        shared_events.append(f'Failed to mkinitcpio: {result.stderr}')
         return False
     
     return True
 
-def create_user(installation_object: InstallInfo, root: str):
-    shared_events.append('Creating user...')
-    user_name = installation_object.username
-    password = installation_object.password
+def create_user(root: str, username: str, password: str):
+    shared_events.append(f'Creating user {username}...')
 
-    process = subprocess.run([
-        'arch-chroot', root, 
+    result = run_command_in_chroot(root, [
         'useradd', '-m', '-G',
-        'wheel', '-s', '/bin/fish', user_name
-    ], capture_output=True)
+        'wheel', '-s', '/bin/fish', username
+    ])
 
-    result = process.returncode
-
-    if result != 0:
-        shared_events.append(f'Failed to create user: {process.stdout.decode()}')
+    if result.returncode != 0:
+        shared_events.append(f'Failed to create user: {result.stderr}')
         return False
     
-    if not change_password(installation_object, root, user_name, password):
+    if not change_password(root, username, password):
         return False
     
     return True
 
 
-def add_to_input(installation_object: InstallInfo, root: str):
-    shared_events.append('Adding user to input group...')
-    user_name = installation_object.username
+def add_to_input(root: str, username: str):
+    shared_events.append(f'Adding {username} to input group...')
 
-    process = subprocess.run([
-        'arch-chroot', root, 
+    result = run_command_in_chroot(root, [
         'usermod', '-a', '-G',
-        'input', user_name
-    ], capture_output=True)
+        'input', username
+    ])
 
-    result = process.returncode
+    if result.returncode != 0:
+        shared_events.append(f'Failed to add user to input group: {result.stderr}')
+        return False
+    
+    return True
 
-    if result != 0:
-        shared_events.append(f'Failed to add user to input group: {process.stdout.decode()}')
+
+def activate_systemd_service(root: str, service: str, user: str = ''):
+    shared_events.append(f'Activating {service}...')
+
+    if user != '':
+        default_target_wants = f'/home/{user}/.config/systemd/user/default.target.wants'
+        run_command(['mkdir', '-p', root + default_target_wants])
+        result = run_command_in_chroot(root, [
+            'ln', '-s', f'/usr/lib/systemd/user/{service}.service', f'{default_target_wants}/{service}.service'
+        ])
+        
+        if result.returncode != 0:
+            shared_events.append(f'Failed to activate {service}: {result.stderr}')
+            return False
+        
+        fix_user_permissions(root, user)
+        
+        return True
+
+    result = run_command_in_chroot(root, ['systemctl', 'enable', service])
+    
+    if result.returncode != 0:
+        shared_events.append(f'Failed to activate {service}: {result.stderr}')
         return False
     
     return True

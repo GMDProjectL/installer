@@ -3,7 +3,6 @@
     import { 
         getString, 
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
-        getDrives,
         installInfo,
         startInstallation,
         getInstallationEvents,
@@ -31,16 +30,11 @@
         node.scroll({ top: node.scrollHeight, behavior: 'smooth' });
     }; 
 
-
-    const sleepAwait = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
-
-
     const startInstallationOnClient = () => {
         if (!pbVisible) {
             startInstallation($installInfo);
         }
     };
-
 
     onMount(() => {
         startInstallationOnClient();
@@ -58,6 +52,7 @@
                     clearInterval(eventCheckerInterval);
                     clearInterval(progressAnimationInterval);
                     done = true;
+                    $installProgress.progress = $installProgress.total
                 }
 
                 if (content.includes('Fatal error. Installation failed.')) {

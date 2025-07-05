@@ -3,12 +3,8 @@
     import { 
         getString, installInfo, checkInternetConnection,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
-
         installationPage,
-
         reboot
-
-
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";

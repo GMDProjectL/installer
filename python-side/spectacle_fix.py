@@ -1,9 +1,11 @@
 from shared import shared_events
 from github_utils import *
-from gdltypes import InstallInfo
-import subprocess
+from path_utils import get_user_autostart_dir
+from resources_utils import copy_from_resources
+from permission_utils import fix_user_permissions
+from process_utils import run_command
 
-def install_spectacle_fix(installinfo: InstallInfo, root: str) -> bool:
+def install_spectacle_fix(root: str, username: str) -> bool:
     try:
         shared_events.append("Installing Spectacle Fix")
         release_result = get_latest_github_release("GMDProjectL/spectacle-fix")
@@ -11,24 +13,20 @@ def install_spectacle_fix(installinfo: InstallInfo, root: str) -> bool:
         dest = root + "/usr/bin/spectacle_fix"
         
         download_file(release_binary_url, dest)
-        
-        process = subprocess.Popen(
-            ['chmod', '+x', dest],
-            stdout=subprocess.PIPE, 
-            stderr=subprocess.PIPE, 
-            bufsize=1, universal_newlines=True
-        )
-        process.wait()
 
-        if process.returncode != 0:
-            shared_events.append(f'Failed to give execution permission for {dest} with return code: {process.returncode}')
+        result = run_command(['chmod', '+x', dest])
+
+        if result.returncode != 0:
+            shared_events.append(f'Failed to give execution permission for {dest} with return code: {result.returncode}')
             return False
         
-        with open(f"{root}/home/{installinfo.username}/.config/autostart/spectacle-fix.desktop", "w") as file:
-            file.write(f"[Desktop Entry]\nType=Application\nName=Spectacle-Fix\nExec={dest}\nX-GNOME-Autostart-enabled=true")
+        autostart_directory = get_user_autostart_dir(root, username)
+        copy_from_resources('.config/autostart/spectacle-fix.desktop', autostart_directory)
+        fix_user_permissions(root, username)
         
         shared_events.append(f"Installed Spectacle Fix")
     except Exception as e:
+        print(e.with_traceback())
         shared_events.append(f'Failed to install Spectacle Fix: {e}')
         return False
     return True

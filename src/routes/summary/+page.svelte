@@ -2,13 +2,11 @@
     import Icon from "@iconify/svelte";
     import { 
         getString, 
-        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
+        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         getDrives,
         installInfo,
         bytesToReadable,
         type DrivesResponse,
-        type PartitionsResponse,
-        getPartitions,
         installationPage
     } from "$lib";
     import Swal from "sweetalert2";

@@ -3,7 +3,7 @@
     import type { TimezonesResponse } from "$lib";
     import { 
         getString, 
-        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, GDLInput,
+        GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installInfo, getTimezones, getRegionString,
         installationPage,
         getCityString

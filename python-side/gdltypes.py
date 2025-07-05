@@ -28,3 +28,9 @@ class InstallInfo:
     runRussianReflector: bool
     installLact: bool
     de: str
+
+@dataclass
+class CommandOutput:
+    stdout: str
+    stderr: str
+    returncode: int

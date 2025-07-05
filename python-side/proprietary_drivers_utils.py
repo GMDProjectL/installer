@@ -1,10 +1,9 @@
-from gdltypes import InstallInfo
 from shared import shared_events
 import subprocess
 from pacman_utils import pacman_install
 
 
-def get_lspci(installation_object: InstallInfo):
+def get_lspci():
     '''lspci -k
     '''
     process = subprocess.run(['lspci', '-k'], capture_output=True)
@@ -13,37 +12,37 @@ def get_lspci(installation_object: InstallInfo):
     return lspci
 
 
-def is_nouveau(installation_object: InstallInfo):
-    lspci = get_lspci(installation_object)
+def is_nouveau():
+    lspci = get_lspci()
     if 'in use: nouveau' in lspci:
         return True
     
     return False
 
 
-def is_nvidia(installation_object: InstallInfo):
-    lspci = get_lspci(installation_object)
+def is_nvidia():
+    lspci = get_lspci()
     if 'in use: nvidia' in lspci:
         return True
     
     return False
 
 
-def is_broadcom_wl(installation_object: InstallInfo):
-    lspci = get_lspci(installation_object)
+def is_broadcom_wl():
+    lspci = get_lspci()
     if 'in use: wl' in lspci:
         return True
     
     return False
 
 
-def try_install_nvidia(installation_object: InstallInfo, root: str):
-    if not is_nvidia(installation_object) and not is_nouveau(installation_object):
+def try_install_nvidia(root: str):
+    if not is_nvidia() and not is_nouveau():
         shared_events.append('Your system doesn\'t have NVIDIA GPU. Skipping.')
         return
     
     shared_events.append('Installing NVIDIA drivers...')
-    result = pacman_install(installation_object, root, 
+    result = pacman_install(root, 
         [
             'nvidia-dkms', 'nvidia-utils', 
             'nvidia-settings', 'nvidia-prime'
@@ -54,13 +53,13 @@ def try_install_nvidia(installation_object: InstallInfo, root: str):
         shared_events.append('Failed to install NVIDIA drivers')
 
 
-def try_install_broadcom(installation_object: InstallInfo, root: str):
-    if not is_broadcom_wl(installation_object):
+def try_install_broadcom(root: str):
+    if not is_broadcom_wl():
         shared_events.append('Your system doesn\'t have Broadcom WiFi. Skipping.')
         return
     
     shared_events.append('Installing Broadcom drivers...')
-    result = pacman_install(installation_object, root, 
+    result = pacman_install(root, 
         [
             'linux-headers', 'dkms', 'broadcom-wl-dkms'
         ]

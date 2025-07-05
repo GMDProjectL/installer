@@ -80,7 +80,7 @@ const getInstallationProgress = async(): Promise<InstallationProgress> => {
 }
 
 const reboot = async() => {
-    const request = await fetch(API_BASE_PATH + '/reboot');
+    const request = await fetch('/reboot');
 }
 
 
