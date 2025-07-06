@@ -7,8 +7,8 @@
         startInstallation,
         getInstallationEvents,
         installProgress,
-        reboot
-
+        reboot,
+        autoscroll
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -96,7 +96,7 @@
         </span>
     </SetupPageTitle>
 
-    <div class="flex justify-start items-start flex-col px-20 w-full gap-10">
+    <div class="flex justify-start items-start flex-col px-20 w-full gap-10" use:autoscroll={{pauseOnUserScroll: true, behavior: "smooth"}}>
         <pre bind:this={logsPre} class="w-full flex flex-col gap-5 overflow-y-auto p-2 text-wrap" 
             style="height: 70vh;">{ logs }</pre>
     </div>

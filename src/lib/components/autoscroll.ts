@@ -1,0 +1,90 @@
+type AutoscrollOptions = {
+	pauseOnUserScroll?: boolean;
+};
+
+export default function autoscroll(
+	node: HTMLElement,
+	options: AutoscrollOptions & ScrollOptions = {
+		behavior: 'smooth',
+	}
+) {
+	const forbiddenOverflows = ['visible', 'hidden'];
+	if (
+		getComputedStyle(node).overflowX in forbiddenOverflows &&
+		getComputedStyle(node).overflowY in forbiddenOverflows
+	) {
+		console.warn(
+			'Autoscroll element will never scroll. Set at least one of `overflow-x` or `overflow-y` to either `auto` or `scroll`.'
+		);
+	}
+
+	const { pauseOnUserScroll: _, ...scrollOptions } = {
+		behavior: 'smooth' as const,
+		...options,
+	};
+	const scroll = () => {
+		node.scrollTo({
+			top: node.scrollHeight,
+			left: node.scrollWidth,
+			...scrollOptions,
+		});
+	};
+
+	// for when children change sizes
+	const resizeObserver = new ResizeObserver(_ => {
+		scroll();
+	});
+
+	// for when children are added or removed/subtree changes
+	const mutationObserver = new MutationObserver(_ => {
+		scroll();
+	});
+
+	const observeAll = () => {
+		// observe size of all children
+        Array.prototype.map.call(node.children, child => {
+            resizeObserver.observe(child);
+        });
+
+		mutationObserver.observe(node, { childList: true, subtree: true });
+	};
+
+	observeAll();
+
+	const handleScroll = () => {
+		if (node.scrollTop + node.clientHeight < node.scrollHeight) {
+			mutationObserver.disconnect();
+			resizeObserver.disconnect();
+		} else {
+			observeAll();
+		}
+	};
+
+	if (options.pauseOnUserScroll) {
+		node.addEventListener('scroll', handleScroll);
+	}
+
+	return {
+		update({ pauseOnUserScroll, behavior }: AutoscrollOptions & ScrollOptions) {
+			if (pauseOnUserScroll) {
+				node.addEventListener('scroll', handleScroll);
+				mutationObserver.disconnect();
+				resizeObserver.disconnect();
+			} else {
+				node.removeEventListener('scroll', handleScroll);
+				observeAll();
+			}
+		},
+		destroy() {
+			if (mutationObserver) {
+				mutationObserver.disconnect();
+			}
+			if (resizeObserver) {
+				resizeObserver.disconnect();
+			}
+			if (options.pauseOnUserScroll) {
+				node.removeEventListener('scroll', handleScroll);
+			}
+		},
+	};
+}

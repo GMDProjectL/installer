@@ -3,7 +3,7 @@ from base.permissions import fix_user_permissions
 
 def get_resources_path() -> str:
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(script_dir, 'resources')
+    return os.path.join(script_dir, '../resources')
 
 def get_resources_config_dir() -> str:
     return os.path.join(get_resources_path(), '.config')
