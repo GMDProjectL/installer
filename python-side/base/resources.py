@@ -1,7 +1,7 @@
 import os
 import shutil
 from shared import shared_events
-from path_utils import get_resources_path
+from base.path import get_resources_path
 
 def copy_from_resources(file_name: str, target_dir: str) -> bool:
     """

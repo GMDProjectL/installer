@@ -1,6 +1,6 @@
 from shared import shared_events
-from process_utils import run_command_in_chroot
-from patching_utils import uncomment_line_in_file
+from base.process import run_command_in_chroot
+from base.patching import uncomment_line_in_file
 
 
 def generate_localtime(root: str, region: str, city: str):

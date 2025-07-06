@@ -1,7 +1,7 @@
 from shared import shared_events
-from path_utils import get_user_config_dir
-from resources_utils import copy_from_resources
-from permission_utils import fix_user_permissions
+from base.path import get_user_config_dir
+from base.resources import copy_from_resources
+from base.permissions import fix_user_permissions
 
 
 def copy_fish_config(root: str, username: str):

@@ -1,5 +1,5 @@
 import os
-from permission_utils import fix_user_permissions
+from base.permissions import fix_user_permissions
 
 def get_resources_path() -> str:
     script_dir = os.path.dirname(os.path.abspath(__file__))

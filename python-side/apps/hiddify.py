@@ -1,5 +1,5 @@
 from shared import shared_events
-from github_utils import install_latest_gh_package
+from apps.github import install_latest_gh_package
 import traceback
 
 def install_hiddify(root: str):

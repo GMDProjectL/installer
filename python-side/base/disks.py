@@ -1,5 +1,5 @@
 from shared import shared_events
-from process_utils import run_command
+from base.process import run_command
 
 
 def generate_fstab(root: str):

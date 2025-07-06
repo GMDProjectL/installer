@@ -3,10 +3,10 @@ import shutil
 import requests
 import zipfile
 from shared import shared_events
-from path_utils import get_user_autostart_dir
-from process_utils import run_command_in_chroot
-from resources_utils import copy_from_resources
-from permission_utils import fix_user_permissions
+from base.path import get_user_autostart_dir
+from base.process import run_command_in_chroot
+from base.resources import copy_from_resources
+from base.permissions import fix_user_permissions
 
 
 def get_latest_oobe_release():

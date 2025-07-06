@@ -1,7 +1,7 @@
 from shared import shared_events
 import subprocess
-from pacman_utils import pacman_install
-from resources_utils import copy_from_resources
+from base.pacman import pacman_install
+from base.resources import copy_from_resources
 
 
 def get_lspci():

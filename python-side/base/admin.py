@@ -1,7 +1,7 @@
 from shared import shared_events
-from process_utils import run_command, run_command_in_chroot
-from permission_utils import fix_user_permissions
-from resources_utils import copy_from_resources
+from base.process import run_command, run_command_in_chroot
+from base.permissions import fix_user_permissions
+from base.resources import copy_from_resources
 
 
 def sudo_wheel(root: str):

@@ -1,6 +1,6 @@
 import requests
 from typing import Any
-from pacman_utils import pacman_install_from_file
+from base.pacman import pacman_install_from_file
 
 def get_latest_github_release(url: str) -> Any:
     response = requests.get(f"https://api.github.com/repos/{url}/releases")

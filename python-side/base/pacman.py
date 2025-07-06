@@ -1,7 +1,7 @@
 import os
 from shared import shared_events
-from process_utils import run_command_in_chroot, run_command
-from patching_utils import replace_str_in_file
+from base.process import run_command_in_chroot, run_command
+from base.patching import replace_str_in_file
 
 
 def append_mirrorlist(root: str):

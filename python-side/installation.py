@@ -2,24 +2,26 @@ import traceback
 from gdltypes import InstallInfo
 from shared import shared_events, shared_progress
 from copy import deepcopy
-from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive, generate_fstab
-from pacman_utils import make_pacman_more_fun, make_pacman_more_unsafe, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
-from admin_utils import sudo_wheel, change_password, create_user, add_to_input, activate_systemd_service, install_nopasswd_pkrule
-from grub_utils import install_grub, update_grub, patch_default_grub
-from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia, copy_nvidia_prime_steam
-from oobe_utils import adjust_oobe_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
-from misc_utils import (
-    copy_fastfetch_config, copy_hidden_apps, 
-    patch_distro_release, install_gdl_xdg_icon, patch_sddm_theme, copy_kde_config,
-    install_plymouth, install_sayodevice_udev_rule, copy_sysctl_config, install_geode_installer
-)
-from locale_utils import generate_locales, generate_localtime
-from konsole_utils import copy_konsole_config
-from fish_utils import copy_fish_config
-from gsr_utils import install_gsrn, install_gsrui, copy_gsr_handler_stuff
-from hiddify_utils import install_hiddify
-from lact_utils import fix_lact_appearance
-from spectacle_utils import install_spectacle_fix
+from base.disks import mount_fs, format_fs, clear_mountpoints, nuke_drive, generate_fstab
+from base.pacman import make_pacman_more_fun, make_pacman_more_unsafe, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
+from base.admin import sudo_wheel, change_password, create_user, add_to_input, activate_systemd_service, install_nopasswd_pkrule
+from base.grub import install_grub, update_grub, patch_default_grub
+from apps.proprietary_drivers import try_install_broadcom, try_install_nvidia, copy_nvidia_prime_steam
+from apps.oobe import adjust_oobe_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
+from cosmetic.misc import copy_fastfetch_config, copy_hidden_apps, copy_kde_config
+from apps.geode import install_geode_installer
+from cosmetic.branding import install_gdl_xdg_icon
+from cosmetic.distro_release import patch_distro_release
+from cosmetic.sddm import patch_sddm_theme
+from cosmetic.plymouth import install_plymouth
+from base.system_configs import install_sayodevice_udev_rule, copy_sysctl_config
+from base.locale import generate_locales, generate_localtime
+from cosmetic.konsole import copy_konsole_config
+from cosmetic.fish import copy_fish_config
+from apps.gsr import install_gsrn, install_gsrui, copy_gsr_handler_stuff
+from apps.hiddify import install_hiddify
+from cosmetic.lact import fix_lact_appearance
+from apps.spectacle import install_spectacle_fix
 
 
 def failmsg():

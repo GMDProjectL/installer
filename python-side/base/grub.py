@@ -1,9 +1,9 @@
 import os
 from shared import shared_events
-from pacman_utils import pacman_install
-from process_utils import run_command_in_chroot
-from patching_utils import replace_str_in_file
-from resources_utils import copy_from_resources
+from base.pacman import pacman_install
+from base.process import run_command_in_chroot
+from base.patching import replace_str_in_file
+from base.resources import copy_from_resources
 
 
 def update_grub(root: str):

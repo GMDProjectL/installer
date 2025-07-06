@@ -1,9 +1,9 @@
 from shared import shared_events
-from github_utils import *
-from path_utils import get_user_autostart_dir
-from resources_utils import copy_from_resources
-from permission_utils import fix_user_permissions
-from process_utils import run_command
+from apps.github import *
+from base.path import get_user_autostart_dir
+from base.resources import copy_from_resources
+from base.permissions import fix_user_permissions
+from base.process import run_command
 
 def install_spectacle_fix(root: str, username: str) -> bool:
     try:

@@ -1,7 +1,7 @@
 from shared import shared_events
-from path_utils import get_user_applications_dir, get_user_hicolor_128_dir
-from permission_utils import fix_user_permissions
-from resources_utils import copy_from_resources
+from base.path import get_user_applications_dir, get_user_hicolor_128_dir
+from base.permissions import fix_user_permissions
+from base.resources import copy_from_resources
 
 
 def copy_gpu_icon(root: str, username: str):

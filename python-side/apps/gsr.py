@@ -1,10 +1,10 @@
 import traceback
 from shared import shared_events
-from github_utils import install_latest_gh_package
-from path_utils import get_user_applications_dir
-from patching_utils import replace_str_in_file
-from permission_utils import fix_user_permissions
-from resources_utils import copy_from_resources, copy_user_config_dir
+from apps.github import install_latest_gh_package
+from base.path import get_user_applications_dir
+from base.patching import replace_str_in_file
+from base.permissions import fix_user_permissions
+from base.resources import copy_from_resources, copy_user_config_dir
 
 def install_gsrn(root: str):
     shared_events.append('Installing GSRN...')
