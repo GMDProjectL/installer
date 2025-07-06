@@ -45,7 +45,7 @@
                 logs += '\n' + newEvents.join('\n');
             }
             await tick();
-            scrollToBottom(logsPre as HTMLElement);
+            // scrollToBottom(logsPre as HTMLElement);
 
             newEvents.forEach((content) => {
                 if (content.includes('Project GDL Installed!')) {

@@ -6,7 +6,6 @@ def run_command(command: list) -> CommandOutput:
     """
     Run a shell command with real-time output capture.
     """
-    shared_events.append(f'Running {' '.join(command)}')
 
     process = subprocess.Popen(
         command,
