@@ -152,9 +152,9 @@ def start_installation(installation_object: InstallInfo):
                 "electron34", "nodejs", "npm",
                 "pnpm", "base-devel",
                 "pamac", "adwaita-fonts", "yay",
-                "p7zip", "zip", "unzip", "unrar", 
+                "7zip", "zip", "unzip", "unrar", 
                 "fastfetch", "gpu-screen-recorder-gtk",
-                "sof-firmware", "fastfetch", "btop", "aptpac", "adw-gtk-theme"
+                "sof-firmware", "fastfetch", "btop", "adw-gtk-theme"
             ] + de_packages
         ):
         failmsg()
