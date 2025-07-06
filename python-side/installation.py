@@ -3,7 +3,7 @@ from gdltypes import InstallInfo
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from disk_utils import mount_fs, format_fs, clear_mountpoints, nuke_drive, generate_fstab
-from pacman_utils import make_pacman_more_fun, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
+from pacman_utils import make_pacman_more_fun, make_pacman_more_unsafe, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
 from admin_utils import sudo_wheel, change_password, create_user, add_to_input, activate_systemd_service, install_nopasswd_pkrule
 from grub_utils import install_grub, update_grub, patch_default_grub
 from proprietary_drivers_utils import try_install_broadcom, try_install_nvidia, copy_nvidia_prime_steam
@@ -84,6 +84,8 @@ def start_installation(installation_object: InstallInfo):
         return
     
     shared_progress.append('Done pacstrapping')
+
+    make_pacman_more_unsafe(installation_root) # I'm sorry it will be removed in the future
 
     fstab = generate_fstab(installation_root)
 

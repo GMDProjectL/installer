@@ -23,6 +23,12 @@ def make_pacman_more_fun(root: str):
     replace_str_in_file(root + '/etc/pacman.conf', '#Color', 'Color\nILoveCandy')
 
 
+def make_pacman_more_unsafe(root: str):
+    shared_events.append('Disabling signature checking...')
+
+    replace_str_in_file(root + '/etc/pacman.conf', 'Required DatabaseOptional', 'Never')
+
+
 def run_reflector(root: str = '', country: str = ''):
     shared_events.append('Running reflector to update mirrorlist...')
 
