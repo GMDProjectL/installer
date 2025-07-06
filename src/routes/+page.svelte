@@ -10,6 +10,8 @@
     import { onMount } from "svelte";
     import Swal from "sweetalert2";
 
+    installationPage.set(0);
+
     let internetConnectionAvailable: boolean | null = null;
 
     onMount(() => {
@@ -84,8 +86,6 @@
             if (!internetConnectionAvailable) {
                 return;
             }
-
-            $installationPage = $installationPage + 1;
 
             goto("/introduce-yourself");
         }}>

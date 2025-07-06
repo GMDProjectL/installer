@@ -14,6 +14,8 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
+    installationPage.set(5);
+
     let drives: DrivesResponse = {};
 
     onMount(async() => {
@@ -100,7 +102,6 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }
@@ -129,7 +130,6 @@
                     $installInfo.rootPartition = $installInfo.selectedDrive + '2';
                 }
             }
-            $installationPage = $installationPage + 1;
 
             goto(
                 $installInfo.method != 'manual-partitioning'

@@ -8,7 +8,8 @@
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
-    import { tick } from "svelte";
+
+    installationPage.set(4);
 
     $: canGoFurther = !(
         $installInfo.installSteam == true && !(
@@ -176,7 +177,6 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }
@@ -196,7 +196,6 @@
                     return;
                 }
             }
-            $installationPage = $installationPage + 1;
             goto("/partitioning");
         }}>
             { getString($installInfo.language, "next") }

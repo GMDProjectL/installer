@@ -8,6 +8,8 @@
     import { goto } from "$app/navigation";
     import { Carousel } from "flowbite-svelte";
 
+    installationPage.set(3);
+
     $: canGoFurther = true;
     const des = ["kde", "gnome"];
 
@@ -52,13 +54,11 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary disabled={!canGoFurther} on:click={() => {
-            $installationPage = $installationPage + 1;
             goto("/additional-software");
         }}>
             { getString($installInfo.language, "next") }

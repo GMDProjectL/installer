@@ -8,6 +8,7 @@
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
 
+    installationPage.set(1);
 
     $: canGoFurther = !(
         $installInfo.username == "" ||
@@ -29,7 +30,6 @@
             });
             return;
         }
-        $installationPage = $installationPage + 1;
         goto("/location");
     }
 </script>
@@ -83,7 +83,6 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }

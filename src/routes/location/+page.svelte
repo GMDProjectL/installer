@@ -13,6 +13,8 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import GdlInput from "$lib/components/input/GDLInput.svelte";
+
+    installationPage.set(2);
     
     let timezones: TimezonesResponse = {};
     let filter1: string = "";
@@ -86,7 +88,6 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }
@@ -104,7 +105,6 @@
                 });
                 return;
             }
-            $installationPage = $installationPage + 1;
             goto("/desktop-environment");
         }}>
             { getString($installInfo.language, "next") }

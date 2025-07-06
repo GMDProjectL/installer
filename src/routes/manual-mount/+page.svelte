@@ -6,12 +6,15 @@
         installInfo,
         bytesToReadable,
         type PartitionsResponse,
-        getPartitions
+        getPartitions,
+        installationPage
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
     import GdlButton from "$lib/components/button/GDLButton.svelte";
+
+    installationPage.set(5);
 
     let partitions: PartitionsResponse = {};
 

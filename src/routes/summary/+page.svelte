@@ -13,6 +13,8 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
+    installationPage.set(6);
+
     let drives: DrivesResponse = {};
 
     onMount(async() => {
@@ -139,7 +141,6 @@
 
     <SetupPageBottom>
         <GDLButton on:click={() => {
-            $installationPage = $installationPage - 1;
             history.back();
         }}>
             { getString($installInfo.language, "back") }
