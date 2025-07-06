@@ -1,6 +1,7 @@
 from shared import shared_events
 from process_utils import run_command, run_command_in_chroot
 from permission_utils import fix_user_permissions
+from resources_utils import copy_from_resources
 
 
 def sudo_wheel(root: str):
@@ -103,3 +104,9 @@ def activate_systemd_service(root: str, service: str, user: str = ''):
         return False
     
     return True
+
+
+def install_nopasswd_pkrule(root: str):
+    shared_events.append('Installing No Polkit Password rule...')
+
+    return copy_from_resources('40-pknopasswd.rules', f'{root}/etc/polkit-1/rules.d')

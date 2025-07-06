@@ -2,6 +2,20 @@ from shared import shared_events
 from process_utils import run_command
 
 
+def generate_fstab(root: str):
+    shared_events.append(f'Generating fstab for {root}')
+
+    result = run_command(['genfstab', '-U', root])
+
+    if result.returncode != 0:
+        shared_events.append(f'Failed to generate fstab for {root}: {result.stderr}')
+        return None
+
+    shared_events.append(f'Generated fstab for {root}: {result.stdout.strip()}')
+
+    return result.stdout.strip()
+
+
 def clear_mountpoints(root: str):
     shared_events.append(f'Unmounting {root} just in case...')
 

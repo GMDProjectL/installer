@@ -28,11 +28,13 @@
 
     $: canGoFurther = !($installInfo.timezoneRegion == '' || $installInfo.timezoneInfo == '');
 
+    const filterPredicate = (val: string, filter: string) => val.toLowerCase().includes(filter.toLowerCase());
+
     $: regionResults = Object.keys(timezones).sort()
-                .filter((val, index, arr) => val.toLowerCase().includes(filter1.toLowerCase()));
+                .filter((val) => filterPredicate(val, filter1));
     
     $: zoneResults = regionZones?.sort()
-                .filter((val, index, arr) => val.toLowerCase().includes(filter2.toLowerCase()));
+                .filter((val) => filterPredicate(val, filter2));
     
 </script>
 
@@ -48,7 +50,7 @@
         </span>
     </SetupPageTitle>
 
-    <div class="flex justify-around items-center px-20 w-full gap-10">
+    <div class="flex justify-center items-center px-20 w-full gap-40">
         <div class="w-96 h-96 flex flex-col gap-5 overflow-y-auto p-2 masked-overflow">
             <GdlInput inputType="text" placeholder={getString($installInfo.language, 'search-placeholder')} bind:value={filter1} />
             {#each regionResults as region}
@@ -60,7 +62,7 @@
             {/each}
         </div>
         <div class="w-96 h-96 flex flex-col gap-5 overflow-y-auto p-2 masked-overflow">
-            {#if regionZones.length == 0}
+            {#if regionZones?.length == 0}
                 <div class="text-center text-zinc-400 flex flex-col items-center justify-center h-full">
                     { getString($installInfo.language, "select-region") }
                 </div>

@@ -8,6 +8,7 @@
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
+    import Swal from "sweetalert2";
 
     let internetConnectionAvailable: boolean | null = null;
 
@@ -59,7 +60,23 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => reboot()}>
+        <GDLButton on:click={async() => {
+            const dialogResult = await Swal.fire({
+                title: getString($installInfo.language, "quit-question-title"),
+                text: getString($installInfo.language, "quit-question"),
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonText: getString($installInfo.language, "yes"),
+                cancelButtonText: getString($installInfo.language, "cancel"),
+                background: '#222',
+                color: 'white',
+                confirmButtonColor: '#333',
+            })
+
+            if (dialogResult.isConfirmed) {
+                reboot();
+            }
+        }}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
         <GDLButton secondary disabled={!internetConnectionAvailable} 

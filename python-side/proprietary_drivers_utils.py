@@ -1,6 +1,7 @@
 from shared import shared_events
 import subprocess
 from pacman_utils import pacman_install
+from resources_utils import copy_from_resources
 
 
 def get_lspci():
@@ -67,3 +68,9 @@ def try_install_broadcom(root: str):
 
     if not result:
         shared_events.append('Failed to install Broadcom drivers')
+
+
+def copy_nvidia_prime_steam(root: str):
+    shared_events.append('Copying NVIDIA PRIME Steam file...')
+    
+    return copy_from_resources('steam-prime.desktop', f'{root}/usr/share/applications')

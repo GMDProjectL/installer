@@ -2,57 +2,12 @@ import os
 from shared import shared_events
 from pacman_utils import pacman_install
 from admin_utils import mkinitpcio
-from process_utils import run_command, run_command_in_chroot
+from process_utils import run_command_in_chroot
 from patching_utils import add_mkinitcpio_hook, uncomment_line_in_file, replace_str_in_file
 from path_utils import get_resources_path, get_user_applications_dir, get_user_autostart_dir, get_user_config_dir
 from permission_utils import fix_user_permissions
 from resources_utils import copy_from_resources, copytree_from_resources, copy_user_config_dir
 from github_utils import install_latest_gh_package
-
-
-def generate_fstab(root: str):
-    shared_events.append(f'Generating fstab for {root}')
-
-    result = run_command(['genfstab', '-U', root])
-
-    if result.returncode != 0:
-        shared_events.append(f'Failed to generate fstab for {root}: {result.stderr}')
-        return None
-
-    shared_events.append(f'Generated fstab for {root}: {result.stdout.strip()}')
-
-    return result.stdout.strip()
-
-
-def generate_localtime(root: str, region: str, city: str):
-    shared_events.append(f'Linking zoneinfo for {root}...')
-
-    result = run_command_in_chroot(root, [
-        'ln', '-sf', f'/usr/share/zoneinfo/{region}/{city}', '/etc/localtime'
-    ])
-
-    if result.returncode != 0:
-        shared_events.append(f'Failed to link zoneinfo for {root}: {result.stderr}')
-        return False
-    
-    return True
-
-
-def generate_locales(root: str, locales: list):
-    shared_events.append(f'Uncommenting locales for {root}...')
-
-    for locale in locales:
-        if not locale.endswith('.UTF-8'):
-            continue
-        uncomment_line_in_file(f'{root}/etc/locale.gen', locale)
-    
-    result = run_command_in_chroot(root, ['locale-gen'])
-
-    if result.returncode != 0:
-        shared_events.append(f'Failed to generate locales for {root}: {result.stderr}')
-        return False
-    
-    return True
 
 
 def patch_distro_release(root: str):
@@ -132,12 +87,6 @@ def install_sayodevice_udev_rule(root: str):
     return copy_from_resources('70-sayo.rules', f'{root}/etc/udev/rules.d')
 
 
-def install_nopasswd_pkrule(root: str):
-    shared_events.append('Installing No Polkit Password rule...')
-
-    return copy_from_resources('40-pknopasswd.rules', f'{root}/etc/polkit-1/rules.d')
-
-
 def copy_sysctl_config(root: str):
     shared_events.append('Copying sysctl config...')
 
@@ -148,12 +97,6 @@ def copy_modprobe_config(root: str):
     shared_events.append('Copying modprobe config...')
 
     return copy_from_resources('gaming.conf', f'{root}/etc/modprobe.d')
-
-
-def copy_nvidia_prime_steam(root: str):
-    shared_events.append('Copying NVIDIA PRIME Steam file...')
-    
-    return copy_from_resources('steam-prime.desktop', f'{root}/usr/share/applications')
 
 
 def copy_hidden_apps(root: str, username: str):
@@ -174,7 +117,7 @@ def copy_fastfetch_config(root: str, username: str):
     fix_user_permissions(root, username)
 
 
-def copy_kde_config(root: str, username):
+def copy_kde_config(root: str, username: str):
     shared_events.append('Copying KDE config files...')
 
     user_config_dir = get_user_config_dir(root, username)
