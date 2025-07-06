@@ -33,6 +33,11 @@ def get_user_share_dir(root: str, username: str) -> str:
     make_user_dirs(root, username, path)
     return path
 
+def get_user_hicolor_128_dir(root: str, username: str) -> str:
+    path = os.path.join(get_user_share_dir(root, username), 'icons/hicolor/128x128/apps')
+    make_user_dirs(root, username, path)
+    return path
+
 def get_user_autostart_dir(root: str, username: str) -> str:
     path = os.path.join(get_user_config_dir(root, username), 'autostart')
     make_user_dirs(root, username, path)

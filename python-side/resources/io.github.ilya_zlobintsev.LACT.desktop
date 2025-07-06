@@ -1,0 +1,21 @@
+[Desktop Entry]
+Categories=System;
+Exec=lact gui
+GenericName=GPU Control Application
+Icon=gpu_icon
+Keywords=AMD;GPU;Radeon;
+NoDisplay=false
+Path=
+PrefersNonDefaultGPU=false
+StartupNotify=true
+Terminal=false
+TerminalOptions=
+Type=Application
+X-KDE-SubstituteUID=false
+X-KDE-Username=
+
+Name=GPU Control Panel
+Name[ru]=Панель управления видеокартой
+
+Comment=Control your graphics cards using LACT
+Comment[ru]=Управляйте вашей видеокартой используя LACT

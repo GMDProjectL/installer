@@ -17,7 +17,7 @@ from konsole_utils import copy_konsole_config
 from fish_utils import copy_fish_config
 from gsr_utils import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from hiddify_utils import install_hiddify
-
+from lact_utils import fix_lact_appearance
 from spectacle_fix import install_spectacle_fix
 
 
@@ -271,6 +271,7 @@ def start_installation(installation_object: InstallInfo):
             return
 
         activate_systemd_service(installation_root, "lactd")
+        fix_lact_appearance(installation_root, installation_object.username)
 
     shared_progress.append('Done Additional software')
     
