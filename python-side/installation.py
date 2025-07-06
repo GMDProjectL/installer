@@ -142,7 +142,7 @@ def start_installation(installation_object: InstallInfo):
     
     if installation_object.de == "kde":
         de_packages = [
-            "plasma", "sddm", "ark", "dolphin",
+            "plasma", "sddm", "ark", "dolphin", "kwin-effect-rounded-corners-git",
             "konsole", "kio-admin", "gwenview", "kate",
             "breeze5", "spectacle", "packagekit-qt6", "flatpak-kcm"
         ]
@@ -154,9 +154,10 @@ def start_installation(installation_object: InstallInfo):
                 "electron34", "nodejs", "npm",
                 "pnpm", "base-devel",
                 "pamac", "adwaita-fonts", "yay",
-                "7zip", "zip", "unzip", "unrar", 
+                "7zip", "zip", "unzip", "unrar",
                 "fastfetch", "gpu-screen-recorder-gtk",
-                "sof-firmware", "fastfetch", "btop", "adw-gtk-theme"
+                "sof-firmware", "fastfetch", "btop", "adw-gtk-theme",
+                "noto-fonts", "noto-fonts-emoji", "noto-fonts-cjk"
             ] + de_packages
         ):
         failmsg()

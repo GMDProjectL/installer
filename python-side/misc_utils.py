@@ -127,6 +127,7 @@ def copy_kde_config(root: str, username: str):
     
     copy_from_resources('.config/kdeglobals', user_config_dir)
     copy_from_resources('.config/kwinrulesrc', user_config_dir)
+    copy_from_resources('.config/kwinrc', user_config_dir)
     copy_from_resources('.config/kglobalshortcutsrc', user_config_dir)
     copy_from_resources('.config/plasmarc', user_config_dir)
     copy_from_resources('.config/plasma-org.kde.plasma.desktop-appletsrc', user_config_dir)
