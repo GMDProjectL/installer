@@ -90,7 +90,7 @@ def install_features(root: str, update_flags: UpdateFlags):
 
     if not update_flags.dontUpdateGrub:
         patch_distro_release(root)
-        patch_default_grub(root)
+        patch_default_grub(root, update_flags.doOsProber)
         update_grub(root)
         
         shared_progress.append('Done GRUB')
@@ -124,7 +124,7 @@ def install_features(root: str, update_flags: UpdateFlags):
             if update_flags.vulkanIntel:
                 pacman_install(root, ["lib32-vulkan-intel", "vulkan-intel"])
             
-            pacman_install(update_flags, ["steam"])
+            pacman_install(root, ["steam"])
 
             if update_flags.vulkanNvidia:
                 copy_nvidia_prime_steam(root)

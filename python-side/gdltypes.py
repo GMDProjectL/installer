@@ -18,6 +18,7 @@ class FeaturesInfo:
     installLact: bool
     fromUpdate: bool
     username: str
+    doOsProber: bool
 
 @dataclass
 class InstallInfo(FeaturesInfo):

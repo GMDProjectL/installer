@@ -16,6 +16,7 @@ type FeaturesInfo = {
     installLact: boolean,
     de: string,
     username: string,
+    doOsProber: boolean
 }
 
 type InstallInfo = FeaturesInfo & {
@@ -63,7 +64,8 @@ let installInfo = writable<InstallInfo>({
     setupCachyosKernel: true,
     runRussianReflector: false,
     installLact: true,
-    de: 'kde'
+    de: 'kde',
+    doOsProber: true
 });
 
 let updateInfo = writable<UpdateFlags>({
@@ -83,7 +85,8 @@ let updateInfo = writable<UpdateFlags>({
     installLact: true,
     de: 'kde',
     dontCopyKde: false,
-    dontUpdateGrub: false
+    dontUpdateGrub: false,
+    doOsProber: true
 });
 
 export default installInfo;  // Export the store

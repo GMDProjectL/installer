@@ -77,5 +77,6 @@
     "dont-copy-kde-config": "Do not install default KDE settings",
     "dont-update-grub": "Do not update GRUB",
     "features": "Features",
-    "updating": "Updating..."
+    "updating": "Updating...",
+    "detect-other-os": "Detect other operating systems (e.g. Windows or something else)"
 }

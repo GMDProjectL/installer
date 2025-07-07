@@ -14,6 +14,14 @@
     <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2 outline-none pt-16" style="height: 70vh;">
         {@render children()}
         <div class="flex items-center gap-5">
+            <input id="doOsProber" class="invert grayscale scale-150" type="checkbox" 
+                bind:checked={$installInfo.doOsProber} />
+            <label for="doOsProber" class="flex items-center gap-4">
+                { getString($installInfo.language, "detect-other-os") }
+                <Icon icon="icomoon-free:windows" />
+            </label>
+        </div>
+        <div class="flex items-center gap-5">
             <input id="multilib" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.enableMultilibRepo} />
             <label for="multilib" class="flex items-center gap-4">

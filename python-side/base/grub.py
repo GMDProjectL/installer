@@ -36,7 +36,7 @@ def install_grub(root: str):
     return True
 
 
-def patch_default_grub(root: str):
+def patch_default_grub(root: str, do_os_prober: bool):
     shared_events.append('Patching default grub...')
 
     pacman_install(root, ['os-prober', 'grub-theme-vimix'])
@@ -49,5 +49,12 @@ def patch_default_grub(root: str):
     replace_str_in_file(root + '/etc/default/grub', 'GRUB_DISTRIBUTOR="Arch"', 'GRUB_DISTRIBUTOR="ProjectGDL"')
     replace_str_in_file(root + '/etc/default/grub', 'loglevel=3 quiet', 'loglevel=3 quiet splash radeon.dpm=0 nmi_watchdog=0 mitigations=off tsc=reliable clocksource=tsc no_debug_objects dma_debug=off highres=on no_timer_check no-kvmclock nomca nomce nosoftlockup nowatchdog powersave=off selinux=0 apparmor=0')
     replace_str_in_file(root + '/etc/default/grub', '#GRUB_BACKGROUND="/path/to/wallpaper"', 'GRUB_BACKGROUND="/usr/share/gdlbg/pgd-bg.png"')
-    replace_str_in_file(root + '/etc/default/grub', '#GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=false')
+    
+    replace_str_in_file(root + '/etc/default/grub', '#GRUB_DISABLE_OS_PROBER=', 'GRUB_DISABLE_OS_PROBER=')
+
+    if do_os_prober:
+        replace_str_in_file(root + '/etc/default/grub', 'GRUB_DISABLE_OS_PROBER=true', 'GRUB_DISABLE_OS_PROBER=false')
+    else:
+        replace_str_in_file(root + '/etc/default/grub', 'GRUB_DISABLE_OS_PROBER=false', 'GRUB_DISABLE_OS_PROBER=true')
+    
     replace_str_in_file(root + '/etc/default/grub', 'GRUB_GFXMODE=auto', 'GRUB_GFXMODE=1920x1080')

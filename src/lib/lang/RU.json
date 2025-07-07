@@ -249,5 +249,6 @@
     "dont-copy-kde-config": "Не устанавливать настройки KDE по умолчанию",
     "dont-update-grub": "Не обновлять GRUB",
     "features": "Фичи",
-    "updating": "Обновление..."
+    "updating": "Обновление...",
+    "detect-other-os": "Обнаруживать другие операционные систему (например, Windows)"
 }
