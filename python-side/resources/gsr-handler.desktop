@@ -5,6 +5,7 @@ StartupNotify=false
 Type=Application
 Icon=/home/myuser/.local/share/applications/com.dec05eba.gpu_screen_recorder.png
 Actions=toggle-show;toggle-record;toggle-replay;replay-save;replay-save-1-min;replay-save-10-min;
+Categories=AudioVideo;
 
 [Desktop Action toggle-show]
 Exec=gsr-ui-cli toggle-show
