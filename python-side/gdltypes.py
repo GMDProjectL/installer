@@ -19,6 +19,7 @@ class FeaturesInfo:
     fromUpdate: bool
     username: str
 
+@dataclass
 class InstallInfo(FeaturesInfo):
     language: str
     computerName: str

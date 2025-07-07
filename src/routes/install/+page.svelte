@@ -36,7 +36,7 @@
     const startInstallationOnClient = () => {
         if (!pbVisible) {
             if (data.isUpdate) {
-                startUpdate($updateInfo);
+                startUpdate({...$installInfo, ...$updateInfo});
             }
             else {
                 startInstallation($installInfo);

@@ -41,7 +41,6 @@ def install_features(root: str, update_flags: UpdateFlags):
     if not pacman_install(
             root, 
             [
-                "grub", "efibootmgr", 
                 "electron34", "nodejs", "npm",
                 "pnpm", "base-devel",
                 "pamac", "adwaita-fonts", "yay",

@@ -135,10 +135,25 @@ def start_installation(installation_object: InstallInfo):
         failmsg()
         return
     
-    update_flags = UpdateFlags(**installation_object)
-    update_flags.dontCopyKde = False
-    update_flags.fromUpdate = False
-    update_flags.username = installation_object.username
+    update_flags = UpdateFlags(
+        installation_object.de,
+        installation_object.setupCachyosKernel,
+        installation_object.enableMultilibRepo,
+        installation_object.installSteam,
+        installation_object.installWine,
+        installation_object.installWinetricks,
+        installation_object.vulkanNvidia,
+        installation_object.vulkanAmd,
+        installation_object.vulkanIntel,
+        installation_object.installGnomeDisks,
+        installation_object.installIntelMedia,
+        installation_object.setupBluetooth,
+        installation_object.runRussianReflector,
+        installation_object.installLact,
+        False,
+        installation_object.username,
+        False, False
+    )
 
     install_features(installation_root, update_flags)
     

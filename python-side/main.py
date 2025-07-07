@@ -61,7 +61,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             body = self.rfile.read(content_length)
             install_object = json.loads(body)
             self.wfile.write(json.dumps({'ok': True}).encode())
-            threading.Thread(target=start_safe_installation, args=(InstallInfo(**install_object),)).start()
+            threading.Thread(target=start_safe_installation, args=(
+                InstallInfo(fromUpdate=False, **install_object)
+            ,)).start()
         
         if parsed_path == '/update':
             content_length = int(self.headers['Content-Length'])
