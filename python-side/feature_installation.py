@@ -20,6 +20,7 @@ from apps.hiddify import install_hiddify
 from apps.spectacle import install_spectacle_fix
 from apps.gsr import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from apps.geode import install_geode_installer
+from apps.gdl_updater import install_gdl_updater
 
 
 def install_features(root: str, update_flags: UpdateFlags):
@@ -198,6 +199,7 @@ def install_features(root: str, update_flags: UpdateFlags):
     install_nopasswd_pkrule(root)
     copy_sysctl_config(root)
     install_hiddify(root)
+    install_gdl_updater(root)
 
     shared_progress.append('Done udev, polkit, sysctl and hiddify, fixed spectacle.')
 
