@@ -9,7 +9,7 @@ import type { InstallInfo } from "./stores/install-info";
 import { 
     getTimezones, getDrives, getPartitions, getUsername, startUpdate,
     checkInternetConnection, startInstallation, getInstallationEvents,
-    reboot, getInstallationProgress, getSystemLanguage
+    reboot, getInstallationProgress, getSystemLanguage, getDE
 } from "./api";
 import type { TimezonesResponse, DrivesResponse, PartitionsResponse } from "./api";
 import bytesToReadable from "./utils/size";
@@ -17,7 +17,7 @@ import type InstallationProgress from "./stores/install-progress";
 
 
 export { 
-    getLanguageStrings, getString, 
+    getLanguageStrings, getString, getDE,
     GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, AdditionalFeaturesContent,
     GDLInput,
     installInfo, installationPage, reboot, autoscroll, getSystemLanguage, startUpdate,

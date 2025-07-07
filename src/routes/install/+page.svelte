@@ -83,7 +83,7 @@
 
         progressAnimationInterval = setInterval(async() => {
             pbVisible = true;
-        }, 1000);
+        }, 1000) as any as number;
 
         return () => {
             clearInterval(eventCheckerInterval);

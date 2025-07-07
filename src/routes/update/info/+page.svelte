@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { 
-        getString, installInfo,
+        getString, installInfo, getDE,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installationPage, getSystemLanguage, getUsername, 
         AdditionalFeaturesContent
@@ -14,8 +14,12 @@
     onMount(async() => {
         const lang = await getSystemLanguage();
         const username = await getUsername();
+        const de = await getDE();
+
         $installInfo.language = lang;
         $updateInfo.username = username;
+        $installInfo.de = de;
+        $updateInfo.de = de;
     })
 
     installationPage.set(1);

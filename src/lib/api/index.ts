@@ -108,9 +108,16 @@ const getUsername = async(): Promise<string> => {
     return response["username"] as string
 }
 
+const getDE = async(): Promise<string> => {
+    const request = await fetch('/get-de');
+    const response = await request.json();
+
+    return response["de"] as string
+}
+
 
 export { 
-    getTimezones, getDrives, getPartitions, getUsername,
+    getTimezones, getDrives, getPartitions, getUsername, getDE,
     checkInternetConnection, startInstallation, getInstallationEvents, startUpdate,
     reboot, getInstallationProgress, getSystemLanguage
 }
