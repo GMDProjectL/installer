@@ -1,8 +1,9 @@
+import os
 import traceback
 from shared import shared_events
 from base.pacman import pacman_remove
 from apps.github import install_latest_gh_package
-from base.path import get_user_applications_dir
+from base.path import get_user_applications_dir, get_user_config_dir
 from base.patching import replace_str_in_file
 from base.permissions import fix_user_permissions
 from base.resources import copy_from_resources, copy_user_config_dir
@@ -41,14 +42,18 @@ def copy_gsr_handler_stuff(root: str, username: str):
     shared_events.append('Copying GSR config files...')
 
     user_app_dir = get_user_applications_dir(root, username)
+    user_config_dir = get_user_config_dir(root, username)
+    gsr_ui_config_path = os.path.join(user_config_dir, 'gpu-screen-recorder/config_ui')
 
     copy_from_resources('gsr-handler.desktop', user_app_dir)
     copy_from_resources('com.dec05eba.gpu_screen_recorder.png', user_app_dir)
 
     replace_str_in_file(f'{user_app_dir}/gsr-handler.desktop', 'myuser', username)
 
-    if root != '/':
+    if not os.path.exists(gsr_ui_config_path):
         copy_user_config_dir(root, 'gpu-screen-recorder', username)
+    else:
+        replace_str_in_file(gsr_ui_config_path, 'enable_hotkeys', 'disable_hotkeys')
         
     copy_from_resources('hidden_apps_kde/com.dec05eba.gpu_screen_recorder.desktop', user_app_dir)
 
