@@ -34,7 +34,7 @@ def install_features(root: str, update_flags: UpdateFlags):
     if update_flags.de == "kde":
         de_packages = [
             "plasma", "sddm", "ark", "dolphin", "kwin-effect-rounded-corners-git",
-            "konsole", "kio-admin", "gwenview", "kate",
+            "konsole", "kio-admin", "gwenview", "kate", "plasma5-integration",
             "breeze5", "spectacle", "packagekit-qt6", "flatpak-kcm"
         ]
     
