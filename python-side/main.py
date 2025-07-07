@@ -1,10 +1,10 @@
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import json
 from utils import check_internet_connection, get_drives, get_partitions, get_timezones
-from installation import start_safe_installation
+from installation import start_safe_installation, start_safe_update
 import threading
 from shared import shared_progress,shared_events 
-from gdltypes import InstallInfo
+from gdltypes import InstallInfo, UpdateFlags
 import os
 import systemd.daemon
 
@@ -27,6 +27,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         if parsed_path == '/get_drives':
             self.wfile.write(json.dumps(get_drives()).encode())
+        
+        if parsed_path == '/get_system_language':
+            self.wfile.write(json.dumps({"lang": os.getenv("LANG")}).encode())
 
         if parsed_path.startswith('/get_partitions/'):
             drive = parsed_path.split('/')[-1]
@@ -59,6 +62,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             install_object = json.loads(body)
             self.wfile.write(json.dumps({'ok': True}).encode())
             threading.Thread(target=start_safe_installation, args=(InstallInfo(**install_object),)).start()
+        
+        if parsed_path == '/update':
+            content_length = int(self.headers['Content-Length'])
+            body = self.rfile.read(content_length)
+            update_flags = json.loads(body)
+            self.wfile.write(json.dumps({'ok': True}).encode())
+            threading.Thread(target=start_safe_update, args=(UpdateFlags(
+                fromUpdate=True,
+                **update_flags
+            ),)).start()
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):

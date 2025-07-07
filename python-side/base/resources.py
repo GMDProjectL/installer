@@ -23,7 +23,7 @@ def copytree_from_resources(src: str, dst: str) -> bool:
     res_dir = get_resources_path()
     
     try:
-        shutil.copytree(os.path.join(res_dir, src), os.path.join(dst, src))
+        shutil.copytree(os.path.join(res_dir, src), os.path.join(dst, src), dirs_exist_ok=True)
         return True
     except Exception as e:
         shared_events.append(f'Failed to copy directory {src}: {e}')

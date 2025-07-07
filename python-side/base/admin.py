@@ -90,8 +90,7 @@ def activate_systemd_service(root: str, service: str, user: str = ''):
         ])
         
         if result.returncode != 0:
-            shared_events.append(f'Failed to activate {service}: {result.stderr}')
-            return False
+            shared_events.append(f'Failed to activate {service}: {result.stderr} (is service already active?)')
         
         fix_user_permissions(root, user)
         

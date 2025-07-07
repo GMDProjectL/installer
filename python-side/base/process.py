@@ -48,4 +48,8 @@ def run_command_in_chroot(root: str, command: list) -> CommandOutput:
     Run a shell command in the chroot environment and return the exit code, stdout, and stderr.
     """
     full_command = ['arch-chroot', root] + command
+
+    if root == '/':
+        return run_command(command)
+
     return run_command(full_command)

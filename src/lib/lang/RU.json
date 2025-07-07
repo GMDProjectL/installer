@@ -243,5 +243,10 @@
     "range-russian-mirrors": "Российские зеркала",
     "install-lact": "Установить LACT (Панель управления видюхой)",
     "search-placeholder": "Поиск...",
-    "select-region": "Выберите регион слева"
+    "select-region": "Выберите регион слева",
+    "update-title": "Обновление системы",
+    "update-body": "Вышло новое обновление системы, и Вам сейчас стоит его установить.",
+    "dont-copy-kde-config": "Не устанавливать настройки KDE по умолчанию",
+    "dont-update-grub": "Не обновлять GRUB",
+    "features": "Фичи"
 }

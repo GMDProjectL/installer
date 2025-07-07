@@ -1,4 +1,4 @@
-import type { InstallInfo } from "$lib/stores/install-info";
+import type { InstallInfo, UpdateFlags } from "$lib/stores/install-info";
 import type { InstallationProgress } from "$lib/stores/install-progress";
 
 const API_BASE_PATH = 'http://localhost:669'
@@ -65,6 +65,17 @@ const startInstallation = async(installation: InstallInfo) => {
     });
 }
 
+const startUpdate = async(updateInfo: UpdateFlags) => {
+    await fetch(API_BASE_PATH + '/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updateInfo)
+    });
+}
+
+
 const getInstallationEvents = async(): Promise<Array<string>> => {
     const request = await fetch(API_BASE_PATH + '/get_installation_events');
     const response = await request.json();
@@ -83,10 +94,24 @@ const reboot = async() => {
     const request = await fetch('/reboot');
 }
 
+const getSystemLanguage = async(): Promise<string> => {
+    const request = await fetch(API_BASE_PATH + '/get_system_language');
+    const response = await request.json();
+
+    return (response["lang"] as string).slice(0, 2)
+}
+
+const getUsername = async(): Promise<string> => {
+    const request = await fetch('/get-username');
+    const response = await request.json();
+
+    return response["username"] as string
+}
+
 
 export { 
-    getTimezones, getDrives, getPartitions, 
-    checkInternetConnection, startInstallation, getInstallationEvents,
-    reboot, getInstallationProgress
+    getTimezones, getDrives, getPartitions, getUsername,
+    checkInternetConnection, startInstallation, getInstallationEvents, startUpdate,
+    reboot, getInstallationProgress, getSystemLanguage
 }
 export type { TimezonesResponse, DrivesResponse, PartitionsResponse }

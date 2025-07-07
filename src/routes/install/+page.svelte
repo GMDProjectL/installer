@@ -3,16 +3,17 @@
     import { 
         getString, 
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
-        installInfo,
+        installInfo, updateInfo,
         startInstallation,
         getInstallationEvents,
         installProgress,
         reboot,
-        autoscroll
+        autoscroll, startUpdate
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
     import { onMount, tick } from "svelte";
+    import type { PageProps } from './$types';
 
 
     let logsPre: unknown;
@@ -24,6 +25,8 @@
     let progressAnimationInterval = 0;
     let logs = '-----------------------------------------------------------';
 
+    export let data: { isUpdate: boolean };
+
     const scrollToBottom = async (node: HTMLElement) => {
         if (!scrollLocked) return;
 
@@ -32,7 +35,12 @@
 
     const startInstallationOnClient = () => {
         if (!pbVisible) {
-            startInstallation($installInfo);
+            if (data.isUpdate) {
+                startUpdate($updateInfo);
+            }
+            else {
+                startInstallation($installInfo);
+            }
         }
     };
 

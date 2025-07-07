@@ -1,31 +1,15 @@
 import traceback
-from gdltypes import InstallInfo
+from gdltypes import InstallInfo, UpdateFlags
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from base.disks import mount_fs, format_fs, clear_mountpoints, nuke_drive, generate_fstab
-from base.pacman import make_pacman_more_fun, make_pacman_more_unsafe, pacman_remove, pacstrap, pacman_install, enable_multilib, connect_chaotic_aur, run_reflector
-from base.admin import sudo_wheel, change_password, create_user, add_to_input, activate_systemd_service, install_nopasswd_pkrule
-from base.grub import install_grub, update_grub, patch_default_grub
-from apps.proprietary_drivers import try_install_broadcom, try_install_nvidia, copy_nvidia_prime_steam
-from apps.oobe import adjust_oobe_permissions, clone_oobe, create_oobe_autostart, install_oobe_dependencies
-from cosmetic.misc import copy_fastfetch_config, copy_hidden_apps, copy_kde_config
-from apps.geode import install_geode_installer
-from cosmetic.branding import install_gdl_xdg_icon
-from cosmetic.distro_release import patch_distro_release
-from cosmetic.sddm import patch_sddm_theme
-from cosmetic.plymouth import install_plymouth
-from base.system_configs import install_sayodevice_udev_rule, copy_sysctl_config
+from base.pacman import make_pacman_more_unsafe, pacstrap, connect_chaotic_aur, run_reflector
+from base.admin import sudo_wheel, change_password, create_user, add_to_input
+from base.grub import install_grub
 from base.locale import generate_locales, generate_localtime
-from cosmetic.konsole import copy_konsole_config
-from cosmetic.fish import copy_fish_config
-from apps.gsr import install_gsrn, install_gsrui, copy_gsr_handler_stuff
-from apps.hiddify import install_hiddify
-from cosmetic.lact import fix_lact_appearance
-from apps.spectacle import install_spectacle_fix
+from utils import failmsg
+from feature_installation import install_features
 
-
-def failmsg():
-    shared_events.append(f'Fatal error. Installation failed.')
 
 # 30 STEPS IN THIS TIME. 15:50 2025-04-05
 def start_installation(installation_object: InstallInfo):
@@ -125,6 +109,20 @@ def start_installation(installation_object: InstallInfo):
         return
     
     shared_progress.append('Done root')
+    
+    if not create_user(installation_root, installation_object.username, installation_object.password):
+        failmsg()
+        return
+    
+    shared_progress.append('Done user')
+
+    add_to_input(installation_root, installation_object.username)
+    
+    if not sudo_wheel(installation_root):
+        failmsg()
+        return
+    
+    shared_progress.append('Done sudo')
 
     
     if not connect_chaotic_aur(installation_root):
@@ -133,239 +131,37 @@ def start_installation(installation_object: InstallInfo):
     
     shared_progress.append('Done chaotic')
     
-
-    de_packages = []
-
-    if installation_object.de == "gnome":
-        de_packages = [
-            "gdm", "gnome", "gnome-tweaks", 
-            "gnome-photos", "dconf", "dconf-editor"
-        ]
-    
-    if installation_object.de == "kde":
-        de_packages = [
-            "plasma", "sddm", "ark", "dolphin", "kwin-effect-rounded-corners-git",
-            "konsole", "kio-admin", "gwenview", "kate",
-            "breeze5", "spectacle", "packagekit-qt6", "flatpak-kcm"
-        ]
-    
-    if not pacman_install(
-            installation_root, 
-            [
-                "grub", "efibootmgr", 
-                "electron34", "nodejs", "npm",
-                "pnpm", "base-devel",
-                "pamac", "adwaita-fonts", "yay",
-                "7zip", "zip", "unzip", "unrar",
-                "fastfetch", "gpu-screen-recorder-gtk",
-                "sof-firmware", "fastfetch", "btop", "adw-gtk-theme",
-                "noto-fonts", "noto-fonts-emoji", "noto-fonts-cjk"
-            ] + de_packages
-        ):
-        failmsg()
-        return
-    
-    shared_progress.append('Done DE')
-    
-    if not create_user(installation_root, installation_object.username, installation_object.password):
-        failmsg()
-        return
-    
-    shared_progress.append('Done user')
-    
-    if not sudo_wheel(installation_root):
-        failmsg()
-        return
-    
-    shared_progress.append('Done sudo')
-    
-    if installation_object.de == 'kde':
-        if not activate_systemd_service(installation_root, "sddm.service"):
-            failmsg()
-            return
-    
-    if installation_object.de == 'gnome':
-        if not activate_systemd_service(installation_root, "gdm.service"):
-            failmsg()
-            return
-        
-    shared_progress.append('Done DM')
-    
-    activate_systemd_service(installation_root, "NetworkManager")
-
-    shared_progress.append('Done Network')
-
-    if installation_object.setupCachyosKernel:
-        if not pacman_install(installation_root, ["linux-cachyos", "linux-cachyos-headers"]):
-            failmsg()
-            return
-        
-        pacman_remove(installation_root, ["linux", "linux-headers"])
-        
-        shared_progress.append('CachyOS Kernel installed')
-        
-    
-    try_install_nvidia(installation_root)
-
-    try_install_broadcom(installation_root)
-
-    shared_progress.append('Done proprietary')
-
-    patch_distro_release(installation_root)
-    
     if not install_grub(installation_root):
         failmsg()
         return
     
-    patch_default_grub(installation_root)
+    update_flags = UpdateFlags(**installation_object)
+    update_flags.dontCopyKde = False
+    update_flags.fromUpdate = False
+    update_flags.username = installation_object.username
 
-    update_grub(installation_root)
+    install_features(installation_root, update_flags)
     
-    shared_progress.append('Done GRUB')
+    shared_events.append('Project GDL Installed!')
 
-    patch_sddm_theme(installation_root)
 
-    shared_progress.append('Done SDDM')
-
-    install_gdl_xdg_icon(installation_root)
-
-    shared_progress.append('Done Branding')
-
-    if pacman_install(installation_root, ["power-profiles-daemon"]):
-        activate_systemd_service(installation_root, "power-profiles-daemon")
-
-    shared_progress.append('Done Power')
-
-    if installation_object.enableMultilibRepo:
-        enable_multilib(installation_root)
-
-        if installation_object.installSteam:
-            if installation_object.vulkanNvidia:
-                pacman_install(installation_root, ["lib32-nvidia-utils", "nvidia-utils"])
-            
-            if installation_object.vulkanAmd:
-                pacman_install(installation_root, [
-                    "lib32-amdvlk", "amdvlk",
-                    "lib32-vulkan-radeon", "vulkan-radeon"
-                ])
-            
-            if installation_object.vulkanIntel:
-                pacman_install(installation_root, ["lib32-vulkan-intel", "vulkan-intel"])
-            
-            pacman_install(installation_root, ["steam"])
-
-            if installation_object.vulkanNvidia:
-                copy_nvidia_prime_steam(installation_root)
-        
-        if installation_object.installWine:
-            pacman_install(installation_root, ["wine"])
-
-            if installation_object.installWinetricks:
-                pacman_install(installation_root, ["winetricks"])
-
-    shared_progress.append('Done Multilib')
-        
-    if installation_object.installGnomeDisks:
-        pacman_install(installation_root, ["gnome-disk-utility"])
-    
-    if installation_object.installIntelMedia:
-        pacman_install(installation_root, ["intel-media-driver", "intel-media-sdk"])
-    
-    if installation_object.installLact:
-        if not pacman_install(installation_root, ["lact"]):
-            failmsg()
-            return
-
-        activate_systemd_service(installation_root, "lactd")
-        fix_lact_appearance(installation_root, installation_object.username)
-
-    shared_progress.append('Done Additional software')
-    
-    shared_events.append('Setting up default KDE settings...')
-
-    copy_kde_config(installation_root, installation_object.username)
-    copy_hidden_apps(installation_root, installation_object.username)
-    add_to_input(installation_root, installation_object.username)
-
-    install_plymouth(installation_root)
-
-    if installation_object.setupBluetooth:
-        pacman_install(installation_root, ["bluez"])
-        activate_systemd_service(installation_root, "bluetooth.service")
-    
-    shared_progress.append('Done BT')
-
-    if not clone_oobe(installation_root):
-        failmsg()
-        return
-    
-    shared_progress.append('Done OOBE')
-    
-    if not adjust_oobe_permissions(installation_root):
-        failmsg()
-        return
-    
-    shared_progress.append('Done Perms')
-    
-    if not install_oobe_dependencies(installation_root):
-        failmsg()
-        return
-    
-    shared_progress.append('Done Deps')
-    
-    if not adjust_oobe_permissions(installation_root):
-        failmsg()
-        return
-    
-    shared_progress.append('Done Perms')
-    
-    create_oobe_autostart(installation_root, installation_object.username)
-
-    install_sayodevice_udev_rule(installation_root)
-    install_nopasswd_pkrule(installation_root)
-    copy_sysctl_config(installation_root)
-    install_hiddify(installation_root)
-
-    shared_progress.append('Done udev, polkit, sysctl and hiddify, fixed spectacle.')
-
-    if installation_object.de == 'kde':
-        pacman_remove(installation_root, ['plasma-welcome'])
-
-        if not install_gsrn(installation_root):
-            failmsg()
-            return
-        
-        if not install_gsrui(installation_root):
-            failmsg()
-            return
-        
-        if not activate_systemd_service(installation_root, 'gpu-screen-recorder-ui', installation_object.username):
-            failmsg()
-            return
-        
-        if not copy_gsr_handler_stuff(installation_root, installation_object.username):
-            failmsg()
-            return
-        
-        install_spectacle_fix(installation_root, installation_object.username)
-        copy_konsole_config(installation_root, installation_object.username)
-
-    copy_fastfetch_config(installation_root, installation_object.username)
-    copy_fish_config(installation_root, installation_object.username)
-    make_pacman_more_fun(installation_root)
-
-    shared_progress.append('Done Terminal Ricing')
-
-    install_geode_installer(installation_root)
-
-    shared_progress.append('Done Geode')
-    
+def start_update_process(update_flags: UpdateFlags):
+    install_features('/', update_flags)
     shared_events.append('Project GDL Installed!')
 
 
 def start_safe_installation(installation_object: InstallInfo):
     try:
         start_installation(installation_object)
+    except Exception as e:
+        shared_events.append('An error occurred during installation: ' + traceback.format_exc())
+        print(traceback.format_exc())
+        failmsg()
+
+
+def start_safe_update(update_flags: UpdateFlags):
+    try:
+        start_update_process(update_flags)
     except Exception as e:
         shared_events.append('An error occurred during installation: ' + traceback.format_exc())
         print(traceback.format_exc())

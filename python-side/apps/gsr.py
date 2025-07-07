@@ -1,5 +1,6 @@
 import traceback
 from shared import shared_events
+from base.pacman import pacman_remove
 from apps.github import install_latest_gh_package
 from base.path import get_user_applications_dir
 from base.patching import replace_str_in_file
@@ -9,6 +10,8 @@ from base.resources import copy_from_resources, copy_user_config_dir
 def install_gsrn(root: str):
     shared_events.append('Installing GSRN...')
     try:
+        if root == '/':
+            pacman_remove(root, ['gpu-screen-recorder-notification']) # Prevents conflicts
         install_latest_gh_package(root, 'GMDProjectL/gpu-screen-recorder-notification', 'gsrn')
     except Exception as e:
         shared_events.append(f'Failed to install gsrn: {e.with_traceback()}')
@@ -19,6 +22,8 @@ def install_gsrn(root: str):
 def install_gsrui(root: str):
     shared_events.append('Installing GSR UI...')
     try:
+        if root == '/':
+            pacman_remove(root, ['gpu-screen-recorder-ui']) # Prevents conflicts
         install_latest_gh_package(root, 'GMDProjectL/gpu-screen-recorder-ui', 'gsrui')
     except Exception as e:
         print(traceback.format_exc())

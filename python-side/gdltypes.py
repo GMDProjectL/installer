@@ -1,19 +1,9 @@
 from dataclasses import dataclass
 
 @dataclass
-class InstallInfo:
-    language: str
-    username: str
-    computerName: str
-    password: str
-    password2: str
-    timezoneRegion: str
-    timezoneInfo: str
-    selectedDrive: str
-    method: str
-    bootPartition: str
-    rootPartition: str
-    formatBootPartition: bool
+class FeaturesInfo:
+    de: str
+    setupCachyosKernel: bool
     enableMultilibRepo: bool
     installSteam: bool
     installWine: bool
@@ -24,10 +14,29 @@ class InstallInfo:
     installGnomeDisks: bool
     installIntelMedia: bool
     setupBluetooth: bool
-    setupCachyosKernel: bool
     runRussianReflector: bool
     installLact: bool
-    de: str
+    fromUpdate: bool
+    username: str
+
+class InstallInfo(FeaturesInfo):
+    language: str
+    computerName: str
+    password: str
+    password2: str
+    timezoneRegion: str
+    timezoneInfo: str
+    selectedDrive: str
+    method: str
+    bootPartition: str
+    rootPartition: str
+    formatBootPartition: bool
+
+@dataclass
+class UpdateFlags(FeaturesInfo):
+    dontCopyKde: bool
+    dontUpdateGrub: bool
+    
 
 @dataclass
 class CommandOutput:

@@ -2,7 +2,10 @@ import requests
 import os
 import fcntl
 import struct
+from shared import shared_events
 
+def failmsg():
+    shared_events.append(f'Fatal error. Installation failed.')
 
 def get_timezones():
     timezones = {}

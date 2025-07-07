@@ -87,7 +87,7 @@ def pacstrap(root: str):
     shared_events.append('Starting pacstrap...')
     result = run_command([
         'pacstrap', '-K', root, 
-        'base', 'base-devel', 
+        'base', 'base-devel', 'arch-install-scripts',
         'linux', 'linux-firmware', 'linux-headers', 'dkms', 
         'vim', 'nano', 'sudo', 'fish', 
         'networkmanager', 'firefox'

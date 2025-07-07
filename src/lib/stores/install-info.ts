@@ -1,18 +1,6 @@
 import { writable } from "svelte/store";
 
-type InstallInfo = {
-    language: string,
-    username: string,
-    computerName: string,
-    password: string,
-    password2: string,
-    timezoneRegion: string,
-    timezoneInfo: string,
-    selectedDrive: string,
-    method: string,
-    bootPartition: string,
-    rootPartition: string,
-    formatBootPartition: boolean,
+type FeaturesInfo = {
     enableMultilibRepo: boolean,
     installSteam: boolean,
     installWine: boolean,
@@ -26,7 +14,27 @@ type InstallInfo = {
     setupCachyosKernel: boolean,
     runRussianReflector: boolean,
     installLact: boolean,
-    de: string
+    de: string,
+    username: string,
+}
+
+type InstallInfo = FeaturesInfo & {
+    language: string,
+    computerName: string,
+    password: string,
+    password2: string,
+    timezoneRegion: string,
+    timezoneInfo: string,
+    selectedDrive: string,
+    method: string,
+    bootPartition: string,
+    rootPartition: string,
+    formatBootPartition: boolean
+}
+
+type UpdateFlags = FeaturesInfo & {
+    dontCopyKde: boolean
+    dontUpdateGrub: boolean
 }
 
 let installInfo = writable<InstallInfo>({
@@ -58,5 +66,26 @@ let installInfo = writable<InstallInfo>({
     de: 'kde'
 });
 
+let updateInfo = writable<UpdateFlags>({
+    username: '',
+    enableMultilibRepo: false,
+    installSteam: false,
+    installWine: false,
+    installWinetricks: false,
+    vulkanNvidia: false,
+    vulkanAmd: false,
+    vulkanIntel: false,
+    installGnomeDisks: false,
+    installIntelMedia: false,
+    setupBluetooth: false,
+    setupCachyosKernel: true,
+    runRussianReflector: false,
+    installLact: true,
+    de: 'kde',
+    dontCopyKde: false,
+    dontUpdateGrub: false
+});
+
 export default installInfo;  // Export the store
-export type { InstallInfo };  // Export the type definition
+export { updateInfo }
+export type { InstallInfo, UpdateFlags };  // Export the type definition

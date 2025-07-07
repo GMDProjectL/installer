@@ -1,3 +1,4 @@
+import os
 from shared import shared_events
 from apps.github import *
 from base.path import get_user_autostart_dir
@@ -11,6 +12,9 @@ def install_spectacle_fix(root: str, username: str) -> bool:
         release_result = get_latest_github_release("GMDProjectL/spectacle-fix")
         release_binary_url = get_github_rb_url(release_result)
         dest = root + "/usr/bin/spectacle_fix"
+
+        if root == '/':
+            os.system('killall spectacle_fix')
         
         download_file(release_binary_url, dest)
 
