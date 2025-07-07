@@ -152,6 +152,7 @@ def start_installation(installation_object: InstallInfo):
         installation_object.installLact,
         False,
         installation_object.username,
+        installation_object.doOsProber,
         False, False
     )
 
