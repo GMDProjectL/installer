@@ -1,7 +1,7 @@
 import os
 from shared import shared_events
 from base.process import run_command_in_chroot, run_command
-from base.patching import replace_str_in_file
+from base.patching import replace_str_in_file, uncomment_line_in_file
 
 
 def append_mirrorlist(root: str):
@@ -27,6 +27,26 @@ def make_pacman_more_unsafe(root: str):
     shared_events.append('Disabling signature checking...')
 
     replace_str_in_file(root + '/etc/pacman.conf', 'Required DatabaseOptional', 'Never')
+
+
+def blacklist_package(root: str, package: str):
+    shared_events.append(f'Blacklisting {package} package...')
+
+    uncomment_line_in_file(root + '/etc/pacman.conf', '#IgnorePkg')
+
+    with open(root + '/etc/pacman.conf', 'r') as f:
+        pacman_contents = f.read()
+    
+    new_pacman_content = ''
+
+    for line in pacman_contents.splitlines():
+        if 'IgnorePkg' in line and '=' in line and package not in line.split():
+            new_pacman_content += line + ' ' + package + '\n'
+        else:
+            new_pacman_content += line + '\n'
+    
+    with open(root + '/etc/pacman.conf', 'w') as f:
+        f.write(new_pacman_content)
 
 
 def run_reflector(root: str = '', country: str = ''):

@@ -2,7 +2,7 @@ from gdltypes import UpdateFlags
 from utils import failmsg
 from shared import shared_progress, shared_events
 
-from base.pacman import pacman_install, pacman_remove, enable_multilib, make_pacman_more_fun
+from base.pacman import pacman_install, pacman_remove, enable_multilib, make_pacman_more_fun, blacklist_package
 from base.admin import activate_systemd_service, install_nopasswd_pkrule
 from base.grub import patch_default_grub, update_grub
 from base.system_configs import install_sayodevice_udev_rule, copy_sysctl_config
@@ -203,6 +203,9 @@ def install_features(root: str, update_flags: UpdateFlags):
 
     if update_flags.de == 'kde':
         pacman_remove(root, ['plasma-welcome'])
+
+        blacklist_package(root, 'gpu-screen-recorder-notification-git')
+        blacklist_package(root, 'gpu-screen-recorder-ui-git')
 
         if not install_gsrn(root):
             failmsg()
