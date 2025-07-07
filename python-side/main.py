@@ -72,7 +72,25 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
             self.wfile.write(json.dumps({'ok': True}).encode())
 
             update_flags = UpdateFlags(
-                "kde", False, False, False, False, False, False, False, False, False, False, False, False, False, True, "myuser", False, False
+                "kde", 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                False, 
+                True, 
+                "myuser", 
+                False, 
+                False,
+                False
             )
             
             for flag in update_flags_json.keys():
