@@ -1,5 +1,6 @@
 import subprocess
 import time
+import sys
 
 
 def wait_for_server():
@@ -11,7 +12,10 @@ def wait_for_server():
             time.sleep(1)
 
 def launch_electron():
-    subprocess.run(['electron34', 'http://localhost:4173'])
+    if '--update' in sys.argv:
+        subprocess.run(['electron34', 'http://localhost:4173/update'])
+    else:
+        subprocess.run(['electron34', 'http://localhost:4173'])
 
 def main():
     wait_for_server()
