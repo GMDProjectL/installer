@@ -18,6 +18,8 @@
     installationPage.set(0);
 </script>
 
+<title>{ getString($installInfo.language, "update-title") }</title>
+
 <SetupPage>
     <SetupPageTitle>
         { getString($installInfo.language, "update-title") }

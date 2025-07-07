@@ -8,6 +8,7 @@ def install_hiddify(root: str):
     try:
         if root == '/':
             pacman_remove(root, ['hiddify']) # Prevents conflicts
+            pacman_remove(root, ['hiddify-next-bin'])
         install_latest_gh_package(root, 'GMDProjectL/hiddify', 'hiddify')
     except Exception as e:
         print(traceback.format_exc())

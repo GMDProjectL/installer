@@ -95,12 +95,13 @@
     
 </script>
 
+<title>{ getString($installInfo.language, data.isUpdate ? "updating" : "installing") }</title>
 
 <SetupPage>
     <SetupPageTitle>
         <span class="flex items-center gap-3">
             <Icon icon="mdi:clock" width="40" height="40" />
-            { getString($installInfo.language, "installing") }
+            { getString($installInfo.language, data.isUpdate ? "updating" : "installing") }
         </span>
     </SetupPageTitle>
 

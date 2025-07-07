@@ -127,7 +127,7 @@ def pacman_remove(root: str, packages: list):
 def pacman_install_from_file(root: str, filename: str):
     shared_events.append(f'Installing from file: {filename}')
 
-    result = run_command(['arch-chroot', root, 'pacman', '-U', filename, '--noconfirm', '--noprogressbar', '--needed'])
+    result = run_command_in_chroot(root, ['pacman', '-U', filename, '--noconfirm', '--noprogressbar', '--needed'])
     
     if result.returncode != 0:
         shared_events.append(f'Failed to install from file: {result.stderr}')

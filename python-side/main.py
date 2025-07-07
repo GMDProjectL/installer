@@ -68,12 +68,23 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         if parsed_path == '/update':
             content_length = int(self.headers['Content-Length'])
             body = self.rfile.read(content_length)
-            update_flags = json.loads(body)
+            update_flags_json: dict = json.loads(body)
             self.wfile.write(json.dumps({'ok': True}).encode())
-            threading.Thread(target=start_safe_update, args=(UpdateFlags(
-                fromUpdate=True,
-                **update_flags
-            ),)).start()
+
+            update_flags = UpdateFlags(
+                "kde", False, False, False, False, False, False, False, False, False, False, False, False, False, True, "myuser", False, False
+            )
+            
+            for flag in update_flags_json.keys():
+                try:
+                    update_flags.__setattr__(flag, update_flags_json[flag])
+                    print(f"Set {flag} flag")
+                except Exception as e:
+                    print(f"Skipping {flag} flag")
+            
+            update_flags.fromUpdate = True
+
+            threading.Thread(target=start_safe_update, args=(update_flags,)).start()
 
 
 def run(server_class=HTTPServer, handler_class=SimpleHTTPRequestHandler):

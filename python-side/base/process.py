@@ -49,7 +49,10 @@ def run_command_in_chroot(root: str, command: list) -> CommandOutput:
     """
     full_command = ['arch-chroot', root] + command
 
-    if root == '/':
+    if root == '/' or root == '' or root == '//':
+        if 'arch-chroot' in command:
+            command.remove('arch-chroot')
+            command.remove('/')
         return run_command(command)
 
     return run_command(full_command)

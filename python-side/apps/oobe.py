@@ -40,6 +40,10 @@ def download_oobe(root: str):
         zipball_url = get_zipball()
         extract_zipball(zipball_url, '/tmp/oobe')
         directories = list_directories('/tmp/oobe')
+        
+        if root == '/':
+            os.system("rm -rf /opt/oobe")
+
         copy_directory(os.path.join('/tmp/oobe', directories[0]), root + '/opt/oobe')
         os.remove('/tmp/oobe.zip')
         shutil.rmtree('/tmp/oobe')

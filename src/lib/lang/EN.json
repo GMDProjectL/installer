@@ -76,5 +76,6 @@
     "update-body": "A new update for the system came out and you should install it now.",
     "dont-copy-kde-config": "Do not install default KDE settings",
     "dont-update-grub": "Do not update GRUB",
-    "features": "Features"
+    "features": "Features",
+    "updating": "Updating..."
 }

@@ -7,11 +7,16 @@ from base.patching import replace_str_in_file
 from base.permissions import fix_user_permissions
 from base.resources import copy_from_resources, copy_user_config_dir
 
+
+def try_removing_existing_gsr_packages(root: str):
+    pacman_remove(root, ['gpu-screen-recorder-notification-git', 'gpu-screen-recorder-ui-git'])
+
 def install_gsrn(root: str):
     shared_events.append('Installing GSRN...')
     try:
         if root == '/':
-            pacman_remove(root, ['gpu-screen-recorder-notification']) # Prevents conflicts
+            try_removing_existing_gsr_packages(root)
+            
         install_latest_gh_package(root, 'GMDProjectL/gpu-screen-recorder-notification', 'gsrn')
     except Exception as e:
         shared_events.append(f'Failed to install gsrn: {e.with_traceback()}')
@@ -23,7 +28,7 @@ def install_gsrui(root: str):
     shared_events.append('Installing GSR UI...')
     try:
         if root == '/':
-            pacman_remove(root, ['gpu-screen-recorder-ui']) # Prevents conflicts
+            try_removing_existing_gsr_packages(root)
         install_latest_gh_package(root, 'GMDProjectL/gpu-screen-recorder-ui', 'gsrui')
     except Exception as e:
         print(traceback.format_exc())
@@ -42,7 +47,9 @@ def copy_gsr_handler_stuff(root: str, username: str):
 
     replace_str_in_file(f'{user_app_dir}/gsr-handler.desktop', 'myuser', username)
 
-    copy_user_config_dir(root, 'gpu-screen-recorder', username)
+    if root != '/':
+        copy_user_config_dir(root, 'gpu-screen-recorder', username)
+        
     copy_from_resources('hidden_apps_kde/com.dec05eba.gpu_screen_recorder.desktop', user_app_dir)
 
     fix_user_permissions(root, username)
