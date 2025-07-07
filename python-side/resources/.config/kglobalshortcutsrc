@@ -2,15 +2,6 @@
 _k_friendly_name=Activity Manager
 switch-to-activity-1ea345f3-1020-4824-8a7d-a7b2392f1c0b=none,none,Switch to activity "Default"
 
-[KDE Keyboard Layout Switcher]
-Switch keyboard layout to English (US)=none,none,Switch keyboard layout to English (US)
-Switch keyboard layout to Russian=none,none,Switch keyboard layout to Russian
-Switch keyboard layout to Английская (США)=none,none,Сменить раскладку клавиатуры на Английская (США)
-Switch keyboard layout to Русская=none,none,Сменить раскладку клавиатуры на Русская
-Switch to Last-Used Keyboard Layout=Meta+Alt+L,Meta+Alt+L,Switch to Last-Used Keyboard Layout
-Switch to Next Keyboard Layout=Meta+Alt+K,Meta+Alt+K,Switch to Next Keyboard Layout
-_k_friendly_name=Keyboard Layout Switcher
-
 [kaccess]
 Toggle Screen Reader On and Off=Meta+Alt+S,Meta+Alt+S,Toggle Screen Reader On and Off
 _k_friendly_name=Accessibility
