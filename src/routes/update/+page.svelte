@@ -32,23 +32,7 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={async() => {
-            const dialogResult = await Swal.fire({
-                title: getString($installInfo.language, "quit-question-title"),
-                text: getString($installInfo.language, "quit-question"),
-                icon: "warning",
-                showCancelButton: true,
-                confirmButtonText: getString($installInfo.language, "yes"),
-                cancelButtonText: getString($installInfo.language, "cancel"),
-                background: '#222',
-                color: 'white',
-                confirmButtonColor: '#333',
-            })
-
-            if (dialogResult.isConfirmed) {
-                window.close();
-            }
-        }}>
+        <GDLButton on:click={() => window.close()}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
         <GDLButton secondary
