@@ -1,14 +1,12 @@
 <script lang="ts">
-    import Icon from "@iconify/svelte";
     import { 
-        getString, installInfo, checkInternetConnection,
+        getString, installInfo,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installationPage,
         getSystemLanguage
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
-    import Swal from "sweetalert2";
 
     onMount(async() => {
         const lang = await getSystemLanguage();

@@ -1,7 +1,7 @@
 <script lang="ts">
     import Icon from "@iconify/svelte";
     import { 
-        getString, installInfo, checkInternetConnection,
+        getString, installInfo,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
         installationPage, getSystemLanguage, getUsername, 
         AdditionalFeaturesContent
@@ -9,7 +9,6 @@
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
-    import Swal from "sweetalert2";
     import { updateInfo } from "$lib/stores/install-info";
 
     onMount(async() => {
