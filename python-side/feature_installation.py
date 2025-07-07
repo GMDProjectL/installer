@@ -21,6 +21,7 @@ from apps.spectacle import install_spectacle_fix
 from apps.gsr import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from apps.geode import install_geode_installer
 from apps.gdl_updater import install_gdl_updater
+from apps.aptpac import install_aptpac
 
 
 def install_features(root: str, update_flags: UpdateFlags):
@@ -55,6 +56,8 @@ def install_features(root: str, update_flags: UpdateFlags):
         return
     
     shared_progress.append('Done DE')
+
+    install_aptpac(root)
     
     if update_flags.de == 'kde':
         if not activate_systemd_service(root, "sddm.service"):
