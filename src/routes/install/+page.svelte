@@ -16,8 +16,10 @@
     import type { PageProps } from './$types';
 
 
-    let logsPre: unknown;
+    let logsPre: HTMLPreElement;
     let scrollLocked = true;
+    let doScroll = true;
+    let currentScrollPos: number;
     let progressLeftPos = 0;
     let installationProgress = 0;
     let pbVisible = false;
@@ -45,15 +47,26 @@
     };
 
     onMount(() => {
+        logsPre.addEventListener('scroll', () => {
+            currentScrollPos = logsPre.scrollTop + logsPre.clientHeight
+        });
         startInstallationOnClient();
 
         const eventCheckerInterval = setInterval(async() => {
             const newEvents = await getInstallationEvents();
             if (newEvents.length > 0) {
+                if (currentScrollPos === logsPre.scrollHeight) {
+                    doScroll = true;
+                }
+
                 logs += '\n' + newEvents.join('\n');
             }
             await tick();
             // scrollToBottom(logsPre as HTMLElement);
+            if (doScroll) {
+                    scrollToBottom(logsPre);
+                    doScroll = false;
+            }
 
             newEvents.forEach((content) => {
                 if (content.includes('Project GDL Installed!')) {
