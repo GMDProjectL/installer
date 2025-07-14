@@ -13,7 +13,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    installationPage.set(6);
+    installationPage.set(7);
 
     let drives: DrivesResponse = {};
 
@@ -140,12 +140,12 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={async() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={async() => {
             if (!canGoFurther) {
                 Swal.fire({
                     title: getString($installInfo.language, "introduce-error"),
@@ -154,7 +154,10 @@
                     background: '#222',
                     color: 'white',
                     confirmButtonColor: '#333',
-                    timer: 3000
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
                 });
                 return;
             }
@@ -170,7 +173,9 @@
                 showConfirmButton: true,
                 cancelButtonText: getString($installInfo.language, "summary-install-popup-no"),
                 confirmButtonText: getString($installInfo.language, "summary-install-popup-yes"),
-
+                customClass: {
+                    popup: "no-select"
+                }
             });
 
             if (result.isConfirmed) {

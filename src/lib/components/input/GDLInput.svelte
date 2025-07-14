@@ -1,9 +1,5 @@
 <script lang="ts">
-    import { createEventDispatcher } from "svelte";
-
 	let { inputType, value = $bindable(), placeholder = "" } = $props();
-
-    const dispatch = createEventDispatcher();
 </script>
 
 <!-- svelte-ignore event_directive_deprecated -->

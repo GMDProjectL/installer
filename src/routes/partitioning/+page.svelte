@@ -14,7 +14,7 @@
     import { goto } from "$app/navigation";
     import { onMount } from "svelte";
 
-    installationPage.set(5);
+    installationPage.set(6);
 
     let drives: DrivesResponse = {};
 
@@ -43,16 +43,16 @@
     <div class="flex justify-start items-center flex-col px-20 w-full gap-10">
         <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2">
             <div>
-                <p>
+                <p class='no-select'>
                     { getString($installInfo.language, "select-drive") }
-                    <a class="ms-3 text-blue-200" href="#" on:click={async() => {
+                    <a class="ms-3 text-blue-200" href="/#" on:click={async() => {
                         drives = await getDrives();
                     }}>
                         ({ getString($installInfo.language, "drive-update") })
                     </a>
                 </p>
                 <select id="select-drive" 
-                    class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full"
+                    class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full no-select"
                     on:change={(e) => {
                         $installInfo.selectedDrive = `${(e.target as any).value}`
                         getPartitions($installInfo.selectedDrive)
@@ -83,7 +83,7 @@
                         </option>
                     {/each}
                 </select>
-                <p class={"text-red-500 mt-2" + (
+                <p class={"text-red-500 mt-2 no-select" + (
                     $installInfo.method == 'nuke-drive'
                     ? ""
                     : " text-transparent"
@@ -92,7 +92,7 @@
                 <div class={$installInfo.method != 'manual-partitioning' ? "opacity-0 pointer-events-none" : ""}>
                     <p class="mb-5 opacity-50 w-96 text-wrap whitespace-pre">{ getString($installInfo.language, "partitioning-disclaimer") }</p>
 
-                    <GDLButton on:click={() => fetch("/open-gnome-disks")}>
+                    <GDLButton on_click={() => fetch("/open-gnome-disks")}>
                         { getString($installInfo.language, "open-gnome-disks") }
                     </GDLButton>
                 </div>
@@ -101,12 +101,12 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={() => {
             if (!canGoFurther) {
                 Swal.fire({
                     title: getString($installInfo.language, "introduce-error"),
@@ -115,7 +115,10 @@
                     background: '#222',
                     color: 'white',
                     confirmButtonColor: '#333',
-                    timer: 3000
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
                 });
                 return;
             }

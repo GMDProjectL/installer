@@ -14,7 +14,7 @@
     import { onMount } from "svelte";
     import GdlButton from "$lib/components/button/GDLButton.svelte";
 
-    installationPage.set(5);
+    installationPage.set(6);
 
     let partitions: PartitionsResponse = {};
 
@@ -39,13 +39,13 @@
 
     <div class="flex justify-start items-center flex-col px-20 w-full gap-10">
         <div class="w-auto flex flex-col gap-5 overflow-y-auto p-2">
-            <h2 class="text-xl font-bold" style="width: 400px;">
+            <h2 class="text-xl font-bold no-select" style="width: 400px;">
                 { getString($installInfo.language, "selected-drive") }
                 /dev/{$installInfo.selectedDrive}
             </h2>
 
             <div>
-                <p>{ getString($installInfo.language, "boot-partition") }</p>
+                <p class="no-select">{ getString($installInfo.language, "boot-partition") }</p>
                 <select id="select-boot-part" 
                     class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full"
                     on:change={(e) => {
@@ -67,14 +67,14 @@
                         type="checkbox" 
                         id="boot-partition-checkbox" />
 
-                    <label for="boot-partition-checkbox">
+                    <label for="boot-partition-checkbox" class="no-select">
                         { getString($installInfo.language, "format") }
                     </label>
                 </div>
             </div>
 
             <div class="mt-3">
-                <p>{ getString($installInfo.language, "root-partition") }</p>
+                <p class="no-select">{ getString($installInfo.language, "root-partition") }</p>
                 <select id="select-root-part" 
                     class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full"
                     on:change={(e) => {
@@ -92,7 +92,7 @@
             </div>
             
             <div class="mt-3">
-                <GdlButton on:click={async() => {
+                <GdlButton on_click={async() => {
                     partitions = await getPartitions($installInfo.selectedDrive);
                 }}>
                     { getString($installInfo.language, "drive-update") }
@@ -102,10 +102,10 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => history.back()}>
+        <GDLButton on_click={() => history.back()}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={() => {
             if (!canGoFurther) {
                 Swal.fire({
                     title: getString($installInfo.language, "introduce-error"),
@@ -114,7 +114,10 @@
                     background: '#222',
                     color: 'white',
                     confirmButtonColor: '#333',
-                    timer: 3000
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
                 });
                 return;
             }

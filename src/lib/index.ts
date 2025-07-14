@@ -1,5 +1,5 @@
 import { getLanguageStrings, getString, getCityString, getRegionString } from "./lang";
-import { GDLButton, SetupPage, SetupPageTitle, AdditionalFeaturesContent, SetupPageBottom, GDLInput, autoscroll } from "./components";
+import { GDLButton, SetupPage, SetupPageTitle, AdditionalFeaturesContent, SetupPageBottom, GDLInput } from "./components";
 
 import installInfo, { updateInfo } from "./stores/install-info";
 import installationPage from "./stores/installation-page";
@@ -14,17 +14,18 @@ import {
 import type { TimezonesResponse, DrivesResponse, PartitionsResponse } from "./api";
 import bytesToReadable from "./utils/size";
 import type InstallationProgress from "./stores/install-progress";
+import { currentInternetDevice, doSkippedInternetSetup, internetDevices } from "./stores/internet-stuff";
 
 
 export { 
     getLanguageStrings, getString, getDE,
     GDLButton, SetupPage, SetupPageTitle, SetupPageBottom, AdditionalFeaturesContent,
     GDLInput,
-    installInfo, installationPage, reboot, autoscroll, getSystemLanguage, startUpdate,
+    installInfo, installationPage, reboot, getSystemLanguage, startUpdate,
     getTimezones, getDrives, getPartitions,
     bytesToReadable, getUsername, updateInfo,
     checkInternetConnection, startInstallation, getInstallationEvents,
-    getCityString, getRegionString, getInstallationProgress, installProgress
+    getCityString, getRegionString, getInstallationProgress, installProgress, currentInternetDevice, doSkippedInternetSetup, internetDevices
 };
 
 export type {

@@ -36,7 +36,7 @@
         <div class="flex items-center gap-5">
             <input id="dontCopyKde" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$updateInfo.dontCopyKde} />
-            <label for="dontCopyKde" class="flex items-center gap-4 font-bold">
+            <label for="dontCopyKde" class="flex items-center gap-4 font-bold no-select">
                 { getString($installInfo.language, "dont-copy-kde-config") }
                 <Icon icon="akar-icons:cross" />
             </label>
@@ -44,7 +44,7 @@
         <div class="flex items-center gap-5">
             <input id="dontUpdateGrub" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$updateInfo.dontUpdateGrub} />
-            <label for="dontUpdateGrub" class="flex items-center gap-4 font-bold">
+            <label for="dontUpdateGrub" class="flex items-center gap-4 font-bold no-select">
                 { getString($installInfo.language, "dont-update-grub") }
                 <Icon icon="akar-icons:cross" />
             </label>
@@ -52,13 +52,13 @@
     </AdditionalFeaturesContent>
 
     <SetupPageBottom>
-        <GDLButton on:click={async() => {
+        <GDLButton on_click={async() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
         <GDLButton secondary
-            on:click={() => {
+            on_click={() => {
                 goto("/install?update=true");
             }}>
             { 

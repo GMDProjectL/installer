@@ -14,7 +14,7 @@
     import { onMount } from "svelte";
     import GdlInput from "$lib/components/input/GDLInput.svelte";
 
-    installationPage.set(2);
+    installationPage.set(3);
     
     let timezones: TimezonesResponse = {};
     let filter1: string = "";
@@ -57,7 +57,7 @@
             <GdlInput inputType="text" placeholder={getString($installInfo.language, 'search-placeholder')} bind:value={filter1} />
             {#each regionResults as region}
                 <GDLButton secondary={$installInfo.timezoneRegion == region} 
-                    on:click={() => $installInfo.timezoneRegion = region}>
+                    on_click={() => $installInfo.timezoneRegion = region}>
                     { getRegionString($installInfo.language, region) != region ? 
                         getRegionString($installInfo.language, region) + ` (${region})` : region }
                 </GDLButton>
@@ -65,7 +65,7 @@
         </div>
         <div class="w-96 h-96 flex flex-col gap-5 overflow-y-auto p-2 masked-overflow">
             {#if regionZones?.length == 0}
-                <div class="text-center text-zinc-400 flex flex-col items-center justify-center h-full">
+                <div class="text-center text-zinc-400 flex flex-col items-center justify-center h-full no-select">
                     { getString($installInfo.language, "select-region") }
                 </div>
             {:else}
@@ -75,7 +75,7 @@
                         $installInfo.timezoneRegion == $installInfo.timezoneRegion 
                         && $installInfo.timezoneInfo == zone
                     }
-                    on:click={() => {
+                    on_click={() => {
                         $installInfo.timezoneRegion = $installInfo.timezoneRegion as string;
                         $installInfo.timezoneInfo = zone;
                     }}>
@@ -87,12 +87,12 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={() => {
             if (!canGoFurther) {
                 Swal.fire({
                     title: getString($installInfo.language, "introduce-error"),
@@ -101,7 +101,10 @@
                     background: '#222',
                     color: 'white',
                     confirmButtonColor: '#333',
-                    timer: 3000
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
                 });
                 return;
             }

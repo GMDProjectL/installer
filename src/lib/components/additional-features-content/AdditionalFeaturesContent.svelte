@@ -16,7 +16,7 @@
         <div class="flex items-center gap-5">
             <input id="doOsProber" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.doOsProber} />
-            <label for="doOsProber" class="flex items-center gap-4">
+            <label for="doOsProber" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "detect-other-os") }
                 <Icon icon="icomoon-free:windows" />
             </label>
@@ -24,7 +24,7 @@
         <div class="flex items-center gap-5">
             <input id="multilib" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.enableMultilibRepo} />
-            <label for="multilib" class="flex items-center gap-4">
+            <label for="multilib" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "enable-multilib-repo") }
                 <Icon icon="mdi:magic" />
             </label>
@@ -36,7 +36,7 @@
                 <input id="steam" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.installSteam}
                     />
-                <label for="steam" class="flex items-center gap-4">
+                <label for="steam" class="flex items-center gap-4 no-select">
                     { getString($installInfo.language, "install-steam") }
                     <Icon icon="mdi:steam" />
                 </label>
@@ -48,7 +48,7 @@
                     <input id="intel" class="invert grayscale scale-150" type="checkbox" 
                         bind:checked={$installInfo.vulkanIntel}
                         />
-                    <label for="intel" class="flex items-center gap-4">
+                    <label for="intel" class="flex items-center gap-4 no-select">
                         HD / UHD / Iris / Arc Graphics
                         <Icon icon="lineicons:intel" width="40" height="40" />
                     </label>
@@ -57,7 +57,7 @@
                     <input id="nvidia" class="invert grayscale scale-150" type="checkbox" 
                         bind:checked={$installInfo.vulkanNvidia}
                         />
-                    <label for="nvidia" class="flex items-center gap-4">
+                    <label for="nvidia" class="flex items-center gap-4 no-select">
                         NVIDIA
                         <Icon icon="lineicons:nvidia" width="30" height="30" />
                     </label>
@@ -66,7 +66,7 @@
                     <input id="amd" class="invert grayscale scale-150" type="checkbox" 
                         bind:checked={$installInfo.vulkanAmd}
                         />
-                    <label for="amd" class="flex items-center gap-4">
+                    <label for="amd" class="flex items-center gap-4 no-select">
                         AMD
                         <Icon icon="bi:amd" class="ms-1 me-3" />
                     </label>
@@ -76,7 +76,7 @@
                 <input id="wine" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.installWine} 
                     />
-                <label for="wine" class="flex items-center gap-4">
+                <label for="wine" class="flex items-center gap-4 no-select">
                     { getString($installInfo.language, "install-wine") }
                     <Icon icon="file-icons:wine" />
                 </label>
@@ -90,7 +90,7 @@
                 <input id="winetricks" class="invert grayscale scale-150" type="checkbox" 
                     bind:checked={$installInfo.installWinetricks} 
                     />
-                <label for="winetricks" class="flex items-center gap-4">
+                <label for="winetricks" class="flex items-center gap-4 no-select">
                     { getString($installInfo.language, "install-winetricks") }
                     <Icon icon="streamline:magic-wand-2-solid" />
                 </label>
@@ -100,7 +100,7 @@
             <input id="gnome-disks" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.installGnomeDisks} 
                 />
-            <label for="gnome-disks" class="flex items-center gap-4">
+            <label for="gnome-disks" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "install-gnome-disks") }
                 <Icon icon="fluent:hard-drive-16-filled" />
             </label>
@@ -109,7 +109,7 @@
             <input id="im" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.installIntelMedia} 
                 />
-            <label for="im" class="flex items-center gap-4">
+            <label for="im" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "install-intel-media") }
                 <Icon icon="ion:hardware-chip-sharp" />
             </label>
@@ -118,7 +118,7 @@
             <input id="cosk" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.setupCachyosKernel} 
                 />
-            <label for="cosk" class="flex items-center gap-4">
+            <label for="cosk" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "setup-cachyos-kernel") }
                 <Icon icon="uil:linux" />
             </label>
@@ -127,7 +127,7 @@
             <input id="ruref" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.runRussianReflector} 
                 />
-            <label for="ruref" class="flex items-center gap-4">
+            <label for="ruref" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "range-russian-mirrors") }
                 <Icon icon="material-symbols:cloud" />
             </label>
@@ -136,7 +136,7 @@
             <input id="lact" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.installLact} 
                 />
-            <label for="lact" class="flex items-center gap-4">
+            <label for="lact" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "install-lact") }
                 <Icon icon="mdi:gpu" />
             </label>
@@ -145,7 +145,7 @@
             <input id="bt" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.setupBluetooth} 
                 />
-            <label for="bt" class="flex items-center gap-4">
+            <label for="bt" class="flex items-center gap-4 no-select">
                 { getString($installInfo.language, "setup-bluetooth") }
                 <Icon icon="material-symbols:bluetooth" />
             </label>

@@ -4,7 +4,6 @@ import SetupPageTitle from "./setup-page/setup-page-title";
 import SetupPageBottom from "./setup-page/setup-page-bottom";
 import GDLInput from "./input";
 import AdditionalFeaturesContent from "./additional-features-content/AdditionalFeaturesContent.svelte";
-import autoscroll from "./autoscroll";
 
 export {
     GDLButton,
@@ -13,5 +12,4 @@ export {
     SetupPageTitle,
     SetupPageBottom,
     AdditionalFeaturesContent,
-    autoscroll
 };

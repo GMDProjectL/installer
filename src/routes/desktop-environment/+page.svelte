@@ -8,7 +8,7 @@
     import { goto } from "$app/navigation";
     import { Carousel } from "flowbite-svelte";
 
-    installationPage.set(3);
+    installationPage.set(4);
 
     $: canGoFurther = true;
     const des = ["kde", "gnome"];
@@ -43,22 +43,22 @@
             ]} />
         </div>
         <div class="w-full flex gap-5 justify-center items-center">
-            <GDLButton on:click={() => $installInfo.de = "kde"} secondary={$installInfo.de == "kde"}>
+            <GDLButton on_click={() => $installInfo.de = "kde"} secondary={$installInfo.de == "kde"}>
                 KDE Plasma ({ getString($installInfo.language, "recommended") })
             </GDLButton>
-            <GDLButton on:click={() => $installInfo.de = "gnome"} secondary={$installInfo.de == "gnome"}>
+            <GDLButton on_click={() => $installInfo.de = "gnome"} secondary={$installInfo.de == "gnome"}>
                 GNOME
             </GDLButton>
         </div>
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={() => {
             goto("/additional-software");
         }}>
             { getString($installInfo.language, "next") }

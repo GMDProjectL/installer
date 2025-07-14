@@ -24,17 +24,17 @@
     </SetupPageTitle>
 
     <div class="flex justify-between items-center flex-col px-20 w-full gap-10">
-        <h2 class="text-2xl font-semibold text-center flex w-full gap-4 justify-center items-center">
+        <h2 class="text-2xl font-semibold text-center flex w-full gap-4 justify-center items-center no-select">
             { getString($installInfo.language, "update-body") }
         </h2>
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => window.close()}>
+        <GDLButton on_click={() => window.close()}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
         <GDLButton secondary
-            on:click={() => {
+            on_click={() => {
                 goto("/update/info");
             }}>
             { 

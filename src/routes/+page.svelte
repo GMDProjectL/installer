@@ -11,20 +11,6 @@
     import Swal from "sweetalert2";
 
     installationPage.set(0);
-
-    let internetConnectionAvailable: boolean | null = null;
-
-    onMount(() => {
-        checkInternetConnection().then(status => internetConnectionAvailable = status);
-        
-        const internetConnectionInterval = setInterval(async() => {
-            internetConnectionAvailable = await checkInternetConnection();
-        }, 5000);
-
-        return () => {
-            clearInterval(internetConnectionInterval);
-        }
-    })
 </script>
 
 
@@ -37,14 +23,14 @@
     </SetupPageTitle>
 
     <div class="flex justify-between items-center flex-col px-20 w-full gap-10">
-        <h2 class="text-2xl font-semibold text-center flex w-full gap-4 justify-center items-center">
+        <h2 class="text-2xl font-semibold text-center flex w-full gap-4 justify-center items-center no-select">
             <Icon icon="material-symbols:language" width="30" height="30" />
             { getString($installInfo.language, "language-tip") }
         </h2>
 
         <div class="w-96 flex flex-col gap-5 h-40 overflow-y-auto p-2">
             {#each ["en", "ru"] as lang}
-                <GDLButton on:click={() => {
+                <GDLButton on_click={() => {
                     $installInfo.language = lang;
                 }}>
                     <span class={$installInfo.language == lang ? "font-bold" : "font-normal"}>
@@ -53,16 +39,10 @@
                 </GDLButton>
             {/each}
         </div>
-
-        {#if internetConnectionAvailable === false}
-        <div class="text-red-500 text-center text-lg">
-            { getString($installInfo.language, "no-internet") }
-        </div>
-        {/if}
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={async() => {
+        <GDLButton on_click={async() => {
             const dialogResult = await Swal.fire({
                 title: getString($installInfo.language, "quit-question-title"),
                 text: getString($installInfo.language, "quit-question"),
@@ -73,6 +53,9 @@
                 background: '#222',
                 color: 'white',
                 confirmButtonColor: '#333',
+                customClass: {
+                    popup: "no-select"
+                }
             })
 
             if (dialogResult.isConfirmed) {
@@ -81,19 +64,9 @@
         }}>
             { getString($installInfo.language, "quit") }
         </GDLButton>
-        <GDLButton secondary disabled={!internetConnectionAvailable} 
-        on:click={() => {
-            if (!internetConnectionAvailable) {
-                return;
-            }
-
-            goto("/introduce-yourself");
-        }}>
-            { 
-                internetConnectionAvailable === null
-                ? getString($installInfo.language, "checking-for-connection")
-                : getString($installInfo.language, "begin")
-            }
+        <GDLButton secondary
+        on_click={() => { goto("/setup-internet"); }}>
+            { getString($installInfo.language, "begin") }
         </GDLButton>
     </SetupPageBottom>
 </SetupPage>

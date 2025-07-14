@@ -8,7 +8,7 @@
         getInstallationEvents,
         installProgress,
         reboot,
-        autoscroll, startUpdate
+        startUpdate
     } from "$lib";
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
@@ -50,6 +50,7 @@
         logsPre.addEventListener('scroll', () => {
             currentScrollPos = logsPre.scrollTop + logsPre.clientHeight
         });
+
         startInstallationOnClient();
 
         const eventCheckerInterval = setInterval(async() => {
@@ -61,11 +62,12 @@
 
                 logs += '\n' + newEvents.join('\n');
             }
+            
             await tick();
-            // scrollToBottom(logsPre as HTMLElement);
+
             if (doScroll) {
-                    scrollToBottom(logsPre);
-                    doScroll = false;
+                scrollToBottom(logsPre);
+                doScroll = false;
             }
 
             newEvents.forEach((content) => {
@@ -83,7 +85,10 @@
                         icon: 'error',
                         background: '#222',
                         color: 'white',
-                        confirmButtonColor: '#333'
+                        confirmButtonColor: '#333',
+                        customClass: {
+                            popup: "no-select"
+                        }
                     });
 
                     clearInterval(eventCheckerInterval);
@@ -118,7 +123,7 @@
         </span>
     </SetupPageTitle>
 
-    <div class="flex justify-start items-start flex-col px-20 w-full gap-10" use:autoscroll={{pauseOnUserScroll: true, behavior: "smooth"}}>
+    <div class="flex justify-start items-start flex-col px-20 w-full gap-10">
         <pre bind:this={logsPre} class="w-full flex flex-col gap-5 overflow-y-auto p-2 text-wrap" 
             style="height: 70vh;">{ logs }</pre>
     </div>
@@ -131,7 +136,7 @@
                 } style={`left: 0%; width: ${Math.round($installProgress.progress / $installProgress.total * 100)}%`}></div>
             </div>
         {:else}
-            <GDLButton secondary on:click={() => {
+            <GDLButton secondary on_click={() => {
                 reboot();
             }}>
                 { getString($installInfo.language, "restart") }

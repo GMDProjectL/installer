@@ -8,14 +8,16 @@
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
 
-    installationPage.set(1);
+    installationPage.set(2);
 
     $: canGoFurther = !(
         $installInfo.username == "" ||
         $installInfo.computerName == "" ||
         $installInfo.password == "" ||
-        $installInfo.password2 == "" ||
-        $installInfo.password != $installInfo.password2);
+        $installInfo.password2 == "");
+
+    $: passwordMismatch = !(
+        $installInfo.password == $installInfo.password2);
         
     const next = () => {
         if (!canGoFurther) {
@@ -26,7 +28,24 @@
                 background: '#222',
                 color: 'white',
                 confirmButtonColor: '#333',
-                timer: 3000
+                timer: 3000,
+                customClass: {
+                    popup: "no-select"
+                }
+            });
+            return;
+        } else if (passwordMismatch) {
+            Swal.fire({
+                title: getString($installInfo.language, "introduce-error"),
+                text: getString($installInfo.language, "password-mismatch-explanation"),
+                icon: 'error',
+                background: '#222',
+                color: 'white',
+                confirmButtonColor: '#333',
+                timer: 3000,
+                customClass: {
+                    popup: "no-select"
+                }
             });
             return;
         }
@@ -51,28 +70,28 @@
             }
         }} class="w-96 flex flex-col gap-5 overflow-y-auto p-2">
             <div>
-                <span class="flex gap-2">
+                <span class="flex gap-2 no-select">
                     <Icon icon="material-symbols-light:person-outline-rounded" width="24" height="24" />
                     { getString($installInfo.language, "username") }:
                 </span>
                 <GDLInput bind:value={$installInfo.username} inputType="text" placeholder="relative" />
             </div>
             <div>
-                <span class="flex gap-2">
+                <span class="flex gap-2 no-select">
                     <Icon icon="mdi-light:monitor" width="24" height="24" />
                     { getString($installInfo.language, "computer-name") }:
                 </span>
                 <GDLInput bind:value={$installInfo.computerName} inputType="text" placeholder="relatives-pc" />
             </div>
             <div>
-                <span class="flex gap-2">
+                <span class="flex gap-2 no-select">
                     <Icon icon="mdi:password" width="24" height="24" />
                     { getString($installInfo.language, "password") }:
                 </span>
                 <GDLInput bind:value={$installInfo.password} inputType="password" placeholder="••••••••••••••••" />
             </div>
             <div>
-                <span class="flex gap-2">
+                <span class="flex gap-2 no-select">
                     <Icon icon="mdi:password" width="24" height="24" />
                     { getString($installInfo.language, "password-2") }:
                 </span>
@@ -82,12 +101,12 @@
     </div>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={next}>
+        <GDLButton secondary disabled={!canGoFurther || passwordMismatch} on_click={next}>
             { getString($installInfo.language, "next") }
         </GDLButton>
     </SetupPageBottom>

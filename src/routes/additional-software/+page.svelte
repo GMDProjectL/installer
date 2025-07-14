@@ -9,7 +9,7 @@
     import Swal from "sweetalert2";
     import { goto } from "$app/navigation";
 
-    installationPage.set(4);
+    installationPage.set(5);
 
     $: canGoFurther = !(
         $installInfo.installSteam == true && !(
@@ -36,12 +36,12 @@
     </AdditionalFeaturesContent>
 
     <SetupPageBottom>
-        <GDLButton on:click={() => {
+        <GDLButton on_click={() => {
             history.back();
         }}>
             { getString($installInfo.language, "back") }
         </GDLButton>
-        <GDLButton secondary disabled={!canGoFurther} on:click={() => {
+        <GDLButton secondary disabled={!canGoFurther} on_click={() => {
             if ($installInfo.installSteam) {
                 if (!canGoFurther) {
                     Swal.fire({
@@ -51,7 +51,10 @@
                         background: '#222',
                         color: 'white',
                         confirmButtonColor: '#333',
-                        timer: 3000
+                        timer: 3000,
+                        customClass: {
+                            popup: "no-select"
+                        }
                     });
                     return;
                 }

@@ -1,8 +1,8 @@
-import requests
 import os
 import fcntl
 import struct
 from shared import shared_events
+import subprocess
 
 def failmsg():
     shared_events.append(f'Fatal error. Installation failed.')
@@ -72,9 +72,6 @@ def get_partitions(block_name):
         }
     return partitions
 
-def check_internet_connection():
-    try:
-        r = requests.get("https://archlinux.org")
-        return r.status_code == 200
-    except:
-        return False
+def genUUID():
+    result = subprocess.run('uuidgen', stdout=subprocess.PIPE)
+    return result.stdout

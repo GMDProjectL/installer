@@ -43,11 +43,11 @@
 </div>
 
 <div class="fixed pointer-events-none bottom-2 w-full scale-150 text-white">
-	<div class="flex justify-center">
+	<div class="flex justify-center no-select">
 		{#if $installProgress.progress > 0 }
 			<b class="scale-50">{Math.min(Math.round($installProgress.progress / $installProgress.total * 100), 100)}%</b>
 		{:else}
-			{#each Array(7) as _, i}
+			{#each Array(8) as _, i}
 				<i class={
 					i != $installationPage
 					? "opacity-50"
