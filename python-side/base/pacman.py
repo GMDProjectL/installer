@@ -109,7 +109,7 @@ def pacstrap(root: str):
         'pacstrap', '-K', root, 
         'grub', 'efibootmgr',
         'base', 'base-devel', 'arch-install-scripts',
-        'linux', 'linux-firmware', 'linux-headers', 'dkms', 
+        'linux-lts', 'linux-firmware', 'linux-lts-headers', 'dkms', 
         'vim', 'nano', 'sudo', 'fish', 
         'networkmanager', 'firefox'
     ])

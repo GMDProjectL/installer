@@ -44,7 +44,7 @@ def install_features(root: str, update_flags: UpdateFlags):
             root, 
             [
                 "electron34", "nodejs", "npm",
-                "pnpm", "base-devel",
+                "pnpm", "base-devel", "python-dbus", "python-pyudev", "python-gobject",
                 "pamac", "adwaita-fonts", "yay",
                 "7zip", "zip", "unzip", "unrar",
                 "fastfetch", "gpu-screen-recorder-gtk",
@@ -76,11 +76,12 @@ def install_features(root: str, update_flags: UpdateFlags):
     shared_progress.append('Done Network')
 
     if update_flags.setupCachyosKernel:
-        if not pacman_install(root, ["linux-cachyos", "linux-cachyos-headers"]):
+        if not pacman_install(root, ["linux-cachyos-lts", "linux-cachyos-lts-headers"]):
             failmsg()
             return
         
         pacman_remove(root, ["linux", "linux-headers"])
+        pacman_remove(root, ["linux-lts", "linux-lts-headers"])
         
         shared_progress.append('CachyOS Kernel installed')
         
