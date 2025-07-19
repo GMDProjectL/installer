@@ -1,6 +1,10 @@
 import subprocess
 import time
 import sys
+import os
+
+# chdir to the current script dir
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 doesDev = False
 
@@ -15,10 +19,13 @@ def wait_for_server():
 
 def launch_electron():
     global doesDev
+
+    electron_command = ['electron34', "./electron-init.js", '--icon', './python-side/resources/projectgdl-logo.png', '--url']
+
     if '--update' in sys.argv:
-        subprocess.run(['electron34', "./electron-init.js", '--icon', './python-side/resources/projectgdl-logo.png', '--url', 'http://localhost:5173/update' if doesDev else 'http://localhost:4173/update'])
+        subprocess.run(electron_command + ['http://localhost:5173/update' if doesDev else 'http://localhost:4173/update'])
     else:
-        subprocess.run(['electron34', "./electron-init.js", '--icon', './python-side/resources/projectgdl-logo.png', '--url', 'http://localhost:5173' if doesDev else ''])
+        subprocess.run(electron_command + ['http://localhost:5173' if doesDev else 'http://localhost:4173'])
 
 def main():
     global doesDev
