@@ -9,6 +9,7 @@ from base.grub import install_grub
 from base.locale import generate_locales, generate_localtime
 from utils import failmsg
 from feature_installation import install_features
+from base.nm_dbus import copy_saved_connections
 
 
 # 30 STEPS IN THIS TIME. 15:50 2025-04-05
@@ -157,9 +158,15 @@ def start_installation(installation_object: InstallInfo):
     )
 
     install_features(installation_root, update_flags)
+
+    shared_events.append('Trying to copy NetworkManager connections')
+
+    if copy_saved_connections(installation_root):
+        shared_events.append('Successfully copied connections')
+    else:
+        shared_events.append('Failed to copy connections')
     
     shared_events.append('Project GDL Installed!')
-
 
 def start_update_process(update_flags: UpdateFlags):
     install_features('/', update_flags)

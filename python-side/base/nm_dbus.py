@@ -1,9 +1,8 @@
 import dbus
 import pyudev
 import uuid
-from dbus.mainloop.glib import DBusGMainLoop
-from threading import Thread
-from gi.repository import GLib
+import shutil
+from pathlib import Path
 
 SERVICE_NAME = 'org.freedesktop.NetworkManager'
 SERVICE_OBJ = '/org/freedesktop/NetworkManager'
@@ -188,3 +187,17 @@ def disconnect_device(device: str):
 
     device_iface.Disconnect()
 
+def copy_saved_connections(installRoot: str) -> bool:
+    connection_dir = Path("/etc/NetworkManager/saved-connections")
+
+    if not connection_dir.exists():
+        return False
+
+    out_connection_dir = Path(Path(installRoot) / connection_dir.relative_to('/'))
+    out_connection_dir.mkdir(parents=True, exist_ok=True)
+
+    for file in connection_dir.iterdir():
+        if file.is_file():
+            shutil.copy2(file, out_connection_dir)
+    
+    return True
