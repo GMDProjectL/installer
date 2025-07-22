@@ -21,6 +21,7 @@ from apps.spectacle import install_spectacle_fix
 from apps.gsr import install_gsrn, install_gsrui, copy_gsr_handler_stuff
 from apps.geode import install_geode_installer
 from apps.gdl_updater import install_gdl_updater
+from apps.gdl_helper import install_gdl_helper
 from apps.aptpac import install_aptpac
 
 
@@ -204,6 +205,7 @@ def install_features(root: str, update_flags: UpdateFlags):
     copy_sysctl_config(root)
     install_hiddify(root)
     install_gdl_updater(root)
+    install_gdl_helper(root)
 
     shared_progress.append('Done udev, polkit, sysctl and hiddify, fixed spectacle.')
 
