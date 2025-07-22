@@ -3,6 +3,7 @@ import pyudev
 import uuid
 import shutil
 from pathlib import Path
+from os import chmod
 
 SERVICE_NAME = 'org.freedesktop.NetworkManager'
 SERVICE_OBJ = '/org/freedesktop/NetworkManager'
@@ -188,7 +189,7 @@ def disconnect_device(device: str):
     device_iface.Disconnect()
 
 def copy_saved_connections(installRoot: str) -> bool:
-    connection_dir = Path("/etc/NetworkManager/saved-connections")
+    connection_dir = Path("/etc/NetworkManager/system-connections")
 
     if not connection_dir.exists():
         return False
@@ -199,5 +200,6 @@ def copy_saved_connections(installRoot: str) -> bool:
     for file in connection_dir.iterdir():
         if file.is_file():
             shutil.copy2(file, out_connection_dir)
+            chmod(out_connection_dir / file.name, 0o600)
     
     return True
