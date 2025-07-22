@@ -12,6 +12,7 @@ def wait_for_server():
     global doesDev
     while True:
         try:
+            subprocess.check_output(['curl', '-s', '-o', '/dev/null', '-w', '%{http_code}', 'http://localhost:669'])
             subprocess.check_output(['curl', '-s', '-o', '/dev/null', '-w', '%{http_code}', 'http://localhost:5173' if doesDev else 'http://localhost:4173'])
             break
         except subprocess.CalledProcessError:

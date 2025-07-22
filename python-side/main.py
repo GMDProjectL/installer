@@ -21,6 +21,8 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         url = urlparse(self.path)
+        if url.path == '/':
+            self.handle_cors()
 
         if url.path == '/get_internet_devices':
             self.handle_cors()
