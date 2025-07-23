@@ -45,7 +45,7 @@
             <div>
                 <p class='no-select'>
                     { getString($installInfo.language, "select-drive") }
-                    <a class="ms-3 text-blue-200" href="/#" on:click={async() => {
+                    <a class="ms-3 text-blue-200" href="/partitioning" on:click={async() => {
                         drives = await getDrives();
                     }}>
                         ({ getString($installInfo.language, "drive-update") })
