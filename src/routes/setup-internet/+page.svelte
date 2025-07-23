@@ -113,6 +113,9 @@
     };
 
     const toggleExpand = (UUIDorSSID: string) => {
+        if (expandedSSIDorUUID === UUIDorSSID) {
+            delete enteredPasswords[UUIDorSSID];
+        }
         expandedSSIDorUUID = expandedSSIDorUUID === UUIDorSSID ? null : UUIDorSSID;
     };
 </script>
@@ -234,7 +237,7 @@
                             {#if (expandedSSIDorUUID === ap?.Ssid)}
                             <div class="w-full flex flex-rows flex-row justify-end items-center gap-3">
                                 {#if ap?.Flags !== 0}
-                                <input type="password" on:click|stopPropagation on:input={(e) => { enteredPasswords[ap.Ssid] = (e.target as HTMLInputElement).value }} placeholder={getString($installInfo.language, "password-tip")} class="w-full bg-zinc-700 p-2 rounded-md focus:outline-none" />
+                                <input type="password" on:click|stopPropagation bind:value={enteredPasswords[ap.Ssid]} placeholder={getString($installInfo.language, "password-tip")} class="w-full bg-zinc-700 p-2 rounded-md focus:outline-none" />
                                 {/if}
                                 <span role="button" tabindex="0" class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + (!connectionButtonValidator(ap?.Flags, ap?.Ssid) ? " opacity-50" : " hover:bg-zinc-600 active:bg-zinc-800")}
                                 on:click|stopPropagation={async () => {
