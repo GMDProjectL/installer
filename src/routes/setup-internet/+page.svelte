@@ -3,7 +3,6 @@
     import { 
         getString, installInfo,
         GDLButton, SetupPage, SetupPageTitle, SetupPageBottom,
-        installationPage,
     } from "$lib";
     import { goto } from "$app/navigation";
     import { onMount, onDestroy } from "svelte";
@@ -21,6 +20,7 @@
     import { currentInternetDevice, doSkippedInternetSetup, internetDevices } from "$lib"
 
     let expandedSSIDorUUID: string | null = null;
+    let expandedUUIDData: Record<string, any> | undefined = undefined;
     let accessPoints: Array<Record<string, any>> = [];
     let deactivatedButtons: Array<string> = [];
     let savedSSID: Array<Record<string, any>> = [];
@@ -65,21 +65,23 @@
         toggleUpdate();
     };
 
-    const toggleUpdate = () => {
+    const toggleUpdate = (disableScanning: boolean = false) => {
         if (updateID !== undefined) {
             clearInterval(updateID);
             updateID = undefined;
         } else {
-            if (get(currentInternetDevice)?.wireless === true) {
-                updateID = setInterval(async () => {
-                    const result = await updateStatus(true, true, true, true, get(currentInternetDevice)?.location);
+            updateID = setInterval(async () => {
+                let wireless = get(currentInternetDevice)?.wireless === true;
+                const result = await updateStatus(true, wireless, wireless && disableScanning === false, wireless, get(currentInternetDevice)?.location);
 
-                    hasInternet = result?.connectivity === 4;
+                hasInternet = result?.connectivity === 4;
+
+                if (wireless === true) {
                     connectedTo = {
                         uuid: result?.applied_connection?.uuid,
                         active_loc: result?.applied_connection?.active_loc
                     };
-                    
+
                     savedSSID = []
                     savedSSIDNames = []
 
@@ -90,15 +92,11 @@
                         }
                     }
 
-                    accessPoints = result?.access_points;
-                }, 500);
-            } else {
-                updateID = setInterval(async () => {
-                    const result = await updateStatus(true);
-
-                    hasInternet = result?.connectivity === 4;
-                }, 500);
-            }
+                    if (disableScanning === false) {
+                        accessPoints = result?.access_points;
+                    }
+                }
+            }, 500);
         }
     };
 
@@ -115,6 +113,11 @@
     const toggleExpand = (UUIDorSSID: string) => {
         if (expandedSSIDorUUID === UUIDorSSID) {
             delete enteredPasswords[UUIDorSSID];
+            toggleUpdate();
+            toggleUpdate();
+        } else {
+            toggleUpdate();
+            toggleUpdate(true);
         }
         expandedSSIDorUUID = expandedSSIDorUUID === UUIDorSSID ? null : UUIDorSSID;
     };
@@ -153,7 +156,7 @@
                 <div class="w-full flex flex-col flex-grow items-start gap-3 overflow-y-auto p-2">
                     {#each savedSSID as savedConnection}
                         <button class={"smooth-transition flex flex-col gap-2 w-full no-select p-3 rounded-md items-start" + (expandedSSIDorUUID === savedConnection?.uuid ? " bg-zinc-800" : " hover:bg-zinc-800")}
-                        on:click={() => { toggleExpand(savedConnection?.uuid) }}>
+                        on:click={() => { toggleExpand(savedConnection?.uuid); }}>
                             <div class="w-full flex flex-rows gap-1 items-center no-select">
                                 {savedConnection?.id}
                                 {#if (connectedTo?.uuid === savedConnection?.uuid)}
@@ -244,33 +247,7 @@
                                     if (!connectionButtonValidator(ap?.Flags, ap?.Ssid))
                                         return;
 
-                                    deactivatedButtons.push(ap?.Ssid)
-
-                                    const connection = await addConnection(ap?.Ssid, (ap?.Flags === 0 ? "" : enteredPasswords[ap?.Ssid]));
-                                    const activeConnection = await activateConnection(connection?.path, ap?.object, $currentInternetDevice.location);
-
-                                    const interval = setInterval(async () => {
-                                        const state = await getActiveConnectionState(activeConnection);
-                                        if (state === 2) {
-                                            deactivatedButtons = deactivatedButtons.filter(v => v !== ap?.Ssid);
-                                            clearInterval(interval);
-                                        } else if (state === "UnknownMethod") {
-                                            Swal.fire({
-                                                title: getString($installInfo.language, "connect-error-title"),
-                                                text: getString($installInfo.language, "invalid-password"),
-                                                icon: 'error',
-                                                background: '#222',
-                                                color: 'white',
-                                                confirmButtonColor: '#333',
-                                                timer: 3000,
-                                                customClass: {
-                                                    popup: "no-select"
-                                                }
-                                            });
-                                            deactivatedButtons = deactivatedButtons.filter(v => v !== ap?.Ssid);
-                                            clearInterval(interval);
-                                        }
-                                    }, 50);
+                                    
                                 }}
                                 on:keydown={() => {}}>
                                     {getString($installInfo.language, "connect")}
