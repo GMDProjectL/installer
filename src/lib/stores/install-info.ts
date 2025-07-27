@@ -86,7 +86,7 @@ let updateInfo = writable<UpdateFlags>({
     runRussianReflector: false,
     installLact: true,
     de: 'kde',
-    dontCopyKde: false,
+    dontCopyKde: true,
     dontUpdateGrub: false,
     doOsProber: true,
     installZapret: false

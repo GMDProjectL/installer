@@ -32,6 +32,13 @@ def make_pacman_more_unsafe(root: str):
 def blacklist_package(root: str, package: str):
     shared_events.append(f'Blacklisting {package} package...')
 
+    with open(root + '/etc/pacman.conf', 'r') as f:
+        old_pacman_contents = f.read()
+    
+    if (package in old_pacman_contents) and ("#IgnorePkg" not in old_pacman_contents):
+        shared_events.append(f'{package} is already blacklisted.')
+        return
+
     uncomment_line_in_file(root + '/etc/pacman.conf', '#IgnorePkg')
 
     with open(root + '/etc/pacman.conf', 'r') as f:
