@@ -133,6 +133,15 @@
             </label>
         </div>
         <div class="flex items-center gap-5">
+            <input id="zapret" class="invert grayscale scale-150" type="checkbox" 
+                bind:checked={$installInfo.installZapret} 
+                />
+            <label for="zapret" class="flex items-center gap-4 no-select">
+                { getString($installInfo.language, "install-zapret") }
+                <Icon icon="material-symbols:cloud" />
+            </label>
+        </div>
+        <div class="flex items-center gap-5">
             <input id="lact" class="invert grayscale scale-150" type="checkbox" 
                 bind:checked={$installInfo.installLact} 
                 />

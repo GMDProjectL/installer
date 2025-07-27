@@ -19,6 +19,7 @@ class FeaturesInfo:
     fromUpdate: bool
     username: str
     doOsProber: bool
+    installZapret: bool
 
 @dataclass
 class InstallInfo(FeaturesInfo):

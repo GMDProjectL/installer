@@ -255,6 +255,7 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                 "myuser", 
                 False, 
                 False,
+                False,
                 False
             )
             

@@ -16,7 +16,8 @@ type FeaturesInfo = {
     installLact: boolean,
     de: string,
     username: string,
-    doOsProber: boolean
+    doOsProber: boolean,
+    installZapret: boolean
 }
 
 type InstallInfo = FeaturesInfo & {
@@ -65,7 +66,8 @@ let installInfo = writable<InstallInfo>({
     runRussianReflector: false,
     installLact: true,
     de: 'kde',
-    doOsProber: true
+    doOsProber: true,
+    installZapret: true
 });
 
 let updateInfo = writable<UpdateFlags>({
@@ -86,7 +88,8 @@ let updateInfo = writable<UpdateFlags>({
     de: 'kde',
     dontCopyKde: false,
     dontUpdateGrub: false,
-    doOsProber: true
+    doOsProber: true,
+    installZapret: false
 });
 
 export default installInfo;  // Export the store

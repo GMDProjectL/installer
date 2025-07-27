@@ -262,5 +262,6 @@
     "dont-update-grub": "Не обновлять GRUB",
     "features": "Фичи",
     "updating": "Обновление...",
-    "detect-other-os": "Обнаруживать другие операционные систему (например, Windows)"
+    "detect-other-os": "Обнаруживать другие операционные систему (например, Windows)",
+    "install-zapret": "Установить Zapret"
 }

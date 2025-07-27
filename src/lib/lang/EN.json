@@ -90,5 +90,6 @@
     "dont-update-grub": "Do not update GRUB",
     "features": "Features",
     "updating": "Updating...",
-    "detect-other-os": "Detect other operating systems (e.g. Windows or something else)"
+    "detect-other-os": "Detect other operating systems (e.g. Windows or something else)",
+    "install-zapret": "Install Zapret"
 }
