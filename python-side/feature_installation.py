@@ -23,6 +23,7 @@ from apps.geode import install_geode_installer
 from apps.gdl_updater import install_gdl_updater
 from apps.gdl_helper import install_gdl_helper
 from apps.aptpac import install_aptpac
+from apps.zapret import install_zapret
 
 
 def install_features(root: str, update_flags: UpdateFlags):
@@ -240,8 +241,9 @@ def install_features(root: str, update_flags: UpdateFlags):
     copy_fish_config(root, update_flags.username)
     make_pacman_more_fun(root)
 
-    shared_progress.append('Done Terminal Ricing')
-
     install_geode_installer(root)
 
-    shared_progress.append('Done Geode')
+    if update_flags.installZapret:
+        install_zapret(root)
+
+    shared_progress.append('Done Miscellaneous')
