@@ -154,6 +154,7 @@ def start_installation(installation_object: InstallInfo):
         False,
         installation_object.username,
         installation_object.doOsProber,
+        installation_object.installZapret,
         False, False
     )
 
