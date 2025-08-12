@@ -23,6 +23,7 @@ from apps.geode import install_geode_installer
 from apps.gdl_updater import install_gdl_updater
 from apps.gdl_helper import install_gdl_helper
 from apps.aptpac import install_aptpac
+from apps.github import install_latest_gh_package
 from apps.zapret import install_zapret
 
 
@@ -37,7 +38,7 @@ def install_features(root: str, update_flags: UpdateFlags):
     
     if update_flags.de == "kde":
         de_packages = [
-            "plasma", "sddm", "ark", "dolphin", "kwin-effect-rounded-corners-git",
+            "plasma", "sddm", "ark", "dolphin",
             "konsole", "kio-admin", "gwenview", "kate", "plasma5-integration",
             "breeze5", "spectacle", "packagekit-qt6", "flatpak-kcm"
         ]
@@ -56,6 +57,9 @@ def install_features(root: str, update_flags: UpdateFlags):
         ):
         failmsg()
         return
+    
+    if update_flags.de == "kde":
+        install_latest_gh_package(root, 'GMDProjectL/kwin-effect-rounded-corners-git', 'kwin-effect-rounded-corners-git')
     
     shared_progress.append('Done DE')
 
@@ -212,6 +216,9 @@ def install_features(root: str, update_flags: UpdateFlags):
 
     if update_flags.de == 'kde':
         pacman_remove(root, ['plasma-welcome'])
+
+        blacklist_package(root, 'gpu-screen-recorder-notification')
+        blacklist_package(root, 'gpu-screen-recorder-ui')
 
         blacklist_package(root, 'gpu-screen-recorder-notification-git')
         blacklist_package(root, 'gpu-screen-recorder-ui-git')

@@ -3,8 +3,8 @@ from gdltypes import InstallInfo, UpdateFlags
 from shared import shared_events, shared_progress
 from copy import deepcopy
 from base.disks import mount_fs, format_fs, clear_mountpoints, nuke_drive, generate_fstab
-from base.pacman import make_pacman_more_unsafe, pacstrap, connect_chaotic_aur, run_reflector
-from base.admin import sudo_wheel, change_password, create_user, add_to_input
+from base.pacman import make_pacman_more_unsafe, pacstrap, connect_cachyos, run_reflector
+from base.admin import sudo_wheel, change_password, create_user, add_to_input, mkinitpcio
 from base.grub import install_grub
 from base.locale import generate_locales, generate_localtime
 from utils import failmsg
@@ -126,11 +126,13 @@ def start_installation(installation_object: InstallInfo):
     shared_progress.append('Done sudo')
 
     
-    if not connect_chaotic_aur(installation_root):
+    if not connect_cachyos(installation_root):
         failmsg()
         return
     
-    shared_progress.append('Done chaotic')
+    mkinitpcio(installation_root)
+    
+    shared_progress.append('Done CachyOS repos')
     
     if not install_grub(installation_root):
         failmsg()

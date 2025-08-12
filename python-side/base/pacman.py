@@ -5,10 +5,20 @@ from base.patching import replace_str_in_file, uncomment_line_in_file
 
 
 def append_mirrorlist(root: str):
-    with open(root + '/etc/pacman.conf', 'a') as f:
-        f.write('''
-[chaotic-aur]
-Include = /etc/pacman.d/chaotic-mirrorlist''')
+    with open(root + '/etc/pacman.conf', 'r') as f:
+        old_config = f.read()
+
+    old_config = old_config.replace(
+        '[core]',
+        '''
+[cachyos]
+Include = /etc/pacman.d/cachyos-mirrorlist
+
+[core]'''
+    )
+
+    with open(root + '/etc/pacman.conf', 'w') as f:
+        f.write(old_config)
 
 
 def enable_multilib(root: str):
@@ -73,39 +83,45 @@ def run_reflector(root: str = '', country: str = ''):
     return True
 
 
-def connect_chaotic_aur(root: str):
-    shared_events.append('Installing Chaotic AUR...')
+def connect_cachyos(root: str):
+    shared_events.append('Installing CachyOS repos...')
 
-    CHAOTIC_AUR_KEY = '3056513887B78AEB'
-    recv_result = os.system(f'arch-chroot {root} pacman-key --recv-key {CHAOTIC_AUR_KEY} --keyserver keyserver.ubuntu.com')
+    CACHYOS_KEY = 'F3B607488DB35A47'
+    recv_result = os.system(f'arch-chroot {root} pacman-key --recv-key {CACHYOS_KEY} --keyserver keyserver.ubuntu.com')
     
     if recv_result != 0:
-        shared_events.append('Failed to connect to Chaotic AUR')
+        shared_events.append('Failed to connect to CachyOS')
         return False
 
-    lsign_result = os.system(f'arch-chroot {root} pacman-key --lsign-key {CHAOTIC_AUR_KEY}')
+    lsign_result = os.system(f'arch-chroot {root} pacman-key --lsign-key {CACHYOS_KEY}')
     
     if lsign_result != 0:
-        shared_events.append('Failed to sign Chaotic AUR key')
+        shared_events.append('Failed to sign CachyOS key')
         return False
     
-    keyring_result = os.system(f"arch-chroot {root} pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-keyring.pkg.tar.zst'")
+    keyring_result = os.system(f"arch-chroot {root} pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-keyring-20240331-1-any.pkg.tar.zst'")
     
     if keyring_result != 0:
-        shared_events.append('Failed to install Chaotic AUR keyring')
+        shared_events.append('Failed to install CachyOS keyring')
         return False
     
-    mirrorlist_result = os.system(f"arch-chroot {root} pacman -U --noconfirm 'https://cdn-mirror.chaotic.cx/chaotic-aur/chaotic-mirrorlist.pkg.tar.zst'")
+    mirrorlist_result = os.system(f"arch-chroot {root} pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/cachyos-mirrorlist-22-1-any.pkg.tar.zst'")
 
     if mirrorlist_result != 0:
-        shared_events.append('Failed to install Chaotic AUR mirrorlist')
+        shared_events.append('Failed to install CachyOS mirrorlist')
+        return False
+    
+    cachyos_pacman_result = os.system(f"arch-chroot {root} pacman -U --noconfirm 'https://mirror.cachyos.org/repo/x86_64/cachyos/pacman-7.0.0.r7.g1f38429-1-x86_64.pkg.tar.zst'")
+
+    if cachyos_pacman_result != 0:
+        shared_events.append('Failed to install CachyOS pacman')
         return False
 
     append_mirrorlist(root)
 
     run_command_in_chroot(root, ['pacman', '-Syyuu', '--noconfirm'])
 
-    shared_events.append('Installed Chaotic AUR!')
+    shared_events.append('Installed CachyOS repos!')
 
     return True
 
@@ -118,7 +134,7 @@ def pacstrap(root: str):
         'base', 'base-devel', 'arch-install-scripts',
         'linux-lts', 'linux-firmware', 'linux-lts-headers', 'dkms', 
         'vim', 'nano', 'sudo', 'fish', 
-        'networkmanager', 'firefox'
+        'networkmanager', 'firefox', 'mkinitcpio'
     ])
     
     if result.returncode != 0:
