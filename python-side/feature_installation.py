@@ -82,11 +82,12 @@ def install_features(root: str, update_flags: UpdateFlags):
     shared_progress.append('Done Network')
 
     if update_flags.setupCachyosKernel:
-        if not pacman_install(root, ["linux-cachyos-lts", "linux-cachyos-lts-headers"]):
+        if not pacman_install(root, ["linux-cachyos", "linux-cachyos-headers"]):
             failmsg()
             return
         
         pacman_remove(root, ["linux", "linux-headers"])
+        pacman_remove(root, ["linux-cachyos-lts"])
         pacman_remove(root, ["linux-lts", "linux-lts-headers"])
         
         shared_progress.append('CachyOS Kernel installed')
