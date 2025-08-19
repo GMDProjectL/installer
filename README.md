@@ -1,9 +1,5 @@
 # Project GDL Distro Installer
 
-
-**NEW VERSION WILL BE REWRITTEN USING DEAR IMGUI, CHECK OUT `new-imgui/` DIRECTORY**
-
-
 Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
 
 ## Developing

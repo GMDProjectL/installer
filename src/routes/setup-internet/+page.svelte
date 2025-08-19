@@ -9,23 +9,22 @@
     import { get } from "svelte/store";
     import Swal from "sweetalert2";
     import { 
-        getInternetDevices,
-        getAccessPoints, checkConnectivity, 
-        addConnection, activateConnection, getActiveConnectionState,
-        getSavedConnections, getAppliedConnection,
-        getConnectionSettings, updateStatus,
-        disconnectDevice,
-        deleteConnection
+        getInternetDevices, activateConnection,
+        getActiveConnectionState, updateStatus,
+        disconnectDevice, deleteConnection
     } from "$lib/api"
-    import { currentInternetDevice, doSkippedInternetSetup, internetDevices } from "$lib"
+    import { 
+        currentInternetDevice, 
+        doSkippedInternetSetup, 
+        internetDevices 
+    } from "$lib"
 
     let expandedSSIDorUUID: string | null = null;
-    let expandedUUIDData: Record<string, any> | undefined = undefined;
     let accessPoints: Array<Record<string, any>> = [];
     let deactivatedButtons: Array<string> = [];
     let savedSSID: Array<Record<string, any>> = [];
     let savedSSIDNames: Array<string> = [];
-    let updateID: number | undefined = undefined;
+    let updateID: NodeJS.Timeout | undefined = undefined;
     let hasInternet: boolean = false;
     let connectedTo: Record<string, any> | undefined = undefined;
     let enteredPasswords: Record<string, string> = {};
