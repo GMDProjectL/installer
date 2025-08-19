@@ -44,11 +44,13 @@ def copy_kde_config(root: str, username: str):
     copy_from_resources('.config/gtk-3.0', user_config_dir)
     copy_from_resources('.config/gtk-4.0', user_config_dir)
     copy_from_resources('.config/xsettingsd', user_config_dir)
+    copy_from_resources('.config/kscreenlockerrc', user_config_dir)
 
     if not root == '/':
         copy_from_resources('.config/kxkbrc', user_config_dir)
     
     replace_str_in_file(user_config_dir + '/plasmarc', 'myuser', username)
+    replace_str_in_file(user_config_dir + '/kscreenlockerrc', 'myuser', username)
     replace_str_in_file(user_config_dir + '/set-gd-wallpaper.sh', 'myuser', username)
     replace_str_in_file(autostart_dir + '/set-gd-wallpaper.desktop', 'myuser', username)
 
