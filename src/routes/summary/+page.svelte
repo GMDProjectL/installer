@@ -136,6 +136,34 @@
                     {$installInfo.installIntelMedia ? "✓" : "x"}
                 </p>
             </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-lact")}</b>
+                    {$installInfo.installLact ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "install-zapret")}</b>
+                    {$installInfo.installZapret ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "setup-cachyos-kernel")}</b>
+                    {$installInfo.setupCachyosKernel ? "✓" : "x"}
+                </p>
+            </div>
+
+            <div class="mt-3">
+                <p>
+                    <b class="ms-4 me-3">• {getString($installInfo.language, "detect-other-os")}</b>
+                    {$installInfo.doOsProber ? "✓" : "x"}
+                </p>
+            </div>
         </div>
     </div>
 
