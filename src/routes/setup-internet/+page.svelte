@@ -11,7 +11,7 @@
     import { 
         getInternetDevices, activateConnection,
         getActiveConnectionState, updateStatus,
-        disconnectDevice, deleteConnection
+        addConnection, disconnectDevice, deleteConnection
     } from "$lib/api"
     import { 
         currentInternetDevice, 
@@ -34,7 +34,7 @@
     });
 
     onDestroy(async () => {
-        toggleUpdate();
+        disableUpdate();
     });
 
     $: {
@@ -53,50 +53,56 @@
         if ($currentInternetDevice === undefined)
             currentInternetDevice.set(data[0]);
 
-        toggleUpdate();
+        enableUpdate();
     };
 
     const onDeviceChange = (e: Event) => {
         const devices = get(internetDevices);
         currentInternetDevice.set(devices.find(v => v?.location === (e.target as HTMLOptionElement).value));
 
-        toggleUpdate();
-        toggleUpdate();
+        disableUpdate();
+        enableUpdate();
     };
 
-    const toggleUpdate = (disableScanning: boolean = false) => {
-        if (updateID !== undefined) {
-            clearInterval(updateID);
-            updateID = undefined;
-        } else {
-            updateID = setInterval(async () => {
-                let wireless = get(currentInternetDevice)?.wireless === true;
-                const result = await updateStatus(true, wireless, wireless && disableScanning === false, wireless, get(currentInternetDevice)?.location);
+    const enableUpdate = (disableScanning: boolean = false) => {
+        if (updateID !== undefined)
+            return;
 
-                hasInternet = result?.connectivity === 4;
+        updateID = setInterval(async () => {
+            let wireless = get(currentInternetDevice)?.wireless === true;
+            const result = await updateStatus(true, wireless, wireless && disableScanning === false, wireless, get(currentInternetDevice)?.location);
 
-                if (wireless === true) {
-                    connectedTo = {
-                        uuid: result?.applied_connection?.uuid,
-                        active_loc: result?.applied_connection?.active_loc
-                    };
+            hasInternet = result?.connectivity === 4;
 
-                    savedSSID = []
-                    savedSSIDNames = []
+            if (wireless === true) {
+                connectedTo = {
+                    uuid: result?.applied_connection?.uuid,
+                    active_loc: result?.applied_connection?.active_loc
+                };
 
-                    for (const connection of result?.saved_connections) {
-                        if (connection?.connection?.type === "802-11-wireless") {
-                            savedSSID.push(connection?.connection)
-                            savedSSIDNames.push(connection?.connection?.id)
-                        }
-                    }
+                savedSSID = []
+                savedSSIDNames = []
 
-                    if (disableScanning === false) {
-                        accessPoints = result?.access_points;
+                for (const connection of result?.saved_connections) {
+                    if (connection?.connection?.type === "802-11-wireless") {
+                        savedSSID.push(connection?.connection)
+                        savedSSIDNames.push(connection?.connection?.id)
                     }
                 }
-            }, 500);
-        }
+
+                if (disableScanning === false) {
+                    accessPoints = result?.access_points;
+                }
+            }
+        }, 500);
+    };
+
+    const disableUpdate = () => {
+        if (updateID === undefined)
+            return;
+
+        clearInterval(updateID);
+        updateID = undefined;
     };
 
     const connectionButtonValidator = (flags: number, SSID: string): boolean => {
@@ -112,13 +118,106 @@
     const toggleExpand = (UUIDorSSID: string) => {
         if (expandedSSIDorUUID === UUIDorSSID) {
             delete enteredPasswords[UUIDorSSID];
-            toggleUpdate();
-            toggleUpdate();
+            disableUpdate();
+            enableUpdate();
         } else {
-            toggleUpdate();
-            toggleUpdate(true);
+            disableUpdate();
+            enableUpdate(true);
         }
         expandedSSIDorUUID = expandedSSIDorUUID === UUIDorSSID ? null : UUIDorSSID;
+    };
+
+    const onConnectNew = async (ap: Record<string, any>) => {
+        if (!connectionButtonValidator(ap?.Flags, ap?.Ssid) && $currentInternetDevice === undefined)
+            return;
+
+        deactivatedButtons.push(ap?.Ssid)
+        const connection = await addConnection(ap?.Ssid, (ap?.Flags === 0 ? "" : enteredPasswords[ap?.Ssid]));
+
+        const activeConnection = await activateConnection(connection?.path, ap?.object, $currentInternetDevice.location);
+        const interval = setInterval(async () => {
+
+            const state = await getActiveConnectionState(activeConnection);
+            if (state === 2) {
+                delete enteredPasswords[ap?.Ssid];
+                deactivatedButtons = deactivatedButtons.filter(v => v !== ap?.Ssid);
+                clearInterval(interval);
+            } else if (state === "UnknownMethod") {
+                Swal.fire({
+                    title: getString($installInfo.language, "connect-error-title"),
+                    text: getString($installInfo.language, "invalid-password"),
+                    icon: 'error',
+                    background: '#222',
+                    color: 'white',
+                    confirmButtonColor: '#333',
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
+                });
+
+                deactivatedButtons = deactivatedButtons.filter(v => v !== ap?.Ssid);
+                clearInterval(interval);
+            }
+
+        }, 50);
+    };
+
+    const onDisconnect = async (savedConnection: Record<string, any>) => {
+        if (deactivatedButtons.includes(savedConnection?.uuid))
+            return;
+        
+        deactivatedButtons.push(savedConnection?.uuid)
+
+        disconnectDevice($currentInternetDevice?.location);
+
+        const interval = setInterval(() => {
+            console.log(connectedTo?.uuid)
+            if (connectedTo?.uuid === savedConnection?.uuid)
+                return;
+
+            deactivatedButtons = deactivatedButtons.filter(v => v !== savedConnection?.uuid)
+            clearInterval(interval)
+        }, 50);
+    };
+
+    const onConnectSaved = async (savedConnection: Record<string, any>) => {
+        if (deactivatedButtons.includes(savedConnection?.uuid))
+            return;
+        
+        deactivatedButtons.push(savedConnection?.uuid)
+
+        console.log(savedConnection)
+
+        const active_connection = await activateConnection(
+            savedConnection?.location, 
+            '/', 
+            $currentInternetDevice?.location
+        );
+
+        const interval = setInterval(async () => {
+            const state = await getActiveConnectionState(active_connection);
+
+            if (state == 2) {
+                deactivatedButtons = deactivatedButtons.filter(v => v !== savedConnection?.uuid);
+                clearInterval(interval);
+            } else if (state === "UnknownMethod") {
+                Swal.fire({
+                    title: getString($installInfo.language, "connect-error-title"),
+                    text: getString($installInfo.language, "invalid-password"),
+                    icon: 'error',
+                    background: '#222',
+                    color: 'white',
+                    confirmButtonColor: '#333',
+                    timer: 3000,
+                    customClass: {
+                        popup: "no-select"
+                    }
+                });
+                deactivatedButtons = deactivatedButtons.filter(v => v !== savedConnection?.uuid);
+                clearInterval(interval);
+            }
+        }, 50);
     };
 </script>
 
@@ -130,34 +229,44 @@
     <div class="flex h-full justify-between items-start flex-col px-20 py-10 w-full gap-10 overflow-y-hidden">
         <div class="w-full h-full flex flex-col flex-grow items-start gap-5 p-2">
             {#if ($internetDevices.length > 1)}
+
                 <select class="bg-zinc-800 outline-0 p-4 rounded-md mt-2 w-full no-select"
-                    on:click={async () => {
-                        $internetDevices = await getInternetDevices();
-                    }}
-                    on:change={async (e: Event) => {
-                        await onDeviceChange(e);
-                    }}>
+                    on:click={async _ => $internetDevices = await getInternetDevices()}
+                    on:change={async (e: Event) => await onDeviceChange(e)}>
+
                     {#each $internetDevices as device}
                         <option selected={$currentInternetDevice !== undefined && $currentInternetDevice.location == device.location} value={device.location}>
                             {device.hardware_name + ` (${device.interface})`}
                         </option>
                     {/each}
+
                 </select>
+
             {/if}
             {#if ($currentInternetDevice && "wireless" in $currentInternetDevice && $currentInternetDevice.wireless)}
                 {#if accessPoints.length === 0}
+
                 <div class="w-full h-full flex flex-row justify-center items-center gap-2 p-2">
+
                     {#each Array(3) as _}
                         <i class="text-4xl loading no-select">•</i>
                     {/each}
+
                 </div>
+
                 {:else}
                 <div class="w-full flex flex-col flex-grow items-start gap-3 overflow-y-auto p-2">
                     {#each savedSSID as savedConnection}
-                        <button class={"smooth-transition flex flex-col gap-2 w-full no-select p-3 rounded-md items-start" + (expandedSSIDorUUID === savedConnection?.uuid ? " bg-zinc-800" : " hover:bg-zinc-800")}
-                        on:click={() => { toggleExpand(savedConnection?.uuid); }}>
+                        <button
+                            class={"smooth-transition flex flex-col gap-2 w-full no-select p-3 rounded-md items-start" + 
+                                (expandedSSIDorUUID === savedConnection?.uuid ? " bg-zinc-800" : " hover:bg-zinc-800")}
+
+                            on:click={_ => toggleExpand(savedConnection?.uuid)}
+                        >
+
                             <div class="w-full flex flex-rows gap-1 items-center no-select">
                                 {savedConnection?.id}
+
                                 {#if (connectedTo?.uuid === savedConnection?.uuid)}
                                     <Icon icon="material-symbols:check" width="20" height="20"/>
                                 {/if}
@@ -165,94 +274,97 @@
                             {#if expandedSSIDorUUID === savedConnection?.uuid}
                             <div class="w-full flex flex-rows flex-row-reverse justify-start items-center gap-3">
                                 {#if (connectedTo?.uuid === savedConnection?.uuid)}
-                                    <span role="button" tabindex="0" class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + (deactivatedButtons.includes(savedConnection?.uuid) ? " opacity-50" : " hover:bg-zinc-600 active:bg-zinc-800")}
-                                    on:click|stopPropagation={async () => {
-                                        if (deactivatedButtons.includes(savedConnection?.uuid))
-                                            return;
-                                        
-                                        deactivatedButtons.push(savedConnection?.uuid)
 
-                                        disconnectDevice($currentInternetDevice?.location);
+                                    <span 
+                                        role="button" 
+                                        tabindex="0" 
 
-                                        const interval = setInterval(() => {
-                                            console.log(connectedTo?.uuid)
-                                            if (connectedTo?.uuid === savedConnection?.uuid)
-                                                return;
+                                        class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + 
+                                            (!deactivatedButtons.includes(savedConnection?.uuid) ? " hover:bg-zinc-600 active:bg-zinc-800" : "")}
 
-                                            deactivatedButtons = deactivatedButtons.filter(v => v !== savedConnection?.uuid)
-                                            clearInterval(interval)
-                                        }, 50);
-                                    }}
-                                    on:keydown={() => {}}>
+                                        class:opacity-50={deactivatedButtons.includes(savedConnection?.uuid)}
+
+                                        on:click|stopPropagation={async _ => await onDisconnect(savedConnection)}
+                                        on:keydown={_ => _}
+                                    >
                                         {getString($installInfo.language, "disconnect")}
                                     </span>
+
                                 {:else}
-                                    <span role="button" tabindex="0" class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + (deactivatedButtons.includes(savedConnection?.uuid) ? " opacity-50" : " hover:bg-zinc-600 active:bg-zinc-800")}
-                                    on:click|stopPropagation={async () => {
-                                        if (deactivatedButtons.includes(savedConnection?.uuid))
-                                            return;
-                                        
-                                        deactivatedButtons.push(savedConnection?.uuid)
 
-                                        console.log(savedConnection)
+                                    <span role="button" tabindex="0" class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + 
+                                        (!deactivatedButtons.includes(savedConnection?.uuid) ? " hover:bg-zinc-600 active:bg-zinc-800" : "")}
+                                    
+                                    class:opacity-50={deactivatedButtons.includes(savedConnection?.uuid)}
 
-                                        const active_connection = await activateConnection(
-                                            savedConnection?.location, 
-                                            '/', 
-                                            $currentInternetDevice?.location
-                                        );
-
-                                        const interval = setInterval(async () => {
-                                            if (await getActiveConnectionState(active_connection) == 2) {
-                                                deactivatedButtons = deactivatedButtons.filter(v => v !== savedConnection?.uuid);
-                                                clearInterval(interval);
-                                            }
-                                        }, 50);
-                                    }}
+                                    on:click|stopPropagation={async _ => await onConnectSaved(savedConnection)}
                                     on:keydown={() => {}}>
                                         {getString($installInfo.language, "connect")}
                                     </span>
+
                                 {/if}
-                                <span role="button" tabindex="0" class="smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-800"
-                                on:click|stopPropagation={async () => {
-                                    await deleteConnection(savedConnection?.location);
-                                }}
-                                on:keydown={() => {}}>
+
+                                <span role="button" tabindex="0"
+                                class="smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700 hover:bg-zinc-600 active:bg-zinc-800"
+
+                                on:click|stopPropagation={async _ => await deleteConnection(savedConnection?.location)}
+                                on:keydown={_ => _}>
                                     {getString($installInfo.language, "delete")}
                                 </span>
+
                             </div>
                             {/if}
                         </button>
                     {/each}
                     {#each accessPoints as ap}
                         {#if (!savedSSIDNames.includes(ap?.decodedSSID))}
-                        <button class={"smooth-transition flex flex-col gap-3 w-full no-select p-3 rounded-md items-start" + (expandedSSIDorUUID === ap?.Ssid ? " bg-zinc-800" : " hover:bg-zinc-800")}
-                        on:click={() => {
-                            toggleExpand(ap.Ssid)
-                        }}>
+                        <button 
+                            class={"smooth-transition flex flex-col gap-3 w-full no-select p-3 rounded-md items-start" + 
+                                (expandedSSIDorUUID !== ap?.Ssid ?" hover:bg-zinc-800" : "")}
+
+                            class:bg-zinc-800={expandedSSIDorUUID === ap?.Ssid}
+
+                            on:click={_ => toggleExpand(ap.Ssid)}
+                        >
                             <div class="w-full flex flex-rows gap-1 items-center no-select">
                                 {ap?.decodedSSID}
+
                                 {#if ap?.Flags != 0}
                                     <Icon icon="material-symbols:lock" width="15" height="15" />
                                 {/if}
                             </div>
+                            
                             {#if (expandedSSIDorUUID === ap?.Ssid)}
                             <div class="w-full flex flex-rows flex-row justify-end items-center gap-3">
                                 {#if ap?.Flags !== 0}
-                                <input type="password" on:click|stopPropagation bind:value={enteredPasswords[ap.Ssid]} placeholder={getString($installInfo.language, "password-tip")} class="w-full bg-zinc-700 p-2 rounded-md focus:outline-none" />
+                                <input 
+                                    type="password" 
+                                    on:click|stopPropagation 
+                                    bind:value={enteredPasswords[ap.Ssid]}
+                                    placeholder={getString($installInfo.language, "password-tip")} 
+                                    class="w-full bg-zinc-700 p-2 rounded-md focus:outline-none"
+                                    on:keyup={async e => {
+                                        if (e.key === "Enter")
+                                            await onConnectNew(ap);
+                                    }}
+                                />
                                 {/if}
-                                <span role="button" tabindex="0" class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + (!connectionButtonValidator(ap?.Flags, ap?.Ssid) ? " opacity-50" : " hover:bg-zinc-600 active:bg-zinc-800")}
-                                on:click|stopPropagation={async () => {
-                                    if (!connectionButtonValidator(ap?.Flags, ap?.Ssid))
-                                        return;
-
+                                <span 
+                                    role="button" 
+                                    tabindex="0" 
+                                    class={"smooth-transition no-select p-2 px-4 rounded-md bg-zinc-700" + 
+                                        (connectionButtonValidator(ap?.Flags, ap?.Ssid) ? " hover:bg-zinc-600 active:bg-zinc-800" : "")}
                                     
-                                }}
-                                on:keydown={() => {}}>
+                                    class:opacity-50={!connectionButtonValidator(ap?.Flags, ap?.Ssid)}
+
+                                    on:click|stopPropagation={async _ => await onConnectNew(ap)}
+                                    on:keydown={_ => _}
+                                >
                                     {getString($installInfo.language, "connect")}
                                 </span>
                             </div>
                             {/if}
+                            
                         </button>
                         {/if}
                     {/each}

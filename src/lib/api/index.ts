@@ -1,7 +1,7 @@
 import type { InstallInfo, UpdateFlags } from "$lib/stores/install-info";
 import type { InstallationProgress } from "$lib/stores/install-progress";
 
-const API_BASE_PATH = 'http://localhost:669'
+const API_BASE_PATH = 'http://127.0.0.1:669'
 
 
 type TimezonesResponse = {

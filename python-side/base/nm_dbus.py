@@ -54,7 +54,7 @@ def get_access_point_properties(access_points: dbus.Array) -> list[dbus.Dictiona
 
     return _list
 
-def get_device_interface_name(device: str):
+def get_device_interface_name(device: str) -> dbus.String:
     proxy = BUS.get_object(SERVICE_NAME, device)
     props_iface = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
     iface = props_iface.Get(SERVICE_NAME + '.Device', "Interface")
@@ -109,7 +109,7 @@ def get_device_hardware_name(device_interface: str) -> str:
             return dev.get("ID_MODEL_FROM_DATABASE") or "Unknown"
         
 
-def add_connection(SSID: list, password: str):
+def add_connection(SSID: list, password: str) -> dbus.String:
     proxy = BUS.get_object(SERVICE_NAME, SERVICE_OBJ + '/Settings')
     settings = dbus.Interface(proxy, SERVICE_NAME + '.Settings')
 
@@ -140,37 +140,37 @@ def add_connection(SSID: list, password: str):
     path = settings.AddConnection(connection)
     return path
 
-def activate_connection(connection: str, device: str, specific_object: str):
+def activate_connection(connection: str, device: str, specific_object: str) -> dbus.String:
     nm_proxy = BUS.get_object(SERVICE_NAME, SERVICE_OBJ)
     nm_iface = dbus.Interface(nm_proxy, SERVICE_NAME)
 
     return nm_iface.ActivateConnection(connection, device, specific_object)
 
-def get_connectivity():
+def get_connectivity() -> dbus.Int16:
     nm_proxy = BUS.get_object(SERVICE_NAME, SERVICE_OBJ)
     nm_iface = dbus.Interface(nm_proxy, SERVICE_NAME)
 
     return nm_iface.CheckConnectivity()
 
-def get_saved_connections():
+def get_saved_connections() -> dbus.Array:
     nm_proxy = BUS.get_object(SERVICE_NAME, SERVICE_OBJ + '/Settings')
     nm_iface = dbus.Interface(nm_proxy, SERVICE_NAME + '.Settings')
 
     return nm_iface.ListConnections()
 
-def get_connection_settings(connection: str):
+def get_connection_settings(connection: str) -> dbus.Dictionary:
     nm_proxy = BUS.get_object(SERVICE_NAME, connection)
     nm_iface = dbus.Interface(nm_proxy, SERVICE_NAME + '.Settings.Connection')
 
     return nm_iface.GetSettings()
 
-def delete_connection(connection: str):
+def delete_connection(connection: str) -> None:
     nm_proxy = BUS.get_object(SERVICE_NAME, connection)
     nm_iface = dbus.Interface(nm_proxy, SERVICE_NAME + '.Settings.Connection')
 
     nm_iface.Delete()
 
-def get_active_connection_state(active_connection: str):
+def get_active_connection_state(active_connection: str) -> dbus.Int16:
     proxy = BUS.get_object(SERVICE_NAME, active_connection)
     iface = dbus.Interface(proxy, "org.freedesktop.DBus.Properties")
 
@@ -182,7 +182,7 @@ def get_device_applied_connection(device: str) -> dict:
 
     return device_iface.GetAppliedConnection(0)
 
-def disconnect_device(device: str):
+def disconnect_device(device: str) -> None:
     proxy = BUS.get_object(SERVICE_NAME, device)
     device_iface = dbus.Interface(proxy, SERVICE_NAME + '.Device')
 
